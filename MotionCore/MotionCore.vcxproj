@@ -151,33 +151,33 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="externals\include\complex.hpp" />
-    <ClInclude Include="externals\include\matrix2x2.hpp" />
-    <ClInclude Include="externals\include\matrix3x3.hpp" />
-    <ClInclude Include="externals\include\matrix4x4.hpp" />
-    <ClInclude Include="externals\include\matrix_transformation.hpp" />
-    <ClInclude Include="externals\include\quaternion.hpp" />
-    <ClInclude Include="externals\include\toolbox.hpp" />
-    <ClInclude Include="externals\include\toolbox_headerfile.hpp" />
-    <ClInclude Include="externals\include\toolbox_typedef.hpp" />
-    <ClInclude Include="externals\include\vector2.hpp" />
-    <ClInclude Include="externals\include\vector3.hpp" />
-    <ClInclude Include="externals\include\vector4.hpp" />
-    <ClInclude Include="include\body\Body.h" />
-    <ClInclude Include="include\body\Circle.h" />
-    <ClInclude Include="include\core\PhysicsEngine.h" />
-    <ClInclude Include="include\core\MotionCoreAllocator.h" />
-    <ClInclude Include="include\MotionCoreHeader.h" />
-    <ClInclude Include="include\core\PhysicsHelper.hpp" />
-    <ClInclude Include="include\PhysicMaterial.h" />
+    <ClInclude Include="include\body\body.h" />
+    <ClInclude Include="include\body\circle.h" />
+    <ClInclude Include="include\core\physics_engine.h" />
+    <ClInclude Include="include\core\motion_core_allocator.h" />
+    <ClInclude Include="include\math\complex.hpp" />
+    <ClInclude Include="include\math\matrix2x2.hpp" />
+    <ClInclude Include="include\math\matrix3x3.hpp" />
+    <ClInclude Include="include\math\matrix4x4.hpp" />
+    <ClInclude Include="include\math\matrix_transformation.hpp" />
+    <ClInclude Include="include\math\quaternion.hpp" />
+    <ClInclude Include="include\math\toolbox.hpp" />
+    <ClInclude Include="include\math\toolbox_headerfile.hpp" />
+    <ClInclude Include="include\math\toolbox_typedef.hpp" />
+    <ClInclude Include="include\math\vector2.hpp" />
+    <ClInclude Include="include\math\vector3.hpp" />
+    <ClInclude Include="include\math\vector4.hpp" />
+    <ClInclude Include="include\motion_core_header.h" />
+    <ClInclude Include="include\core\physics_helper.hpp" />
+    <ClInclude Include="include\physic_material.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="source\PhysicsHelper.cpp" />
-    <ClCompile Include="source\PhysicsEngine.cpp" />
-    <ClCompile Include="source\MotionCoreAllocator.cpp" />
+    <ClCompile Include="source\physics_helper.cpp" />
+    <ClCompile Include="source\physics_engine.cpp" />
+    <ClCompile Include="source\motion_core_allocator.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="externals\include\vector2.inl" />
+    <None Include="include\math\vector2.inl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

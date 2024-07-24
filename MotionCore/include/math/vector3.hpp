@@ -1,7 +1,7 @@
 ﻿#pragma once
 #include "toolbox_headerfile.hpp"
 
-namespace ToolBox
+namespace Tbx
 {
     template <typename T>
     class Vector3

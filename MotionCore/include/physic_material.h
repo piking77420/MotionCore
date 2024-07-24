@@ -1,6 +1,6 @@
 #pragma once
 
-#include <MotionCoreHeader.h>
+#include "motion_core_header.h"
 
 namespace MotionCore
 {

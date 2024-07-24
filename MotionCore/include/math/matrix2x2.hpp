@@ -1,7 +1,7 @@
 ﻿#pragma once
 #include "vector2.hpp"
 
-namespace ToolBox
+namespace Tbx
 {
 
     template <typename T>

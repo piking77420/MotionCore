@@ -2,7 +2,7 @@
 
 #include "vector3.hpp"
 
-namespace ToolBox
+namespace Tbx
 {
     template <typename T>
     class Matrix3x3

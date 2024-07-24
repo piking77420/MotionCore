@@ -4,7 +4,7 @@
 
 #include "vector4.hpp"
 
-namespace ToolBox
+namespace Tbx
 {
 
     template <typename T>

@@ -1,16 +1,16 @@
 
 #pragma once
-#include "PhysicMaterial.h"
+#include "physic_material.h"
 
 namespace MotionCore
 {
     struct Body
     {
         uint32_t id = -1;
-        ToolBox::Vector2f position;
-        ToolBox::Vector2f velocity;
-        ToolBox::Vector2f acceleration;
-        ToolBox::Vector2f force;
+        Tbx::Vector2f position;
+        Tbx::Vector2f velocity;
+        Tbx::Vector2f acceleration;
+        Tbx::Vector2f force;
         float invMass = 1.f;
         PhysicMaterial physicMaterial;
     };

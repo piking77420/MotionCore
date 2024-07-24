@@ -11,7 +11,7 @@
 
 #include "quaternion.hpp"
 
-namespace ToolBox
+namespace Tbx
 {
     using Vector2f = Vector2<float>;
     using Vector2i = Vector2<int>;

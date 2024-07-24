@@ -15,77 +15,77 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\core\PhysicsEngine.h">
+    <ClInclude Include="include\core\physics_engine.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\core\MotionCoreAllocator.h">
+    <ClInclude Include="include\core\motion_core_allocator.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\MotionCoreHeader.h">
+    <ClInclude Include="include\motion_core_header.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="externals\include\complex.hpp">
+    <ClInclude Include="include\body\circle.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="externals\include\vector4.hpp">
+    <ClInclude Include="include\body\body.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="externals\include\matrix_transformation.hpp">
+    <ClInclude Include="include\core\physics_helper.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="externals\include\matrix2x2.hpp">
+    <ClInclude Include="include\physic_material.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="externals\include\matrix3x3.hpp">
+    <ClInclude Include="include\math\complex.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="externals\include\matrix4x4.hpp">
+    <ClInclude Include="include\math\matrix_transformation.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="externals\include\quaternion.hpp">
+    <ClInclude Include="include\math\matrix2x2.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="externals\include\toolbox.hpp">
+    <ClInclude Include="include\math\matrix3x3.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="externals\include\toolbox_headerfile.hpp">
+    <ClInclude Include="include\math\matrix4x4.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="externals\include\toolbox_typedef.hpp">
+    <ClInclude Include="include\math\quaternion.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="externals\include\vector2.hpp">
+    <ClInclude Include="include\math\toolbox.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="externals\include\vector3.hpp">
+    <ClInclude Include="include\math\toolbox_headerfile.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\body\Circle.h">
+    <ClInclude Include="include\math\toolbox_typedef.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\body\Body.h">
+    <ClInclude Include="include\math\vector2.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\core\PhysicsHelper.hpp">
+    <ClInclude Include="include\math\vector3.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\PhysicMaterial.h">
+    <ClInclude Include="include\math\vector4.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="source\PhysicsEngine.cpp">
+    <ClCompile Include="source\physics_engine.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="source\MotionCoreAllocator.cpp">
+    <ClCompile Include="source\motion_core_allocator.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="source\PhysicsHelper.cpp">
+    <ClCompile Include="source\physics_helper.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="externals\include\vector2.inl">
+    <None Include="include\math\vector2.inl">
       <Filter>Header Files</Filter>
     </None>
   </ItemGroup>

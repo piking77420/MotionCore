@@ -2,7 +2,7 @@
 
 #include "toolbox_typedef.hpp"
 
-namespace ToolBox
+namespace Tbx
 {
 
     template<typename D, typename F, typename T>

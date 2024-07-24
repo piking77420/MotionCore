@@ -1,6 +1,6 @@
 #include <memory>
 
-#include "Core/MotionCoreAllocator.h"
+#include "core/motion_core_allocator.h"
 
 using namespace MotionCore;
 
