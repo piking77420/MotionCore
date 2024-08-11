@@ -24,7 +24,7 @@
     <ClInclude Include="include\motion_core_header.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\body\circle.h">
+    <ClInclude Include="include\body\sphere.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\body\body.h">

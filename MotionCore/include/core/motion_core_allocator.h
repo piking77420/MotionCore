@@ -11,9 +11,9 @@ namespace MotionCore
 
 		static void Destroy();
 
-		MOTION_CORE static void* Alloc(size_t _size);
+		static void* Alloc(size_t _size);
 
-		MOTION_CORE static void Free(void* _data);
+		static void Free(void* _data);
 	private:
 
 	};

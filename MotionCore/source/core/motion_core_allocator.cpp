@@ -1,12 +1,14 @@
 #include <memory>
 
+
+
 #include "core/motion_core_allocator.h"
 
 using namespace MotionCore;
 
 void MotionCoreAllocator::Initialize()
 {
-
+	
 }
 
 void MotionCoreAllocator::Destroy()
