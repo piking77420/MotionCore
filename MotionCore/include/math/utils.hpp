@@ -49,12 +49,12 @@ namespace Tbx
     template <typename T>
     bool IsInTriangle(Vector3<T> _P, Vector3<T> _A, Vector3<T> _B, Vector3<T> _C)
     {
-         T u = static_cast<T>(0.f);
-         T v = static_cast<T>(0.f);
-         T w = static_cast<T>(0.f);
+         T u = static_cast<T>(0);
+         T v = static_cast<T>(0);
+         T w = static_cast<T>(0);
 
          BaryCenter<T>(_A, _B, _C, _P, &u , &v, &w);
 
-         return v >= static_cast<T>(0.f) && w >= static_cast<T>(0.f) && (v + w) <= static_cast<T>(1.f);
+         return v >= static_cast<T>(0) && w >= static_cast<T>(0) && (v + w) <= static_cast<T>(1);
     }
 }

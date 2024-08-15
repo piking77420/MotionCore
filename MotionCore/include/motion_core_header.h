@@ -12,5 +12,11 @@
 
 namespace MotionCore
 {
-	
+	using numeric = float;
+
+	using Vec2 = Tbx::Vector2<numeric>;
+	using Vec3 = Tbx::Vector3<numeric>;
+	using Vec4 = Tbx::Vector4<numeric>;
+
+	using Quat = Tbx::Quaternion<numeric>;
 }

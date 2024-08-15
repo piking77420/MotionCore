@@ -4,68 +4,58 @@
 #include "core/motion_core_allocator.h"
 #include <queue>
 
+#include "collision_solver.h"
+
 namespace MotionCore
 {
+    struct PhyscicsEngineInitilizationParameters
+    {
+        numeric timeStep = static_cast<numeric>(0);
+    };
 
-	class PhysicsEngine
-	{
-	public:
-		
-		struct PhyscicsEngineInitilizationParameters
-		{
-			 float timeStep = 0.f;
-		};
-		
-		
-		MOTION_CORE void Initialize(const PhyscicsEngineInitilizationParameters& _physcicsEngineInitilizationParameters);
+    class PhysicsEngine
+    {
+    public:
+       
+        MOTION_CORE void Initialize(const PhyscicsEngineInitilizationParameters* _physcicsEngineInitilizationParameters);
 
-		MOTION_CORE void Destroy();
+        MOTION_CORE void Destroy();
 
-		MOTION_CORE void Update(float _deltaTime);
+        MOTION_CORE void Update(numeric _deltaTime);
 
-		MOTION_CORE static uint32_t CreateSphere(Tbx::Vector3f _position, float _radius, float _mass);
+        MOTION_CORE void AddForce(uint32_t _id, const Vec3& _forces);
 
-		MOTION_CORE static uint32_t DestroySphere(Tbx::Vector3f _position, float _radius, float _mass);
+        MOTION_CORE void AddImpulse(uint32_t _id, const Vec3& _impluse);
 
-		MOTION_CORE static void AddForce(uint32_t _id, Tbx::Vector3f _force);
+        MOTION_CORE uint32_t CreateBody(const CreateBodyInfo* _CreateBodyInfo);
 
-		MOTION_CORE static void AddImpulse(uint32_t _id, Tbx::Vector3f _impulse);
+    private:
+        Tbx::Vector3f m_Gravity = {0.f, -9.81f, 0.f};
+        
+        struct TimeInfo
+        {
+            numeric accumulateTime = static_cast<numeric>(0);
+            numeric timeStep = static_cast<numeric>(0);
+        };
 
-	private:
-		static PhysicsEngine* m_Instance;
-		
-		struct CollisionPoint
-		{
-			Body* b1 = nullptr;
-			Body* b2 = nullptr;
-			Tbx::Vector2f normal;
+        TimeInfo timeInfo;
 
-			float depth = 1.0f;
-			float penetrationb1 = 0.0f;
-			float penetrationb2 = 0.0f;
-		};
+        ObjectInfo m_ObjectInfo;
 
-		float accumulateTime = 0.f;
+        CollisionSolver m_CollisionSolver; 
+        
+        void Step(numeric _deltatime);
 
-		float timeStep = 0.f; 
-		
-		std::queue<CollisionPoint> collisionPoint;
+        void Integrate(numeric _deltatime);
 
-		std::vector<Sphere> m_Sphere;
+        static inline void AddForce(Body* _body, Tbx::Vector3f _force)
+        {
+            _body->force += _force;
+        }
 
-		Tbx::Vector3f m_Gravity = {0.f, -9.81f, 0.f};
-
-		static void Step(float _deltatime);
-
-		static void Integrate(float _deltatime);
-
-		static void NaiveCollisionFounder();
-
-		static void ResolveCollision();
-
-		static void AddForce(Body* _body, Tbx::Vector3f _force);
-
-		static void AddImpulse(Body* _body, Tbx::Vector3f _impulse);
-	};
-
+        static inline void AddImpulse(Body* _body, Tbx::Vector3f _impulse)
+        {
+            _body->velocity += _impulse * _body->invMass;
+        }
+    };
 }

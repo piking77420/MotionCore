@@ -6,8 +6,8 @@ namespace MotionCore
 {
     struct PhysicMaterial
     {
-        float drag = 0.99f;
-        float restitutionCoef = 0.99f;
+        numeric drag = static_cast<numeric>(0.99);
+        numeric restitutionCoef = static_cast<numeric>(0.99);
     };
 }
 

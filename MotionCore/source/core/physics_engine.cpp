@@ -6,13 +6,10 @@
 
 using namespace MotionCore;
 
-PhysicsEngine* PhysicsEngine::m_Instance = nullptr;
-
-
-void PhysicsEngine::Initialize(const PhyscicsEngineInitilizationParameters& _physcicsEngineInitilizationParameters)
+void PhysicsEngine::Initialize(const PhyscicsEngineInitilizationParameters* _physcicsEngineInitilizationParameters)
 {
-    m_Instance = this;
     MotionCoreAllocator::Initialize();
+    timeInfo.timeStep = _physcicsEngineInitilizationParameters->timeStep;
 }
 
 void PhysicsEngine::Destroy()
@@ -20,100 +17,58 @@ void PhysicsEngine::Destroy()
     MotionCoreAllocator::Destroy();
 }
 
-void MotionCore::PhysicsEngine::Update(float _deltaTime)
+void MotionCore::PhysicsEngine::Update(numeric _deltaTime)
 {
-    accumulateTime += _deltaTime;
+    timeInfo.accumulateTime += _deltaTime;
 
-    while (accumulateTime >= timeStep)
+    while (timeInfo.accumulateTime >= timeInfo.timeStep)
     {
-        Step(timeStep);
-        accumulateTime -= timeStep;
+        Step(timeInfo.timeStep);
+        timeInfo.accumulateTime -= timeInfo.timeStep;
     }
 }
 
-uint32_t PhysicsEngine::CreateSphere(Tbx::Vector3f _position, float radius, float mass)
+void PhysicsEngine::AddForce(uint32_t _id, const Vec3& _forces)
 {
-    const uint32_t id = static_cast<uint32_t>(m_Instance->m_Sphere.size());
-
-    Sphere s =
-    {
-        s.body =
-        {
-            .id = id,
-            .invMass = 1.f / mass,
-            .position = _position,
-            .velocity = {},
-            .acceleration = {},
-            .force = {}
-        },
-        radius
-    };
-    m_Instance->m_Sphere.push_back(s);
-
-    return m_Instance->m_Sphere.at(m_Instance->m_Sphere.size() - 1).body.id;
+    /*
+    Body* body = GetBodyFromId(_id);
+    AddForce(body, _forces);*/
 }
 
-void MotionCore::PhysicsEngine::AddForce(uint32_t _id, Tbx::Vector3f _force)
+void PhysicsEngine::AddImpulse(uint32_t _id, const Vec3& _impluse)
 {
-    auto it = std::find_if(m_Instance->m_Sphere.begin(), m_Instance->m_Sphere.end(),
-                           [_id](const Sphere& p) { return p.body.id == _id; });
-
-    if (it == m_Instance->m_Sphere.end())
-        return;
-
-    AddForce(&(*it).body, _force);
+    /*
+    Body* body = GetBodyFromId(_id);
+    AddImpulse(body, _impluse);*/
 }
 
-void MotionCore::PhysicsEngine::AddImpulse(uint32_t _id, Tbx::Vector3f _impulse)
+uint32_t PhysicsEngine::CreateBody(const CreateBodyInfo* _CreateBodyInfo)
 {
-    auto it = std::find_if(m_Instance->m_Sphere.begin(), m_Instance->m_Sphere.end(),
-                           [_id](const Sphere& p) { return p.body.id == _id; });
+    
 
-    if (it == m_Instance->m_Sphere.end())
-        return;
-
-    AddImpulse(&(*it).body, _impulse);
+    return 0;
 }
+
 
 void PhysicsEngine::Step(float _deltatime)
 {
     Integrate(_deltatime);
-    NaiveCollisionFounder();
-    ResolveCollision();
+    //NaiveCollisionFounder();
+    //ResolveCollision();
 }
 
 void MotionCore::PhysicsEngine::Integrate(float _deltatime)
 {
-    static constexpr float drag = 0.99f;
-
-    for (Sphere& s : m_Instance->m_Sphere)
+    for (Body& body : m_ObjectInfo.bodies)
     {
-        Body& body = s.body;
-
-        body.force += m_Instance->m_Gravity;
+        body.force += m_Gravity;
         body.acceleration += body.force * body.invMass;
         body.velocity += body.acceleration * _deltatime;
         body.position += body.acceleration * 0.5f * _deltatime * _deltatime + body.velocity * _deltatime;
-        body.velocity *= drag;
+        body.velocity *= body.physcicalMaterial.drag;
 
         body.force = {};
     }
 }
 
-void MotionCore::PhysicsEngine::NaiveCollisionFounder()
-{
-}
 
-void MotionCore::PhysicsEngine::ResolveCollision()
-{
-}
-
-void MotionCore::PhysicsEngine::AddForce(Body* _body, Tbx::Vector3f _force)
-{
-    _body->force += _force;
-}
-
-void MotionCore::PhysicsEngine::AddImpulse(Body* _body, Tbx::Vector3f _impulse)
-{
-    _body->velocity += _impulse * _body->invMass;
-}
