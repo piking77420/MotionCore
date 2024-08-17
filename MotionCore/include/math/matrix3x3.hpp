@@ -30,8 +30,8 @@ namespace Tbx
         }
 
         constexpr Matrix3x3(DataType x1, DataType y1, DataType z1,
-            DataType x2, DataType y2, DataType z2,
-            DataType x3, DataType y3, DataType z3)
+                            DataType x2, DataType y2, DataType z2,
+                            DataType x3, DataType y3, DataType z3)
         {
             m_Data[0].x = x1;
             m_Data[0].y = y1;
@@ -52,6 +52,7 @@ namespace Tbx
             m_Data[1] = _vec2;
             m_Data[2] = _vec3;
         }
+
         constexpr Matrix3x3(DataType _value)
         {
             for (int i = 0; i < 3; i++)
@@ -86,7 +87,7 @@ namespace Tbx
             return m_Data[_size];
         }
 
-        Matrix3x3 operator*(const Matrix3x3& _other)
+        Matrix3x3 operator*(const Matrix3x3& _other) const
         {
             Matrix3x3 result = {};
 
@@ -104,6 +105,21 @@ namespace Tbx
             return result;
         }
 
+        Vector3<T> operator*(const Vector3<T>& _vec) const
+        {
+            Vector3<T> result = 0;
+
+            for (size_t i = 0; i < Size; i++)
+            {
+                for (size_t j = 0; j < Size; j++)
+                {
+                    result[i] += m_Data[i][j] * _vec[j];
+                }
+            }
+
+            return result;
+        }
+
         void operator*=(Matrix3x3 _m2)
         {
             *this = *this * _m2;
@@ -111,7 +127,6 @@ namespace Tbx
 
         bool operator==(const Matrix3x3& _other) const
         {
-
             for (size_t i = 0; i < Size; ++i)
             {
                 for (size_t j = 0; j < Size; ++j)
@@ -128,7 +143,7 @@ namespace Tbx
 
         Vector3<T> Trace()
         {
-            return { m_Data[0][0],m_Data[1][1],m_Data[2][2] };
+            return {m_Data[0][0], m_Data[1][1], m_Data[2][2]};
         }
 
         std::string ToString() const
@@ -154,9 +169,8 @@ namespace Tbx
             }
             return result;
         }
+
     private:
         std::array<Vec, Size> m_Data;
-
-
     };
 }

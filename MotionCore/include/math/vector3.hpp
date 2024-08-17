@@ -9,9 +9,9 @@ namespace Tbx
     public:
         using DataType = T;
 
-        T x = 0.f;
-        T y = 0.f;
-        T z = 0.f;
+        T x = static_cast<T>(0);
+        T y = static_cast<T>(0);
+        T z = static_cast<T>(0);
 
         constexpr Vector3() = default;
 
@@ -25,7 +25,7 @@ namespace Tbx
 
         ~Vector3() = default;
 
-        constexpr DataType* GetPtr()
+        TOOLBOX_INLINE constexpr DataType* GetPtr()
         {
             return &x;
         }
@@ -36,17 +36,17 @@ namespace Tbx
         }
 
 
-        DataType MagnitudeSquare() const
+        TOOLBOX_INLINE DataType MagnitudeSquare() const
         {
             return x * x + y * y + z * z;
         }
 
-        DataType Magnitude() const
+        TOOLBOX_INLINE DataType Magnitude() const
         {
             return std::sqrt(MagnitudeSquare());
         }
 
-        Vector3 Normalize() const
+        TOOLBOX_INLINE Vector3 Normalize() const
         {
             const DataType mag = Magnitude();
 
@@ -59,12 +59,12 @@ namespace Tbx
         }
 
 
-        constexpr static DataType Dot(const Vector3& _v1, const Vector3& _v2)
+        TOOLBOX_INLINE constexpr static DataType Dot(const Vector3& _v1, const Vector3& _v2)
         {
             return _v1.x * _v2.x + _v1.y * _v2.y + _v1.z * _v2.z;
         }
 
-        constexpr static Vector3 Cross(const Vector3& _v1, const Vector3& _v2)
+        TOOLBOX_INLINE constexpr static Vector3 Cross(const Vector3& _v1, const Vector3& _v2)
         {
             return Vector3(_v1.y * _v2.z - _v1.z * _v2.y,
                 _v1.z * _v2.x - _v1.x * _v2.z,
@@ -150,27 +150,41 @@ namespace Tbx
             z /= _Row1.z;
         }
 
-        Vector3 operator+(DataType value)
+        TOOLBOX_INLINE Vector3 operator+(DataType value) const
         {
             return { x + value, y + value, z + value };
         }
 
-        Vector3 operator-(DataType value)
+        TOOLBOX_INLINE Vector3 operator-(DataType value) const
         {
             return { x - value, y - value, z - value };
         }
 
-        Vector3 operator*(DataType value)
+        TOOLBOX_INLINE Vector3 operator*(DataType value) const
         {
             return { x * value, y * value, z * value };
         }
 
-        Vector3 operator/(DataType value)
+        TOOLBOX_INLINE void operator*=(DataType value)
+        {
+            x *= value;
+            y *= value;
+            z *= value;
+        }
+
+        TOOLBOX_INLINE Vector3 operator/(DataType value) const
         {
             return { x / value, y / value, z / value };
         }
 
-        TOOLBOX_INLINE DataType& operator[](size_t index)
+        TOOLBOX_INLINE void operator/=(DataType value) const
+        {
+            x /= value;
+            y /= value;
+            z /= value;
+        }
+
+        TOOLBOX_INLINE DataType& operator[](size_t index) 
         {
             return *static_cast<T*>(&x + index);
         }
@@ -191,13 +205,13 @@ namespace Tbx
         }
 
 
-        static constexpr Vector3 Zero() { return Vector3(static_cast<T>(0)); };
+        TOOLBOX_INLINE static constexpr Vector3 Zero() { return Vector3(static_cast<T>(0)); };
 
-        static constexpr Vector3 UnitX() { return { 1, 0, 0 }; };
+        TOOLBOX_INLINE static constexpr Vector3 UnitX() { return { 1, 0, 0 }; };
 
-        static constexpr Vector3 UnitY() { return { 0, 1, 0 }; };
+        TOOLBOX_INLINE static constexpr Vector3 UnitY() { return { 0, 1, 0 }; };
 
-        static constexpr Vector3 UnitZ() { return { 0, 0, 1 }; };
+        TOOLBOX_INLINE static constexpr Vector3 UnitZ() { return { 0, 0, 1 }; };
 
         std::string ToString() const
         {

@@ -13,7 +13,7 @@ namespace MotionCore
 
         ~CollisionSolver() = default;
 
-        void SolveCollsion(ObjectInfo& _objectInfo);
+        void SolveCollsion(ObjectInfo* _objectInfo);
     private:
         
     };

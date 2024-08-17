@@ -22,8 +22,8 @@ namespace MotionCore
             numeric depth;
             bool hitResult = false;
         };
-        
-        SphereCollisionInfo SphereCollision(numeric _sphereRadius1, numeric _sphereRadius2, const Vec3& _bodyPos1, const Vec3& _bodyPos2);
+
+        static SphereCollisionInfo SphereCollision(numeric _sphereRadius1, numeric _sphereRadius2, const Vec3& _bodyPos1, const Vec3& _bodyPos2);
     };
 }
 

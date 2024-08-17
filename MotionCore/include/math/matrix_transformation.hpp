@@ -4,15 +4,14 @@
 
 namespace Tbx
 {
-
-    template<typename D, typename F, typename T>
+    template <typename D, typename F, typename T>
     void MatrixCast(const F& _from, T* _to)
     {
         static_assert(std::is_same_v<T, Matrix3x3<D>> ||
-            std::is_same_v<T, Matrix2x2<D>> || std::is_same_v<T, Matrix4x4<D>>, "T is not a Matrix");
+                      std::is_same_v<T, Matrix2x2<D>> || std::is_same_v<T, Matrix4x4<D>>, "T is not a Matrix");
 
         static_assert(std::is_same_v<F, Matrix3x3<D>> ||
-            std::is_same_v<F, Matrix2x2<D>> || std::is_same_v<F, Matrix4x4<D>>, "F is not a Matrix");
+                      std::is_same_v<F, Matrix2x2<D>> || std::is_same_v<F, Matrix4x4<D>>, "F is not a Matrix");
 
         static_assert(!std::is_same_v<F, T>, "T and F are the same type");
 
@@ -112,6 +111,7 @@ namespace Tbx
 
         *matrix = x * y * z;
     }
+
     template <class T>
     void RotationMatrix3D(const Quaternion<T>& _quaternion, Matrix3x3<T>* matrix)
     {
@@ -162,6 +162,7 @@ namespace Tbx
 
         (*matrix)[3][3] = 1.f;
     }
+
     template <class T>
     void RotationMatrix3D(const Quaternion<T>& _quaternion, Matrix4x4<T>* matrix)
     {
@@ -268,7 +269,8 @@ namespace Tbx
 
 
     template <typename T>
-    void PerspectiveMatrix(const float fov, const float aspect, const float Near, const float Far, Matrix4x4<T>* _outMatrix)
+    void PerspectiveMatrix(const float fov, const float aspect, const float Near, const float Far,
+                           Matrix4x4<T>* _outMatrix)
     {
         const T fFovRad = static_cast<T>(1) / std::tanf(fov / static_cast<T>(2.f));
         const T zdiff = Near - Far;
@@ -289,7 +291,7 @@ namespace Tbx
 
     template <class T>
     constexpr static void OrthoGraphicMatrix(float left, float right, float bottom, float top, float zNear, float zFar,
-        Matrix4x4<T> _outMatrix)
+                                             Matrix4x4<T> _outMatrix)
     {
         T topBottomDiff = top - bottom;
         T rightLeftDiff = right - left;
@@ -408,71 +410,87 @@ namespace Tbx
     {
         Matrix4x4<T> copy = matrix.Transpose();
 
-        Matrix3x3<T> m1 = Matrix3x3<T>(Vector3<T>(copy[1][1], copy[1][2], copy[1][3]), Vector3<T>(copy[2][1], copy[2][2], copy[2][3]),
-            Vector3<T>(copy[3][1], copy[3][2], copy[3][3]));
+        Matrix3x3<T> m1 = Matrix3x3<T>(Vector3<T>(copy[1][1], copy[1][2], copy[1][3]),
+                                       Vector3<T>(copy[2][1], copy[2][2], copy[2][3]),
+                                       Vector3<T>(copy[3][1], copy[3][2], copy[3][3]));
         (*_out)[0][0] = Determinant(m1);
 
-        Matrix3x3<T> m2 = Matrix3x3<T>(Vector3<T>(copy[1][0], copy[1][2], copy[1][3]), Vector3<T>(copy[2][0], copy[2][2], copy[2][3]),
-            Vector3<T>(copy[3][0], copy[3][2], copy[3][3]));
+        Matrix3x3<T> m2 = Matrix3x3<T>(Vector3<T>(copy[1][0], copy[1][2], copy[1][3]),
+                                       Vector3<T>(copy[2][0], copy[2][2], copy[2][3]),
+                                       Vector3<T>(copy[3][0], copy[3][2], copy[3][3]));
         (*_out)[0][1] = -Determinant(m2);
 
-        Matrix3x3<T> m3 = Matrix3x3<T>(Vector3<T>(copy[1][0], copy[1][1], copy[1][3]), Vector3<T>(copy[2][0], copy[2][1], copy[2][3]),
-            Vector3<T>(copy[3][0], copy[3][1], copy[3][3]));
+        Matrix3x3<T> m3 = Matrix3x3<T>(Vector3<T>(copy[1][0], copy[1][1], copy[1][3]),
+                                       Vector3<T>(copy[2][0], copy[2][1], copy[2][3]),
+                                       Vector3<T>(copy[3][0], copy[3][1], copy[3][3]));
         (*_out)[0][2] = Determinant(m3);
 
-        Matrix3x3<T> m4 = Matrix3x3<T>(Vector3<T>(copy[1][0], copy[1][1], copy[1][2]), Vector3<T>(copy[2][0], copy[2][1], copy[2][2]),
-            Vector3<T>(copy[3][0], copy[3][1], copy[3][2]));
+        Matrix3x3<T> m4 = Matrix3x3<T>(Vector3<T>(copy[1][0], copy[1][1], copy[1][2]),
+                                       Vector3<T>(copy[2][0], copy[2][1], copy[2][2]),
+                                       Vector3<T>(copy[3][0], copy[3][1], copy[3][2]));
         (*_out)[0][3] = -Determinant(m4);
 
 
-        m1 = Matrix3x3<T>(Vector3<T>(copy[0][1], copy[0][2], copy[0][3]), Vector3<T>(copy[2][1], copy[2][2], copy[2][3]),
-            Vector3<T>(copy[3][1], copy[3][2], copy[3][3]));
+        m1 = Matrix3x3<T>(Vector3<T>(copy[0][1], copy[0][2], copy[0][3]),
+                          Vector3<T>(copy[2][1], copy[2][2], copy[2][3]),
+                          Vector3<T>(copy[3][1], copy[3][2], copy[3][3]));
         (*_out)[1][0] = -Determinant(m1);
 
-        m2 = Matrix3x3<T>(Vector3<T>(copy[0][0], copy[0][2], copy[0][3]), Vector3<T>(copy[2][0], copy[2][2], copy[2][3]),
-            Vector3<T>(copy[3][0], copy[3][2], copy[3][3]));
+        m2 = Matrix3x3<T>(Vector3<T>(copy[0][0], copy[0][2], copy[0][3]),
+                          Vector3<T>(copy[2][0], copy[2][2], copy[2][3]),
+                          Vector3<T>(copy[3][0], copy[3][2], copy[3][3]));
         (*_out)[1][1] = Determinant(m2);
 
-        m3 = Matrix3x3<T>(Vector3<T>(copy[0][0], copy[0][1], copy[0][3]), Vector3<T>(copy[2][0], copy[2][1], copy[2][3]),
-            Vector3<T>(copy[3][0], copy[3][1], copy[3][3]));
+        m3 = Matrix3x3<T>(Vector3<T>(copy[0][0], copy[0][1], copy[0][3]),
+                          Vector3<T>(copy[2][0], copy[2][1], copy[2][3]),
+                          Vector3<T>(copy[3][0], copy[3][1], copy[3][3]));
         (*_out)[1][2] = -Determinant(m3);
 
-        m4 = Matrix3x3<T>(Vector3<T>(copy[0][0], copy[0][1], copy[0][2]), Vector3<T>(copy[2][0], copy[2][1], copy[2][2]),
-            Vector3<T>(copy[3][0], copy[3][1], copy[3][2]));
+        m4 = Matrix3x3<T>(Vector3<T>(copy[0][0], copy[0][1], copy[0][2]),
+                          Vector3<T>(copy[2][0], copy[2][1], copy[2][2]),
+                          Vector3<T>(copy[3][0], copy[3][1], copy[3][2]));
         (*_out)[1][3] = Determinant(m4);
 
 
-        m1 = Matrix3x3<T>(Vector3<T>(copy[0][1], copy[0][2], copy[0][3]), Vector3<T>(copy[1][1], copy[1][2], copy[1][3]),
-            Vector3<T>(copy[3][1], copy[3][2], copy[3][3]));
+        m1 = Matrix3x3<T>(Vector3<T>(copy[0][1], copy[0][2], copy[0][3]),
+                          Vector3<T>(copy[1][1], copy[1][2], copy[1][3]),
+                          Vector3<T>(copy[3][1], copy[3][2], copy[3][3]));
         (*_out)[2][0] = Determinant(m1);
 
-        m2 = Matrix3x3<T>(Vector3<T>(copy[0][0], copy[0][2], copy[0][3]), Vector3<T>(copy[1][0], copy[1][2], copy[1][3]),
-            Vector3<T>(copy[3][0], copy[3][2], copy[3][3]));
+        m2 = Matrix3x3<T>(Vector3<T>(copy[0][0], copy[0][2], copy[0][3]),
+                          Vector3<T>(copy[1][0], copy[1][2], copy[1][3]),
+                          Vector3<T>(copy[3][0], copy[3][2], copy[3][3]));
         (*_out)[2][1] = -Determinant(m2);
 
-        m3 = Matrix3x3<T>(Vector3<T>(copy[0][0], copy[0][1], copy[0][3]), Vector3<T>(copy[1][0], copy[1][1], copy[1][3]),
-            Vector3<T>(copy[3][0], copy[3][1], copy[3][3]));
+        m3 = Matrix3x3<T>(Vector3<T>(copy[0][0], copy[0][1], copy[0][3]),
+                          Vector3<T>(copy[1][0], copy[1][1], copy[1][3]),
+                          Vector3<T>(copy[3][0], copy[3][1], copy[3][3]));
         (*_out)[2][2] = Determinant(m3);
 
-        m4 = Matrix3x3<T>(Vector3<T>(copy[0][0], copy[0][1], copy[0][2]), Vector3<T>(copy[1][0], copy[1][1], copy[1][2]),
-            Vector3<T>(copy[3][0], copy[3][1], copy[3][2]));
+        m4 = Matrix3x3<T>(Vector3<T>(copy[0][0], copy[0][1], copy[0][2]),
+                          Vector3<T>(copy[1][0], copy[1][1], copy[1][2]),
+                          Vector3<T>(copy[3][0], copy[3][1], copy[3][2]));
         (*_out)[2][3] = -Determinant(m4);
 
 
-        m1 = Matrix3x3<T>(Vector3<T>(copy[0][1], copy[0][2], copy[0][3]), Vector3<T>(copy[1][1], copy[1][2], copy[1][3]),
-            Vector3<T>(copy[2][1], copy[2][2], copy[2][3]));
+        m1 = Matrix3x3<T>(Vector3<T>(copy[0][1], copy[0][2], copy[0][3]),
+                          Vector3<T>(copy[1][1], copy[1][2], copy[1][3]),
+                          Vector3<T>(copy[2][1], copy[2][2], copy[2][3]));
         (*_out)[3][0] = -Determinant(m1);
 
-        m2 = Matrix3x3<T>(Vector3<T>(copy[0][0], copy[0][2], copy[0][3]), Vector3<T>(copy[1][0], copy[1][2], copy[1][3]),
-            Vector3<T>(copy[2][0], copy[2][2], copy[2][3]));
+        m2 = Matrix3x3<T>(Vector3<T>(copy[0][0], copy[0][2], copy[0][3]),
+                          Vector3<T>(copy[1][0], copy[1][2], copy[1][3]),
+                          Vector3<T>(copy[2][0], copy[2][2], copy[2][3]));
         (*_out)[3][1] = Determinant(m2);
 
-        m3 = Matrix3x3<T>(Vector3<T>(copy[0][0], copy[0][1], copy[0][3]), Vector3<T>(copy[1][0], copy[1][1], copy[1][3]),
-            Vector3<T>(copy[2][0], copy[2][1], copy[2][3]));
+        m3 = Matrix3x3<T>(Vector3<T>(copy[0][0], copy[0][1], copy[0][3]),
+                          Vector3<T>(copy[1][0], copy[1][1], copy[1][3]),
+                          Vector3<T>(copy[2][0], copy[2][1], copy[2][3]));
         (*_out)[3][2] = -Determinant(m3);
 
-        m4 = Matrix3x3<T>(Vector3<T>(copy[0][0], copy[0][1], copy[0][2]), Vector3<T>(copy[1][0], copy[1][1], copy[1][2]),
-            Vector3<T>(copy[2][0], copy[2][1], copy[2][2]));
+        m4 = Matrix3x3<T>(Vector3<T>(copy[0][0], copy[0][1], copy[0][2]),
+                          Vector3<T>(copy[1][0], copy[1][1], copy[1][2]),
+                          Vector3<T>(copy[2][0], copy[2][1], copy[2][2]));
         (*_out)[3][3] = Determinant(m4);
     }
 
@@ -481,8 +499,8 @@ namespace Tbx
     {
         Matrix4x4<T> adj;
         AdjoinMatrix(_matrix, &adj);
-        float determinant = Determinant(_matrix);
-        float invertedDeternimant = 1.f / determinant;
+        const T determinant = Determinant(_matrix);
+        const T invertedDeternimant = static_cast<T>(1) / determinant;
 
         Matrix4x4<T> result;
         for (int i = 0; i < 4; i++)
@@ -495,7 +513,58 @@ namespace Tbx
         *_outMatrix = result;
     }
 
-    template<typename T>
+    template <class T>
+    Matrix3x3<T> AdjoinMatrix(const Matrix3x3<T>& matrix)
+    {
+        Matrix3x3<T> copy = matrix.Transpose();
+        Matrix3x3<T> result;
+
+        // Calculate the cofactors for each element
+        T m1 = Determinant(Matrix2x2<T>(Vector2<T>(copy[1][1], copy[1][2]), Vector2<T>(copy[2][1], copy[2][2])));
+        T m2 = Determinant(Matrix2x2<T>(Vector2<T>(copy[1][0], copy[1][2]), Vector2<T>(copy[2][0], copy[2][2])));
+        T m3 = Determinant(Matrix2x2<T>(Vector2<T>(copy[1][0], copy[1][1]), Vector2<T>(copy[2][0], copy[2][1])));
+        result[0][0] = m1;
+        result[0][1] = -m2;
+        result[0][2] = m3;
+
+        m1 = Determinant(Matrix2x2<T>(Vector2<T>(copy[0][1], copy[0][2]), Vector2<T>(copy[2][1], copy[2][2])));
+        m2 = Determinant(Matrix2x2<T>(Vector2<T>(copy[0][0], copy[0][2]), Vector2<T>(copy[2][0], copy[2][2])));
+        m3 = Determinant(Matrix2x2<T>(Vector2<T>(copy[0][0], copy[0][1]), Vector2<T>(copy[2][0], copy[2][1])));
+        result[1][0] = -m1;
+        result[1][1] = m2;
+        result[1][2] = -m3;
+
+        m1 = Determinant(Matrix2x2<T>(Vector2<T>(copy[0][1], copy[0][2]), Vector2<T>(copy[1][1], copy[1][2])));
+        m2 = Determinant(Matrix2x2<T>(Vector2<T>(copy[0][0], copy[0][2]), Vector2<T>(copy[1][0], copy[1][2])));
+        m3 = Determinant(Matrix2x2<T>(Vector2<T>(copy[0][0], copy[0][1]), Vector2<T>(copy[1][0], copy[1][1])));
+        result[2][0] = m1;
+        result[2][1] = -m2;
+        result[2][2] = m3;
+        
+        return result;
+    }
+
+    template <typename T>
+    Matrix3x3<T> Invert(const Matrix3x3<T>& _matrix)
+    {
+        const Matrix3x3<T> adj = AdjoinMatrix(_matrix);
+
+        const T determinant = Determinant(_matrix);
+        const T invertedDeternimant = static_cast<T>(1) / determinant;
+
+        Matrix3x3<T> result;
+        for (size_t i = 0; i < Matrix3x3<T>::Size; i++)
+        {
+            for (size_t k = 0; k < Matrix3x3<T>::Size; k++)
+            {
+                result[i][k] = invertedDeternimant * adj[i][k];
+            }
+        }
+        return result;
+    }
+
+
+    template <typename T>
     void ToMatrix(const Quaternion<T>& _from, Matrix3x3<T>* _out)
     {
         const T b = _from.imaginary.x;
@@ -517,13 +586,13 @@ namespace Tbx
 
         *_out =
         {
-                    {2.f * (aa + bb) - 1.f,2.f * (bc + da), 2.f * (bd - ca)},
-                    {2.f * (bc - da), 2.f * (aa + cc) - 1.f, 2.f * (cd + ba) },
-                    {2.f * (bd + ca),2.f * (cd - ba),2.f * (aa + dd) - 1.f},
+            {2.f * (aa + bb) - 1.f, 2.f * (bc + da), 2.f * (bd - ca)},
+            {2.f * (bc - da), 2.f * (aa + cc) - 1.f, 2.f * (cd + ba)},
+            {2.f * (bd + ca), 2.f * (cd - ba), 2.f * (aa + dd) - 1.f},
         };
     }
 
-    template<typename T>
+    template <typename T>
     void ToMatrix(const Quaternion<T>& _from, Matrix4x4<T>* _out)
     {
         Matrix3x3<T> m3;
@@ -531,7 +600,7 @@ namespace Tbx
         MatrixCast<T, decltype(m3), decltype(*_out)>(m3, *_out);
     }
 
-    template<typename T>
+    template <typename T>
     void FromMatrix(const Matrix3x3<T>& _matrix, Quaternion<T>* _out)
     {
         T trace = _matrix.Trace();
@@ -548,7 +617,7 @@ namespace Tbx
     }
 
 
-    template<typename T>
+    template <typename T>
     void FromMatrix(const Matrix4x4<T>& _matrix, Quaternion<T>* _out)
     {
         Matrix3x3<T> m3;
@@ -567,7 +636,7 @@ namespace Tbx
         return Quaternion(b * denom, c * denom, d * denom, -a).Normalize();
     }
 
-    template<typename T>
+    template <typename T>
     void Trs2D(const Vector2<T>& _translation, const T& _rotation, const Vector2<T>& _scale, Matrix3x3<T>* _outModel)
     {
         Matrix2x2<T> rot;
@@ -577,11 +646,12 @@ namespace Tbx
         ScaleMatrix2D(_rotation, &scale);
 
         *_outModel = rot * scale;
-        *_outModel[Matrix3x3<T>::Size] = { _translation.x,_translation.y, static_cast<T>(1) };
+        *_outModel[Matrix3x3<T>::Size] = {_translation.x, _translation.y, static_cast<T>(1)};
     }
 
-    template<typename T>
-    void Trs3D(const Vector3<T>& _translation, const Vector3<T>& _rotation, const Vector3<T>& _scale, Matrix4x4<T>* _outModel)
+    template <typename T>
+    void Trs3D(const Vector3<T>& _translation, const Vector3<T>& _rotation, const Vector3<T>& _scale,
+               Matrix4x4<T>* _outModel)
     {
         Matrix4x4<T> rot;
         Matrix4x4<T> scale;
@@ -590,11 +660,12 @@ namespace Tbx
         ScaleMatrix3D(_scale, &scale);
 
         *_outModel = rot * scale;
-        (*_outModel)[Matrix4x4<T>::Size - 1] = { _translation.x, _translation.y, _translation.z, static_cast<T>(1) };
+        (*_outModel)[Matrix4x4<T>::Size - 1] = {_translation.x, _translation.y, _translation.z, static_cast<T>(1)};
     }
 
-    template<typename T>
-    void Trs3D(const Vector3<T>& _translation, const Quaternion<T>& _rotation, const Vector3<T>& _scale, Matrix4x4<T>* _outModel)
+    template <typename T>
+    void Trs3D(const Vector3<T>& _translation, const Quaternion<T>& _rotation, const Vector3<T>& _scale,
+               Matrix4x4<T>* _outModel)
     {
         Matrix4x4<T> rot;
         Matrix4x4<T> scale;
@@ -603,9 +674,6 @@ namespace Tbx
         ScaleMatrix3D(_scale, &scale);
 
         *_outModel = rot * scale;
-        (*_outModel)[Matrix4x4<T>::Size - 1] = { _translation.x, _translation.y, _translation.z, static_cast<T>(1) };
+        (*_outModel)[Matrix4x4<T>::Size - 1] = {_translation.x, _translation.y, _translation.z, static_cast<T>(1)};
     }
-
-
-
 }

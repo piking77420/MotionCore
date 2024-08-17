@@ -5,6 +5,8 @@
 #include <queue>
 
 #include "collision_solver.h"
+#include "collision_detector.hpp"
+#include "integrator.hpp"
 
 namespace MotionCore
 {
@@ -23,11 +25,19 @@ namespace MotionCore
 
         MOTION_CORE void Update(numeric _deltaTime);
 
-        MOTION_CORE void AddForce(uint32_t _id, const Vec3& _forces);
+        MOTION_CORE FORCEINLINE void AddForce(uint32_t _id, const Vec3& _forces);
 
-        MOTION_CORE void AddImpulse(uint32_t _id, const Vec3& _impluse);
+        MOTION_CORE FORCEINLINE void AddImpulse(uint32_t _id, const Vec3& _impluse);
 
-        MOTION_CORE uint32_t CreateBody(const CreateBodyInfo* _CreateBodyInfo);
+        MOTION_CORE FORCEINLINE void AddTorque(uint32_t _id, const Vec3& _torque);
+
+        MOTION_CORE uint32_t CreateBody(const BodyCreateInfo& _bodyCreateInfo);
+
+        MOTION_CORE bool DestroyBody(uint32_t _bodyID);
+
+        MOTION_CORE Vec3 GetPosition(uint32_t _id);
+
+        MOTION_CORE Quat GetRotation(uint32_t _id);
 
     private:
         Tbx::Vector3f m_Gravity = {0.f, -9.81f, 0.f};
@@ -42,20 +52,19 @@ namespace MotionCore
 
         ObjectInfo m_ObjectInfo;
 
-        CollisionSolver m_CollisionSolver; 
+        Integrator integrator; 
+
+        CollisionSolver m_CollisionSolver;
+
+        CollisionDetector m_CollisionDetector;
         
         void Step(numeric _deltatime);
 
         void Integrate(numeric _deltatime);
+        
+        uint32_t GetValidBodyId() const;
 
-        static inline void AddForce(Body* _body, Tbx::Vector3f _force)
-        {
-            _body->force += _force;
-        }
+        void InitBody(Body* _body, const BodyCreateInfo* _bodyCreateInfo);
 
-        static inline void AddImpulse(Body* _body, Tbx::Vector3f _impulse)
-        {
-            _body->velocity += _impulse * _body->invMass;
-        }
     };
 }

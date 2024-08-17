@@ -10,6 +10,8 @@
 #define MOTION_CORE __declspec(dllimport)
 #endif
 
+#define FORCEINLINE __forceinline
+
 namespace MotionCore
 {
 	using numeric = float;

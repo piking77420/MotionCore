@@ -14,16 +14,16 @@ namespace MotionCore
         return -Tbx::Vector3<DataType>::Dot(_vel1 - _vel2, (_pos1 - _pos2).Normalize());
     }
 
-    inline Body* GetBodyFromId(const std::vector<Body>& _bodies, uint32_t _id)
-    {/*
-        decltype(_bodies)::iterator it = std::find_if(_bodies.begin(), _bodies.end(), [&_id](const Body& b)
+    inline Body* GetBodyFromId(std::vector<Body>& _bodies, uint32_t _id)
+    {
+        auto it = std::ranges::find_if(_bodies, [&_id](const Body& b)
         {
             return b.id == _id;
         });
 
         if (it != _bodies.end())
             return &*it;
-            */
+            
         return nullptr;
     }
 }
