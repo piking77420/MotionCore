@@ -13,7 +13,7 @@ namespace MotionCore
 
         ~CollisionDetector() = default;
 
-        void FoundCollision(ObjectInfo* objectInfo);
+        void FoundCollision(MotionCoreContext* objectInfo);
     private:
         struct SphereCollisionInfo
         {

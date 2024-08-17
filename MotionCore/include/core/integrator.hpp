@@ -31,11 +31,11 @@ namespace MotionCore
             _body->isAwake = true;
         }
 
-        void IntegrateBodies(ObjectInfo* _objectInfo, const Vec3& _gravity, numeric _deltaTime);
+        void IntegrateBodies(MotionCoreContext* _objectInfo, const Vec3& _gravity, numeric _deltaTime);
     private:
         numeric deltatime = static_cast<numeric>(0);
 
-        ObjectInfo* m_ObjectInfo = nullptr;
+        MotionCoreContext* m_ObjectInfo = nullptr;
         
         void ComputePosition(Body* body) const;
 

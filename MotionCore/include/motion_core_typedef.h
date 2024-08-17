@@ -35,8 +35,9 @@ namespace MotionCore
         {
             numeric radius;
             numeric height;
-            Vec3 min;
-            Vec3 max;
+            Vec3 center;
+            Vec3 extend;
+            uint32_t physicsMeshId = -1;
 
             // for std vector else it's deleted function
             Body() {}
@@ -54,7 +55,6 @@ namespace MotionCore
         Vec3 velocity;
         uint32_t primitiveIndex = NULLPRIMITVE;
         
-        Vec3 worldCenterOfMass;
         numeric invMass = static_cast<numeric>(1.f);
 
         Vec3 lastFrameAcceleration;
@@ -110,10 +110,24 @@ namespace MotionCore
     };
 
 
-    struct ObjectInfo
+    struct ConvexHull
+    {
+        uint32_t id = -1;
+        std::vector<Tbx::Vector3f> hullverticies;
+    };
+
+    struct MeshData
+    {
+        uint32_t id = -1;
+        Vec3 worldCenterOfMass;
+        ConvexHull convexHull;
+    };
+    
+    struct MotionCoreContext
     {
         std::vector<Body> bodies;
         std::vector<PrimitiveInfo> primitiveInfo;
         std::queue<CollisionPoint> collisionPoint;
+        std::vector<MeshData> meshDatas;
     };
 }

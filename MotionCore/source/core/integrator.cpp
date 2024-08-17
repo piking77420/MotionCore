@@ -2,7 +2,7 @@
 
 
 
-void MotionCore::Integrator::IntegrateBodies(ObjectInfo* _objectInfo, const Vec3& _gravity, numeric _deltaTime)
+void MotionCore::Integrator::IntegrateBodies(MotionCoreContext* _objectInfo, const Vec3& _gravity, numeric _deltaTime)
 {
     m_ObjectInfo = _objectInfo;
     std::vector<Body>& bodies = _objectInfo->bodies;
@@ -43,8 +43,8 @@ void MotionCore::Integrator::ComputeRotation(Body* body) const
     body->angularVelocity += angularAcceleration * deltatime;
     body->rotation +=  body->angularVelocity * deltatime * static_cast<numeric>(0.5);
     body->rotation = body->rotation.Normalize();
-    
-    body->angularVelocity *= pow(body->physcicalMaterial.angularDamping, deltatime);
+    const numeric dampingValue = pow(body->physcicalMaterial.angularDamping, deltatime); 
+    body->angularVelocity *= dampingValue;
 }
 
 
@@ -82,7 +82,7 @@ Tbx::Matrix3x3<MotionCore::numeric> MotionCore::Integrator::GetInvertInertiaTens
     case BOX:
         {
             
-            const Vec3 extend = (type.data.max - type.data.min) * static_cast<numeric>(0.5);
+            const Vec3 extend = type.data.extend;
             const numeric PowerX = extend.x * extend.x;
             const numeric PowerY = extend.y * extend.y;
             const numeric PowerZ = extend.z * extend.z;
@@ -91,7 +91,7 @@ Tbx::Matrix3x3<MotionCore::numeric> MotionCore::Integrator::GetInvertInertiaTens
             {
                 {constantBox * mass * (PowerY + PowerZ), zero, zero},
                 {zero,constantBox * mass * (PowerX + PowerZ),zero},
-                {zero,constantBox * mass * (PowerX + PowerY),zero}
+                {zero,zero,constantBox * mass * (PowerX + PowerY)}
             }; 
         }
         break;

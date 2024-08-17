@@ -1,6 +1,6 @@
 ﻿#include "core/collision_solver.h"
 
-void MotionCore::CollisionSolver::SolveCollsion(ObjectInfo* _objectInfo)
+void MotionCore::CollisionSolver::SolveCollsion(MotionCoreContext* _objectInfo)
 {
     /*
     for(CollisionPoint& coll : _objectInfo)

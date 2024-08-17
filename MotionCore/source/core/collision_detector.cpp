@@ -1,6 +1,6 @@
 ﻿#include "core/collision_detector.hpp"
 
-void MotionCore::CollisionDetector::FoundCollision(ObjectInfo* objectInfo)
+void MotionCore::CollisionDetector::FoundCollision(MotionCoreContext* objectInfo)
 {
     /*
     std::vector<Body>& bodies = objectInfo->bodies;

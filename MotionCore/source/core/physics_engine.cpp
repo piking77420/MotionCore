@@ -5,6 +5,7 @@
 #include "core/physics_helper.hpp"
 
 #include "memory"
+#include "algo/quick_hull.hpp"
 
 using namespace MotionCore;
 
@@ -15,6 +16,29 @@ void PhysicsEngine::Initialize(const PhyscicsEngineInitilizationParameters* _phy
     m_ObjectInfo.bodies.resize(MAX_BODIES);
     m_ObjectInfo.primitiveInfo.resize(MAX_BODIES); 
 
+/*
+    // test //
+
+    Tbx::Vector3f array[4] =
+ {
+        {2, 3, 1},    // Vertex 0
+        {7, -2, 4},   // Vertex 1
+        {10, 10, 3},   // Vertex 2
+        {5, 7, 2}    // Vertex 3
+ };
+
+    Tbx::Vector3f p1 = {4, -2, 8};  // Point 1 on the plane
+    Tbx::Vector3f p2 = {1, 3, 5};   // Point 2 on the plane
+    Tbx::Vector3f p3 = {6, 2, 0};   // Point 3 on the plane
+        
+    BeginHull hull;
+    hull._verticiesData = array;
+    hull._vertexSize = sizeof(p1);
+    hull._positionOffSet = 0;
+    hull._nbrOfVerticies = 4;
+    
+    int index = FarestVertexFromFacesAndOutSideTheOrigin(p1,p2,p3,&hull);
+*/
 }
 
 void PhysicsEngine::Destroy()
@@ -83,6 +107,12 @@ Quat PhysicsEngine::GetRotation(uint32_t _id)
     return m_ObjectInfo.bodies[_id].rotation;
 }
 
+uint32_t PhysicsEngine::CreateMeshInfo(void* _verticiesData, uint32_t _nbrOfVerticies, uint32_t _vertexSize,
+    uint32_t _vectorSize, uint32_t _vectorDataSize, uint32_t _positionOffSet)
+{
+    return 0;
+}
+
 
 void PhysicsEngine::Step(numeric _deltatime)
 {
@@ -106,6 +136,13 @@ void PhysicsEngine::InitBody(Body* _body, const BodyCreateInfo* _bodyCreateInfo)
 {
     _body->invMass = static_cast<numeric>(1) / _bodyCreateInfo->mass;
     size_t i = 0;
+
+    if (_bodyCreateInfo->bodyTypeInfo.bodyType == MESH && _bodyCreateInfo->bodyTypeInfo.data.physicsMeshId == static_cast<uint32_t>(-1))
+    {
+        // ERROR
+        return;
+    }
+    
     for (; i < m_ObjectInfo.primitiveInfo.size(); i++)
     {
         if (m_ObjectInfo.primitiveInfo[i].bodyType == NONE)
@@ -120,8 +157,34 @@ void PhysicsEngine::InitBody(Body* _body, const BodyCreateInfo* _bodyCreateInfo)
     _body->position = _bodyCreateInfo->position;
     _body->rotation = _bodyCreateInfo->rotation;
     
-    _body->physcicalMaterial.damping = _bodyCreateInfo->physcicalMaterial.damping;
-    _body->physcicalMaterial.restitutionCoeff = _bodyCreateInfo->physcicalMaterial.restitutionCoeff;
+    _body->physcicalMaterial = _bodyCreateInfo->physcicalMaterial;
+}
+
+Vec3 PhysicsEngine::GetWorldCenterOfMass(const Body* _body) const
+{
+    if (_body->id == NULLBODY || _body->primitiveIndex == NULLPRIMITVE)
+    {
+        // error
+        return {};
+    }
+    
+    PrimitiveInfo primitiveInfo = m_ObjectInfo.primitiveInfo.at(_body->primitiveIndex);
+    
+    switch (primitiveInfo.bodyType)
+    {
+    case NONE:
+        break;
+    case SPHERE:
+        return {};
+    case BOX:
+        return {};
+    case CAPSULE:
+        return { static_cast<numeric>(0), static_cast<numeric>(0), m_ObjectInfo.primitiveInfo.at(_body->primitiveIndex).data.height * static_cast<numeric>(0.5) };
+        break;
+    case MESH:
+        return m_ObjectInfo.meshDatas.at(primitiveInfo.data.physicsMeshId).worldCenterOfMass;
+        break;
+    }
 }
 
 
