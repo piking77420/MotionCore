@@ -23,6 +23,11 @@ namespace Tbx
         {
         }
 
+        template<typename U>
+        operator Vector3<U>() const {
+            return Vector3<U>(static_cast<U>(x), static_cast<U>(y), static_cast<U>(z));
+        }
+
         ~Vector3() = default;
 
         TOOLBOX_INLINE constexpr DataType* GetPtr()

@@ -10,34 +10,49 @@ void MotionCore::Integrator::IntegrateBodies(MotionCoreContext* _objectInfo, con
 
     for (Body& body : bodies)
     {
-        if (body.id == NULLBODY || !body.isAwake)
+        if (body.id == NULLBODY || !body.isAwake || body.primitiveIndex == NULLPRIMITVE)
             continue;
         
+        PrimitiveInfo& primitiveInfo = _objectInfo->primitiveInfo.at(body.primitiveIndex);
+        
         //body.force += _gravity;
-        ComputePosition(&body);
-        ComputeRotation(&body);
-
+        ComputePosition(&body, &primitiveInfo);
+        ComputeRotation(&body, primitiveInfo);
         
         body.forceAccumulation = {};
         body.torqueAccumulation = {};
-       
     }
 }
 
-void MotionCore::Integrator::ComputePosition(Body* body) const
+void MotionCore::Integrator::SleepBodies(MotionCoreContext* _objectInfo)
+{
+    std::vector<Body>& bodies = _objectInfo->bodies;
+
+    for (Body& body : bodies)
+    {
+        if (body.id == NULLBODY || !body.isAwake)
+            continue;
+
+        const PrimitiveInfo primitiveInfo = m_ObjectInfo->primitiveInfo[body.primitiveIndex];
+        // TO do sleep 
+        
+    }
+}
+
+void MotionCore::Integrator::ComputePosition(Body* body, PrimitiveInfo* _primitiveInfo) const
 {
     const Vec3 acceleration = body->forceAccumulation * body->invMass;
     body->lastFrameAcceleration = acceleration; 
     
     body->velocity += body->lastFrameAcceleration * deltatime;
-    body->position += body->lastFrameAcceleration * static_cast<numeric>(0.5) * deltatime * deltatime + body->velocity * deltatime;
+    _primitiveInfo->position += body->lastFrameAcceleration * static_cast<numeric>(0.5) * deltatime * deltatime + body->velocity * deltatime;
     const numeric dampingValue = pow(body->physcicalMaterial.damping, deltatime); 
     body->velocity *= dampingValue;
 }
 
-void MotionCore::Integrator::ComputeRotation(Body* body) const
+void MotionCore::Integrator::ComputeRotation(Body* body, const PrimitiveInfo& _primitiveInfo) const
 {
-    const Tbx::Matrix3x3<numeric> InverTensor = GetInvertInertiaTensor(*body);
+    const Tbx::Matrix3x3<numeric> InverTensor = GetInvertInertiaTensor(*body,_primitiveInfo);
         
     const Vec3 angularAcceleration = InverTensor * body->torqueAccumulation;
     body->angularVelocity += angularAcceleration * deltatime;
@@ -48,11 +63,9 @@ void MotionCore::Integrator::ComputeRotation(Body* body) const
 }
 
 
-Tbx::Matrix3x3<MotionCore::numeric> MotionCore::Integrator::GetInvertInertiaTensor(const Body& body) const
+Tbx::Matrix3x3<MotionCore::numeric> MotionCore::Integrator::GetInvertInertiaTensor(const Body& body, const PrimitiveInfo& _primitiveInfo) const
 {
-    const PrimitiveInfo type = m_ObjectInfo->primitiveInfo[body.primitiveIndex];
-
-    if (type.bodyType == NONE)
+    if (_primitiveInfo.bodyType == NONE)
         return Tbx::Matrix3x3<MotionCore::numeric>::Identity();
     
     Tbx::Matrix3x3<numeric> tensor;
@@ -62,13 +75,13 @@ Tbx::Matrix3x3<MotionCore::numeric> MotionCore::Integrator::GetInvertInertiaTens
     const numeric mass = static_cast<numeric>(1) / body.invMass;
 
     
-    switch (type.bodyType)
+    switch (_primitiveInfo.bodyType)
     {
     case NONE: // NOLINT(bugprone-branch-clone)
         break;
     case SPHERE:
         {
-            const numeric radiusSquare = type.data.radius * type.data.radius;
+            const numeric radiusSquare = _primitiveInfo.data.sphere.radius * _primitiveInfo.data.sphere.radius;
             const numeric value = radiusSquare * mass * constantSphere;
         
             tensor =
@@ -82,7 +95,7 @@ Tbx::Matrix3x3<MotionCore::numeric> MotionCore::Integrator::GetInvertInertiaTens
     case BOX:
         {
             
-            const Vec3 extend = type.data.extend;
+            const Vec3 extend = _primitiveInfo.data.aabb.extend;
             const numeric PowerX = extend.x * extend.x;
             const numeric PowerY = extend.y * extend.y;
             const numeric PowerZ = extend.z * extend.z;

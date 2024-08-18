@@ -52,7 +52,7 @@ namespace MotionCore
         MOTION_CORE uint32_t CreateMeshInfo(void* _verticiesData, uint32_t _nbrOfVerticies, uint32_t _vertexSize, uint32_t _vectorSize, uint32_t _vectorDataSize,  uint32_t _positionOffSet); 
 
     private:
-        Tbx::Vector3f m_Gravity = {0.f, -9.81f, 0.f};
+        Vec3 m_Gravity = {0.f, -9.81f, 0.f};
         
         struct TimeInfo
         {

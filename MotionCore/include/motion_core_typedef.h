@@ -3,6 +3,7 @@
 #include <variant>
 
 #include "physic_material.h"
+#include "primitive.h"
 
 namespace MotionCore
 {
@@ -27,16 +28,16 @@ namespace MotionCore
         MESH
     };
 
+    
     struct PrimitiveInfo
     {
         PrimitiveType bodyType;
         
         union Body
         {
-            numeric radius;
-            numeric height;
-            Vec3 center;
-            Vec3 extend;
+            Sphere sphere;
+            AABB aabb;
+            Caspule caspule;
             uint32_t physicsMeshId = -1;
 
             // for std vector else it's deleted function
@@ -44,29 +45,30 @@ namespace MotionCore
             ~Body() {};
         };
         Body data;
+        Vec3 position;
+        uint32_t bodyId = NULLBODY;
     };
     
 
     struct Body
     {
-        Vec3 position;
+        Vec3 velocity;
         uint32_t id = NULLBODY;
         
-        Vec3 velocity;
+        Vec3 lastFrameAcceleration;
         uint32_t primitiveIndex = NULLPRIMITVE;
         
+        Vec3 angularVelocity;
         numeric invMass = static_cast<numeric>(1.f);
-
-        Vec3 lastFrameAcceleration;
         
         Quat rotation;
         PhyscicalMaterial physcicalMaterial;
-
-        Vec3 angularVelocity;
-        bool isAwake = false;
         
-        Vec3 torqueAccumulation;
+        bool isAwake = false;
         Vec3 forceAccumulation;
+    
+        Vec3 torqueAccumulation;
+        AABB worldBoundingBox;
     };
     
 
@@ -79,20 +81,8 @@ namespace MotionCore
         PrimitiveInfo bodyTypeInfo;
         PhyscicalMaterial physcicalMaterial; 
     };
+
     
-    struct Sphere
-    {
-        uint32_t bodyId = NULLBODY;
-        numeric radius = static_cast<numeric>(0.5);
-    };
-
-    struct BoundingBox
-    {
-        uint32_t bodyId = NULLBODY;
-        Vec3 min = Vec3(static_cast<numeric>(-0.5));
-        Vec3 max = Vec3(static_cast<numeric>(0.5));
-    };
-
     struct PenetrationInfo
     {
         numeric penetrationB1;

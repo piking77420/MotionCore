@@ -1,42 +1,17 @@
 ﻿#include "core/collision_detector.hpp"
 
-void MotionCore::CollisionDetector::FoundCollision(MotionCoreContext* objectInfo)
+void MotionCore::CollisionDetector::FoundCollision(MotionCoreContext* _objectInfo)
 {
-    /*
-    std::vector<Body>& bodies = objectInfo->bodies;
+    motionCoreContext = _objectInfo;
     
-    for (size_t i = 0; i < objectInfo->bodies.size(); ++i)
+    std::vector<Body>& bodies = _objectInfo->bodies;
+
+    for (Body& body : bodies)
     {
-        Body& b1 = m_Instance->particles[i];
+        ComputeWorldABBB(&body);
 
-        for (size_t j = i + 1; j < m_Instance->particles.size(); ++j)
-        {
-            Particule& p2 = m_Instance->particles[j];
-
-            const float maxRadius = p1.radius + p2.radius; 
-            Tbx::Vector2f vec = p2.body.position - p1.body.position;
-            const float distanceSquare = vec.MagnitudeSquare(); 
-
-            if (distanceSquare > maxRadius * maxRadius)
-                continue;
-
-            float depth = distanceSquare - maxRadius;
-
-            CollisionPoint coll =
-            {
-                .b1 = &p1.body,
-                .b2 = &p2.body,
-                .normal = vec,
-                .depth = depth, 
-                .penetrationb1 = (p1.body.invMass + p2.body.invMass) / p2.body.invMass * depth,
-                .penetrationb2 = -(p1.body.invMass + p2.body.invMass) / p1.body.invMass * depth
-
-            };
-
-            m_Instance->collisionPoint.push(coll);
-        }
     }
-    */
+    
 }
 
 MotionCore::CollisionDetector::SphereCollisionInfo MotionCore::CollisionDetector::SphereCollision(
@@ -51,4 +26,37 @@ MotionCore::CollisionDetector::SphereCollisionInfo MotionCore::CollisionDetector
         return {.normal = {}, .depth = {}, .hitResult = false};
     
     return {.normal = sphereDirectionVector.Normalize(), .depth = sqrtf(distanceSquare), .hitResult = true};
+}
+
+void MotionCore::CollisionDetector::ComputeWorldABBB(Body* body) const
+{
+    Tbx::Matrix3x3<numeric> matrix;
+    Tbx::RotationMatrix3D(body->rotation, &matrix);
+
+    
+}
+
+MotionCore::AABB MotionCore::CollisionDetector::GetLocalAABB(Body* _body) const
+{
+    PrimitiveInfo primitiveInfo = motionCoreContext->primitiveInfo.at(_body->primitiveIndex);
+    AABB returnAabb;
+    
+    switch (primitiveInfo.bodyType)
+    {
+    case NONE:
+        break;
+    case SPHERE:
+        returnAabb.extend = primitiveInfo.data.sphere.radius;
+        break;
+    case BOX:
+        returnAabb = primitiveInfo.data.aabb;
+        break;
+    case CAPSULE:
+        break;
+    case MESH:
+        break;
+    default: ;
+    }
+
+    return returnAabb;
 }

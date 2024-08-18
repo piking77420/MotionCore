@@ -99,7 +99,9 @@ bool PhysicsEngine::DestroyBody(uint32_t _bodyID)
 
 Vec3 PhysicsEngine::GetPosition(uint32_t _id)
 {
-    return m_ObjectInfo.bodies[_id].position;
+    const PrimitiveInfo& primitiveInfo = m_ObjectInfo.primitiveInfo.at( m_ObjectInfo.bodies.at(_id).primitiveIndex);
+    
+    return primitiveInfo.position;
 }
 
 Quat PhysicsEngine::GetRotation(uint32_t _id)
@@ -110,6 +112,7 @@ Quat PhysicsEngine::GetRotation(uint32_t _id)
 uint32_t PhysicsEngine::CreateMeshInfo(void* _verticiesData, uint32_t _nbrOfVerticies, uint32_t _vertexSize,
     uint32_t _vectorSize, uint32_t _vectorDataSize, uint32_t _positionOffSet)
 {
+    // TODO
     return 0;
 }
 
@@ -149,12 +152,14 @@ void PhysicsEngine::InitBody(Body* _body, const BodyCreateInfo* _bodyCreateInfo)
         {
             m_ObjectInfo.primitiveInfo[i].bodyType = _bodyCreateInfo->bodyTypeInfo.bodyType;
             m_ObjectInfo.primitiveInfo[i].data = _bodyCreateInfo->bodyTypeInfo.data;
+            m_ObjectInfo.primitiveInfo[i].position = _bodyCreateInfo->position;
+            
             _body->primitiveIndex = static_cast<uint32_t>(i);
             break;
         }
     }
     
-    _body->position = _bodyCreateInfo->position;
+   
     _body->rotation = _bodyCreateInfo->rotation;
     
     _body->physcicalMaterial = _bodyCreateInfo->physcicalMaterial;
@@ -168,7 +173,7 @@ Vec3 PhysicsEngine::GetWorldCenterOfMass(const Body* _body) const
         return {};
     }
     
-    PrimitiveInfo primitiveInfo = m_ObjectInfo.primitiveInfo.at(_body->primitiveIndex);
+    const PrimitiveInfo primitiveInfo = m_ObjectInfo.primitiveInfo.at(_body->primitiveIndex);
     
     switch (primitiveInfo.bodyType)
     {
@@ -179,12 +184,14 @@ Vec3 PhysicsEngine::GetWorldCenterOfMass(const Body* _body) const
     case BOX:
         return {};
     case CAPSULE:
-        return { static_cast<numeric>(0), static_cast<numeric>(0), m_ObjectInfo.primitiveInfo.at(_body->primitiveIndex).data.height * static_cast<numeric>(0.5) };
+        return { static_cast<numeric>(0), static_cast<numeric>(0), m_ObjectInfo.primitiveInfo.at(_body->primitiveIndex).data.caspule.height * static_cast<numeric>(0.5) };
         break;
     case MESH:
         return m_ObjectInfo.meshDatas.at(primitiveInfo.data.physicsMeshId).worldCenterOfMass;
         break;
     }
+
+    return {};
 }
 
 

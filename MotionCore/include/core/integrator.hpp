@@ -32,16 +32,18 @@ namespace MotionCore
         }
 
         void IntegrateBodies(MotionCoreContext* _objectInfo, const Vec3& _gravity, numeric _deltaTime);
+
+        void SleepBodies(MotionCoreContext* _objectInfo);
     private:
         numeric deltatime = static_cast<numeric>(0);
 
         MotionCoreContext* m_ObjectInfo = nullptr;
         
-        void ComputePosition(Body* body) const;
+        void ComputePosition(Body* body,PrimitiveInfo* _primitiveInfo) const;
 
-        void ComputeRotation(Body* body) const;
+        void ComputeRotation(Body* body, const PrimitiveInfo& _primitiveInfo) const;
         
-        Tbx::Matrix3x3<numeric> GetInvertInertiaTensor(const Body& body) const;
+        Tbx::Matrix3x3<numeric> GetInvertInertiaTensor(const Body& body, const PrimitiveInfo& _primitiveInfo) const;
     };
     
 }

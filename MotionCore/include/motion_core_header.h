@@ -14,7 +14,7 @@
 
 namespace MotionCore
 {
-	using numeric = float;
+	using numeric = double;
 
 	using Vec2 = Tbx::Vector2<numeric>;
 	using Vec3 = Tbx::Vector3<numeric>;

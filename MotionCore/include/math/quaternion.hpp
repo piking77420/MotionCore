@@ -28,6 +28,11 @@ namespace Tbx
 
         }
 
+        template<typename U>
+        operator Quaternion<U>() const {
+            return Quaternion<U>(static_cast<Vector3<U>>(imaginary),static_cast<U>(real));
+        }
+
         ~Quaternion() = default;
 
         constexpr static TOOLBOX_INLINE Quaternion Identity() { return { Vec3::Zero(), static_cast<DataType>(1) }; }
