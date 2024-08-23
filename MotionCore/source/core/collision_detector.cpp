@@ -3,37 +3,22 @@
 void MotionCore::CollisionDetector::FoundCollision(MotionCoreContext* _objectInfo)
 {
     motionCoreContext = _objectInfo;
-    
     std::vector<Body>& bodies = _objectInfo->bodies;
 
     for (Body& body : bodies)
     {
+        if (body.id == NULLBODY || !body.isAwake)
+            continue;
         ComputeWorldABBB(&body);
-
     }
     
 }
 
-MotionCore::CollisionDetector::SphereCollisionInfo MotionCore::CollisionDetector::SphereCollision(
-    numeric _sphereRadius1, numeric _sphereRadius2, const Vec3& _bodyPos1, const Vec3& _bodyPos2)
-{
-    const Vec3 sphereDirectionVector = _bodyPos2 - _bodyPos1;
-    const numeric distanceSquare = sphereDirectionVector.MagnitudeSquare();
-    const numeric radiusSum = _sphereRadius1 * _sphereRadius1 + _sphereRadius2 * _sphereRadius2;
-
-    SphereCollisionInfo sphereCollisionInfo;
-    if (distanceSquare < radiusSum)
-        return {.normal = {}, .depth = {}, .hitResult = false};
-    
-    return {.normal = sphereDirectionVector.Normalize(), .depth = sqrtf(distanceSquare), .hitResult = true};
-}
 
 void MotionCore::CollisionDetector::ComputeWorldABBB(Body* body) const
 {
-    Tbx::Matrix3x3<numeric> matrix;
-    Tbx::RotationMatrix3D(body->rotation, &matrix);
-
-    
+    body->worldAABB = GetLocalAABB(body);
+    body->worldAABB = GetRotatedAABB(body->worldAABB, body->rotation);
 }
 
 MotionCore::AABB MotionCore::CollisionDetector::GetLocalAABB(Body* _body) const

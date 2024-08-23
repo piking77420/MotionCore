@@ -1,0 +1,20 @@
+﻿#pragma once
+
+#include "motion_core_header.h"
+#include "motion_core_typedef.h"
+
+namespace MotionCore
+{
+    class CollisionSolver
+    {
+    public:
+
+        CollisionSolver() = default;
+
+        ~CollisionSolver() = default;
+
+        void SolveCollsion(MotionCoreContext* _objectInfo);
+    private:
+        
+    };
+}

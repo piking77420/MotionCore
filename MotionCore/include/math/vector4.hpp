@@ -179,6 +179,11 @@ namespace Tbx
 
         constexpr Vector4 UnitW() { return { 0, 0 ,1 , 1 }; };
 
+        bool IsZero() const
+        {
+            return IsZero<T>(Magnitude());
+        }
+
         [[nodiscard]]
         std::string ToString() const
         {

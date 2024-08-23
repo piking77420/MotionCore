@@ -5,6 +5,7 @@
 #include "core/physics_helper.hpp"
 
 #include "memory"
+#include "algo/primitive_test.h"
 #include "algo/quick_hull.hpp"
 
 using namespace MotionCore;
@@ -39,6 +40,14 @@ void PhysicsEngine::Initialize(const PhyscicsEngineInitilizationParameters* _phy
     
     int index = FarestVertexFromFacesAndOutSideTheOrigin(p1,p2,p3,&hull);
 */
+
+    OBB obb;
+    obb.extend = 0.5f;
+    Vec3 center;
+    Vec3 point = {0,2,0};
+    Tbx::RotationMatrix3D(Deg2Rad * 70,Deg2Rad * 45,Deg2Rad * -30, &obb.orientationMatrix);
+    point = ClosetPointToOOB(point,center,obb);
+    
 }
 
 void PhysicsEngine::Destroy()

@@ -15,7 +15,7 @@ void MotionCore::Integrator::IntegrateBodies(MotionCoreContext* _objectInfo, con
         
         PrimitiveInfo& primitiveInfo = _objectInfo->primitiveInfo.at(body.primitiveIndex);
         
-        //body.force += _gravity;
+        body.forceAccumulation += _gravity;
         ComputePosition(&body, &primitiveInfo);
         ComputeRotation(&body, primitiveInfo);
         

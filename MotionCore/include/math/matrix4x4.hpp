@@ -1,8 +1,6 @@
 ﻿#pragma once
-#include <immintrin.h>
-#include <stacktrace>
-
 #include "vector4.hpp"
+#include <immintrin.h>
 
 namespace Tbx
 {

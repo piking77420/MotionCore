@@ -81,10 +81,19 @@ namespace Tbx
         {
             return m_Data[_size];
         }
+        
 
         TOOLBOX_INLINE Vec& operator[](size_t _size)
         {
             return m_Data[_size];
+        }
+
+        TOOLBOX_INLINE Vec GetRow(size_t _index) const
+        {
+            DataType x = m_Data[0][_index]; 
+            DataType y = m_Data[1][_index]; 
+            DataType z = m_Data[2][_index]; 
+            return Vec{x, y, z};
         }
 
         Matrix3x3 operator*(const Matrix3x3& _other) const

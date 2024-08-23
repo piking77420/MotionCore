@@ -2,8 +2,7 @@
 #include <queue>
 #include <variant>
 
-#include "physic_material.h"
-#include "primitive.h"
+#include "primitive_type_def.h"
 
 namespace MotionCore
 {
@@ -32,7 +31,7 @@ namespace MotionCore
     struct PrimitiveInfo
     {
         PrimitiveType bodyType;
-        
+
         union Body
         {
             Sphere sphere;
@@ -40,7 +39,7 @@ namespace MotionCore
             Caspule caspule;
             uint32_t physicsMeshId = -1;
 
-            // for std vector else it's deleted function
+            // for std vector  it's deleted function
             Body() {}
             ~Body() {};
         };
@@ -68,7 +67,7 @@ namespace MotionCore
         Vec3 forceAccumulation;
     
         Vec3 torqueAccumulation;
-        AABB worldBoundingBox;
+        AABB worldAABB;
     };
     
 
@@ -119,5 +118,11 @@ namespace MotionCore
         std::vector<PrimitiveInfo> primitiveInfo;
         std::queue<CollisionPoint> collisionPoint;
         std::vector<MeshData> meshDatas;
+    };
+
+    struct PhysicMaterial
+    {
+        numeric drag = static_cast<numeric>(0.99);
+        numeric restitutionCoef = static_cast<numeric>(0.99);
     };
 }

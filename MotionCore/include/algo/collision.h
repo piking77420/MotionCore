@@ -23,13 +23,15 @@ namespace MotionCore
        return distanceSquare <= radiusSum;
     }
 
-    FORCEINLINE bool CaspuleCaspule(const Caspule& _a, const Caspule& _b)
+    FORCEINLINE bool CaspuleCaspule(const Vec3& centerCaspusle1, const numeric heightCapsule1,
+        const Vec3& centerCaspusle2, const numeric heightCapsule2, const numeric radiusCapsule2)
     {
-        
+
+        return false;
     }
 
     template <typename T>
-     inline float TriangleArea2D(T _x1, T _y1, T _x2, T _y2, T _x3, T _y3)
+     FORCEINLINE float TriangleArea2D(T _x1, T _y1, T _x2, T _y2, T _x3, T _y3)
     {
         return (_x1 - _x2) * (_y2 - _y3) - (_x2 - _x3) * (_y1 - _y2); 
     }
