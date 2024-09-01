@@ -31,10 +31,11 @@ MotionCore::AABB MotionCore::CollisionDetector::GetLocalAABB(Body* _body) const
     case NONE:
         break;
     case SPHERE:
-        returnAabb.extend = primitiveInfo.data.sphere.radius;
+        returnAabb.max = primitiveInfo.data.sphere.radius * static_cast<numeric>(0.5);
+        returnAabb.min = -returnAabb.max;
         break;
     case BOX:
-        returnAabb = primitiveInfo.data.aabb;
+        returnAabb = GetAABBFromOBB(primitiveInfo.data.obb);
         break;
     case CAPSULE:
         break;
@@ -45,3 +46,4 @@ MotionCore::AABB MotionCore::CollisionDetector::GetLocalAABB(Body* _body) const
 
     return returnAabb;
 }
+

@@ -18,7 +18,15 @@ void MotionCore::Integrator::IntegrateBodies(MotionCoreContext* _objectInfo, con
         body.forceAccumulation += _gravity;
         ComputePosition(&body, &primitiveInfo);
         ComputeRotation(&body, primitiveInfo);
+        UpdatePrimitive(body, &primitiveInfo);
         
+        const numeric dampingValue = pow(body.physcicalMaterial.damping, deltatime); 
+        const numeric angular = pow(body.physcicalMaterial.angularDamping, deltatime); 
+        
+        // Applie damping
+        body.velocity *= dampingValue;
+        body.angularVelocity *= dampingValue;
+
         body.forceAccumulation = {};
         body.torqueAccumulation = {};
     }
@@ -45,9 +53,8 @@ void MotionCore::Integrator::ComputePosition(Body* body, PrimitiveInfo* _primiti
     body->lastFrameAcceleration = acceleration; 
     
     body->velocity += body->lastFrameAcceleration * deltatime;
-    _primitiveInfo->position += body->lastFrameAcceleration * static_cast<numeric>(0.5) * deltatime * deltatime + body->velocity * deltatime;
-    const numeric dampingValue = pow(body->physcicalMaterial.damping, deltatime); 
-    body->velocity *= dampingValue;
+   
+   
 }
 
 void MotionCore::Integrator::ComputeRotation(Body* body, const PrimitiveInfo& _primitiveInfo) const
@@ -58,8 +65,6 @@ void MotionCore::Integrator::ComputeRotation(Body* body, const PrimitiveInfo& _p
     body->angularVelocity += angularAcceleration * deltatime;
     body->rotation +=  body->angularVelocity * deltatime * static_cast<numeric>(0.5);
     body->rotation = body->rotation.Normalize();
-    const numeric dampingValue = pow(body->physcicalMaterial.angularDamping, deltatime); 
-    body->angularVelocity *= dampingValue;
 }
 
 
@@ -95,7 +100,7 @@ Tbx::Matrix3x3<MotionCore::numeric> MotionCore::Integrator::GetInvertInertiaTens
     case BOX:
         {
             
-            const Vec3 extend = _primitiveInfo.data.aabb.extend;
+            const Vec3 extend = _primitiveInfo.data.obb.extend;
             const numeric PowerX = extend.x * extend.x;
             const numeric PowerY = extend.y * extend.y;
             const numeric PowerZ = extend.z * extend.z;
@@ -122,4 +127,24 @@ Tbx::Matrix3x3<MotionCore::numeric> MotionCore::Integrator::GetInvertInertiaTens
     }
     
     return Tbx::Invert(tensor);
+}
+
+void MotionCore::Integrator::UpdatePrimitive(const Body& _body, PrimitiveInfo* _primitive)
+{
+    SetPositionFromPrimitive(_primitive) += _body.lastFrameAcceleration * static_cast<numeric>(0.5) * deltatime * deltatime + _body.velocity * deltatime;
+    
+    switch (_primitive->bodyType)
+    {
+        case NONE:
+            break;
+        case SPHERE:
+            break;
+        case BOX:
+            Tbx::RotationMatrix3D(_body.rotation, &_primitive->data.obb.orientationMatrix);  
+            break;
+        case CAPSULE:
+            break;
+        case MESH:
+            break;
+    }
 }

@@ -73,36 +73,31 @@ namespace MotionCore
         return ac.MagnitudeSquare() - e * e / f;
     }
 
-    FORCEINLINE Vec3 ClosestPointOnAABB(Vec3 _point, const Vec3& _aabbCenter, const AABB& _aabb)
+    FORCEINLINE Vec3 ClosestPointOnAABB(Vec3 _point, const AABB& _aabb)
     {
-        const Vec3 min = _aabbCenter - _aabb.extend;
-        const Vec3 max = _aabbCenter + _aabb.extend;
-
-        _point = Tbx::SIMD::min<numeric>(min, _point);
-        _point = Tbx::SIMD::max<numeric>(max, _point);
+        _point = Tbx::SIMD::min<numeric>(_aabb.min, _point);
+        _point = Tbx::SIMD::max<numeric>(_aabb.max, _point);
         return _point;
     }
 
-    FORCEINLINE numeric SqDistancePointAABB(const Vec3& _point, const Vec3& _aabbCenter, const AABB& _aabb)
+    FORCEINLINE numeric SqDistancePointAABB(const Vec3& _point, const AABB& _aabb)
     {
-        const Vec3 min = _aabbCenter - _aabb.extend;
-        const Vec3 max = _aabbCenter + _aabb.extend;
         numeric sqDistance = NUMERICAL_ZERO;
 
         for (size_t i = 0; i < 3; i++)
         {
             const numeric value = _point[i];
-            if (value < min[i]) sqDistance += (min[i] - value) * (min[i] - value);
-            if (value > max[i]) sqDistance += (value - max[i]) * (value - max[i]);
+            if (value < _aabb.min[i]) sqDistance += (_aabb.min[i] - value) * (_aabb.min[i] - value);
+            if (value > _aabb.max[i]) sqDistance += (value - _aabb.max[i]) * (value - _aabb.max[i]);
         }
 
         return sqDistance;
     }
 
-    FORCEINLINE Vec3 ClosetPointToOOB(const Vec3& _point, const Vec3& _obbCenter, const OBB& _oBB)
+    FORCEINLINE Vec3 ClosetPointToOOB(const Vec3& _point, const OBB& _oBB)
     {
-        const Vec3 d = _point - _obbCenter;
-        Vec3 outPoint = _obbCenter;
+        const Vec3 d = _point - _oBB.center;
+        Vec3 outPoint = _oBB.center;
 
         for (size_t i = 0; i < decltype(_oBB.orientationMatrix)::Size; i++)
         {
@@ -115,9 +110,9 @@ namespace MotionCore
         return outPoint;
     }
 
-    FORCEINLINE Vec3 SqDistancePointOOBB(const Vec3& _point, const Vec3& _obbCenter, const OBB& _oBB)
+    FORCEINLINE Vec3 SqDistancePointOOBB(const Vec3& _point,const OBB& _oBB)
     {
-        return (ClosetPointToOOB(_point, _obbCenter, _oBB) - _point).MagnitudeSquare();
+        return (ClosetPointToOOB(_point, _oBB) - _point).MagnitudeSquare();
     }
 
     FORCEINLINE bool TestSpherePlane(const Vec3& _sphereCenter, const Sphere _sphere, const Plane& _plane)
@@ -149,12 +144,15 @@ namespace MotionCore
         return std::abs(s) <= r;
     }
 
-    FORCEINLINE bool TestAABBPlane(const Vec3& _aabbCenter, const AABB& _aabb, const Plane& _plane)
+    FORCEINLINE bool TestAABBPlane(const AABB& _aabb, const Plane& _plane)
     {
-        const numeric r = _aabb.extend.x * std::abs(_plane.normal.x) + _aabb.extend.y * std::abs(_plane.normal.y)
-            + _aabb.extend.z * std::abs(_plane.normal.z);
+        const Vec3 center = (_aabb.max - _aabb.min) * static_cast<numeric>(0.5);
+        const Vec3 extend = _aabb.max - center;
 
-        const numeric s = Vec3::Dot(_plane.normal, _aabbCenter) - _plane.distance;
+        const numeric r = extend.x * std::abs(_plane.normal.x) + extend.y * std::abs(_plane.normal.y)
+            + extend.z * std::abs(_plane.normal.z);
+
+        const numeric s = Vec3::Dot(_plane.normal, center) - _plane.distance;
 
         return std::abs(s) <= r;
     }
@@ -162,7 +160,7 @@ namespace MotionCore
     FORCEINLINE bool TestSphereAABB(const Vec3& _sphereCenter, const Sphere _sphere, const Vec3& _aabbCenter,
                                     const AABB& _aabb)
     {
-        const numeric Sqdistance = SqDistancePointAABB(_sphereCenter, _aabbCenter, _aabb);
+        const numeric Sqdistance = SqDistancePointAABB(_sphereCenter, _aabb);
 
         return Sqdistance <= _sphere.radius * _sphere.radius;
     }
@@ -171,19 +169,19 @@ namespace MotionCore
                                     const AABB& _aabb
                                     , Vec3* _aabbClosestPoint)
     {
-        *_aabbClosestPoint = ClosestPointOnAABB(_sphereCenter, _aabbCenter, _aabb);
+        *_aabbClosestPoint = ClosestPointOnAABB(_sphereCenter, _aabb);
 
         const Vec3 v = *_aabbClosestPoint - _sphereCenter;
         return v.MagnitudeSquare() <= _sphere.radius * _sphere.radius;
     }
 
-    FORCEINLINE bool TestSphereOBB(const Vec3& _sphereCenter, const Sphere _sphere, const Vec3& _obbCenter,
+    FORCEINLINE bool TestSphereOBB(const Sphere _sphere, const Vec3& _obbCenter,
                                    const OBB& _obb
                                    , Vec3* _aabbClosestPoint)
     {
-        *_aabbClosestPoint = ClosetPointToOOB(_sphereCenter, _obbCenter, _obb);
+        *_aabbClosestPoint = ClosetPointToOOB(_sphere.center, _obb);
 
-        const Vec3 v = *_aabbClosestPoint - _sphereCenter;
+        const Vec3 v = *_aabbClosestPoint - _sphere.center;
         return v.MagnitudeSquare() <= _sphere.radius * _sphere.radius;
     }
 
@@ -215,10 +213,10 @@ namespace MotionCore
     }
 
     // raycast dir should be normalize
-    FORCEINLINE bool RaySphere(const RayCast& _rayCast, const Vec3& _sphereCenter, const Sphere _sphere, numeric* _t,
+    FORCEINLINE bool RaySphere(const RayCast& _rayCast,const Sphere _sphere, numeric* _t,
                                Vec3* _point)
     {
-        const Vec3 m = _rayCast.ori - _sphereCenter;
+        const Vec3 m = _rayCast.ori - _sphere.center;
         const numeric b = Vec3::Dot(m, _rayCast.dir);
         const numeric c = m.MagnitudeSquare() - _sphere.radius * _sphere.radius;
 
@@ -254,19 +252,21 @@ namespace MotionCore
         *_tmin = NUMERICAL_ZERO;
         numeric tmax = NUMERICAL_MAX;
         // set the raycast to aabb space
-
+        const Vec3 center = (_aabb.max - _aabb.min) * static_cast<numeric>(0.5);
+        const Vec3 extend = _aabb.max - center;
+        
         for (size_t i = 0; i < 3; i++)
         {
             if (std::abs(_dir[i]) < MotionCore::ESPILON)
             {
-                if (_dir[i] < -_aabb.extend[i] || _dir[i] > _aabb.extend[i])
+                if (_dir[i] < -extend[i] || _dir[i] > extend[i])
                     return false;
             }
             else
             {
                 const numeric ood = NUMERICAL_ONE / _dir[i];
-                numeric t1 = (-_aabb.extend[i] - rayAABBSpace[i]) * ood;
-                numeric t2 = (_aabb.extend[i] - rayAABBSpace[i]) * ood;
+                numeric t1 = (-extend[i] - rayAABBSpace[i]) * ood;
+                numeric t2 = (extend[i] - rayAABBSpace[i]) * ood;
 
                 if (t1 > t2)
                     std::swap(t1, t2);

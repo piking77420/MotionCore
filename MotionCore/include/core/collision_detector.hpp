@@ -21,6 +21,8 @@ namespace MotionCore
         void ComputeWorldABBB(Body* _body) const;
 
         MotionCore::AABB GetLocalAABB(Body* _body) const;
+
+       
     };
 }
 

@@ -35,7 +35,7 @@ namespace MotionCore
         union Body
         {
             Sphere sphere;
-            AABB aabb;
+            OBB obb;
             Caspule caspule;
             uint32_t physicsMeshId = -1;
 
@@ -44,7 +44,6 @@ namespace MotionCore
             ~Body() {};
         };
         Body data;
-        Vec3 position;
         uint32_t bodyId = NULLBODY;
     };
     
@@ -125,4 +124,69 @@ namespace MotionCore
         numeric drag = static_cast<numeric>(0.99);
         numeric restitutionCoef = static_cast<numeric>(0.99);
     };
+
+    inline const Vec3& GetPositionFromPrimitive(const PrimitiveInfo& _primitiveInfo)
+    {
+        switch (_primitiveInfo.bodyType)
+        {
+        case NONE:
+            break;
+        case SPHERE:
+            return _primitiveInfo.data.sphere.center;
+            break;
+        case BOX:
+            return _primitiveInfo.data.sphere.center;
+            break;
+        case CAPSULE:
+            return _primitiveInfo.data.caspule.center;
+            break;
+        case MESH:
+            // TODO 
+                break;
+        default: ;
+        }    
+    }
+
+    inline Vec3& SetPositionFromPrimitive(PrimitiveInfo* _primitiveInfo)
+    {
+        switch (_primitiveInfo->bodyType)
+        {
+        case NONE:
+            break;
+        case SPHERE:
+            return _primitiveInfo->data.sphere.center;
+            break;
+        case BOX:
+            return _primitiveInfo->data.sphere.center;
+            break;
+        case CAPSULE:
+            return _primitiveInfo->data.caspule.center;
+            break;
+        case MESH:
+            // TODO 
+                break;
+        default: ;
+        }    
+    }
+
+    inline AABB GetAABBFromOBB(const OBB& _obb)
+    {
+        AABB aabb;
+    
+        const Tbx::Matrix3x3<numeric> m = _obb.orientationMatrix;
+        const Vec3& ext = _obb.extend;
+
+        for (size_t i = 0; i < 3; i++)
+        {
+            const Vec3 axisScaled = Vec3(m[i][0], m[i][1], m[i][2]) * ext[i];
+
+            for (size_t j = 0; j < 3; j++)
+            {
+                aabb.min[i] -= std::abs(axisScaled[j]);
+                aabb.max[i] += std::abs(axisScaled[j]);
+            }
+        }
+
+        return aabb;
+    }
 }

@@ -8,22 +8,26 @@ namespace MotionCore
 
     struct Sphere 
     {
+        Vec3 center;
         numeric radius;
     };
 
     struct AABB
     {
-        Vec3 extend;
+        Vec3 min;
+        Vec3 max;
     };
 
     struct OBB
     {
+        Vec3 center;
         Vec3 extend;
         Tbx::Matrix3x3<numeric> orientationMatrix = Tbx::Matrix3x3<numeric>::Identity();
     };
 
     struct Caspule
     {
+        Vec3 center;
         numeric height;
         numeric radius;
     };
@@ -51,7 +55,18 @@ namespace MotionCore
         {
             for (size_t j = 0; j < Tbx::Matrix3x3<numeric>::Size; j++)
             {
-                returnAbb.extend[i] += std::abs(matrix[j][i]) * _aabb.extend[j];
+                const numeric e = _aabb.min[j] * matrix[i][j];
+                const numeric f = _aabb.max[j] * matrix[i][j];
+                if (e < f )
+                {
+                    returnAbb.min[i] += e;
+                    returnAbb.max[i] += f;
+                }
+                else
+                {
+                    returnAbb.min[i] += f;
+                    returnAbb.max[i] += e;
+                }
             }
         }
 
@@ -59,6 +74,11 @@ namespace MotionCore
     }
 
     
+    FORCEINLINE Vec3 GetExtend(const AABB& _abb)
+    {
+        const Vec3 center = (_abb.max - _abb.min) * static_cast<numeric>(0.5);
+        return _abb.max - center;
+    }
 
    
 }

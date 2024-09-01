@@ -79,6 +79,6 @@ namespace MotionCore
         void InitBody(Body* _body, const BodyCreateInfo* _bodyCreateInfo);
 
         Vec3 GetWorldCenterOfMass(const Body* _body) const;
-
+        
     };
 }
