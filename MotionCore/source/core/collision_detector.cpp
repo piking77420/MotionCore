@@ -1,41 +1,53 @@
 ﻿#include "core/collision_detector.hpp"
 
+
 void MotionCore::CollisionDetector::FoundCollision(MotionCoreContext* _objectInfo)
 {
     motionCoreContext = _objectInfo;
-    std::vector<Body>& bodies = _objectInfo->bodies;
+    std::vector<PrimitiveInfo>& primitive = _objectInfo->primitiveInfo;
+    bvhObjects.resize(primitive.size());
 
-    for (Body& body : bodies)
+    for (size_t i = 0; i < primitive.size(); i++)
     {
-        if (body.id == NULLBODY || !body.isAwake)
+        if (primitive.at(i).bodyId == NULLBODY)
             continue;
-        ComputeWorldABBB(&body);
+        
+        ComputeWorldABBB(&primitive.at(i));
+        
+        bvhObjects.at(i).objectPtr = &bvhObjects.at(i);
+        bvhObjects.at(i).boundingAABB = {primitive.at(i).worldAABB.min, primitive.at(i).worldAABB.max};
+        
+    }
+
+    //bvh.Clear();
+    for (size_t i = 0; i < bvhObjects.size(); i++)
+    {
+       // bvh.Insert(&bvhObjects.at(i));
     }
     
+    BroadPhase();
 }
 
 
-void MotionCore::CollisionDetector::ComputeWorldABBB(Body* body) const
+void MotionCore::CollisionDetector::ComputeWorldABBB(PrimitiveInfo* _primitiveInfo) const
 {
-    body->worldAABB = GetLocalAABB(body);
-    body->worldAABB = GetRotatedAABB(body->worldAABB, body->rotation);
+    _primitiveInfo->worldAABB = GetLocalAABB(*_primitiveInfo);
 }
 
-MotionCore::AABB MotionCore::CollisionDetector::GetLocalAABB(Body* _body) const
+MotionCore::AABB MotionCore::CollisionDetector::GetLocalAABB(const PrimitiveInfo& _primitiveInfo) const
 {
-    PrimitiveInfo primitiveInfo = motionCoreContext->primitiveInfo.at(_body->primitiveIndex);
     AABB returnAabb;
     
-    switch (primitiveInfo.bodyType)
+    switch (_primitiveInfo.bodyType)
     {
     case NONE:
         break;
     case SPHERE:
-        returnAabb.max = primitiveInfo.data.sphere.radius * static_cast<numeric>(0.5);
-        returnAabb.min = -returnAabb.max;
+        returnAabb.max =  _primitiveInfo.data.sphere.center + _primitiveInfo.data.sphere.radius * static_cast<numeric>(0.5);
+        returnAabb.min = _primitiveInfo.data.sphere.center - _primitiveInfo.data.sphere.radius * static_cast<numeric>(0.5);
         break;
     case BOX:
-        returnAabb = GetAABBFromOBB(primitiveInfo.data.obb);
+        returnAabb = GetAABBFromOBB(_primitiveInfo.data.obb);
         break;
     case CAPSULE:
         break;
@@ -45,5 +57,11 @@ MotionCore::AABB MotionCore::CollisionDetector::GetLocalAABB(Body* _body) const
     }
 
     return returnAabb;
+}
+
+void MotionCore::CollisionDetector::BroadPhase()
+{
+    std::vector<Body>& bodies = motionCoreContext->bodies;
+
 }
 

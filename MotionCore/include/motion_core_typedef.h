@@ -2,7 +2,7 @@
 #include <queue>
 #include <variant>
 
-#include "primitive_type_def.h"
+#include "primitive/primitive.h"
 
 namespace MotionCore
 {
@@ -45,6 +45,7 @@ namespace MotionCore
         };
         Body data;
         uint32_t bodyId = NULLBODY;
+        AABB worldAABB;
     };
     
 
@@ -66,7 +67,6 @@ namespace MotionCore
         Vec3 forceAccumulation;
     
         Vec3 torqueAccumulation;
-        AABB worldAABB;
     };
     
 
@@ -175,6 +175,8 @@ namespace MotionCore
     
         const Tbx::Matrix3x3<numeric> m = _obb.orientationMatrix;
         const Vec3& ext = _obb.extend;
+        aabb.max = _obb.center;
+        aabb.min = _obb.center;
 
         for (size_t i = 0; i < 3; i++)
         {

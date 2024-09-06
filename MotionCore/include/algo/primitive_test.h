@@ -1,7 +1,7 @@
 ﻿#pragma once
 #include <algorithm>
 
-#include "primitive_type_def.h"
+#include "primitive/primitive.h"
 #include "math/simd_operation.h"
 
 namespace MotionCore
@@ -282,4 +282,14 @@ namespace MotionCore
         *_point = (rayAABBSpace + _dir * *_tmin) + _p; // convert to worldSpace
         return true;
     }
+
+    struct OBBOBBHitersectionInfo
+    {
+        bool IsPenetrating;
+        numeric depth;
+    };
+
+    OBBOBBHitersectionInfo SATObbObb(const OBB& _obb1, const OBB& _obb2);
+    
+    
 }

@@ -17,3 +17,16 @@ bool MotionCore::RaySphere(const RayCast& _rayCast, const Vec3& _sphereCenter, c
 
     return true;
 }
+
+MotionCore::OBBOBBHitersectionInfo MotionCore::SATObbObb(const OBB& _obb1, const OBB& _obb2)
+{
+    // SAT Goal find a sepator Axis
+    // Fist the 3 axis of the Obb1 
+    // Then the other 3 axis of the Obb2
+    // 3 axis because box faces are parralle otherwise it would be 6
+    // and finally all combinaision of cross product between obb1's axis and obb2's axis
+    // 3 + 3 + 9 = 15 axis to test
+
+    
+    return {};
+}
