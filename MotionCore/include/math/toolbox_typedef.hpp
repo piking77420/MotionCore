@@ -11,6 +11,7 @@
 
 #include "quaternion.hpp"
 
+
 namespace Tbx
 {
     using Vector2f = Vector2<float>;
