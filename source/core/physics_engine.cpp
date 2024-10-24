@@ -5,6 +5,7 @@
 #include "core/physics_helper.hpp"
 
 #include "memory"
+#include "algo/primitive_test.h"
 #include "algo/quick_hull.hpp"
 
 using namespace MotionCore;
@@ -39,6 +40,14 @@ void PhysicsEngine::Initialize(const PhyscicsEngineInitilizationParameters* _phy
     
     int index = FarestVertexFromFacesAndOutSideTheOrigin(p1,p2,p3,&hull);
 */
+
+    OBB obb;
+    obb.extend = 0.5f;
+    Vec3 center;
+    Vec3 point = {0,2,0};
+    Tbx::RotationMatrix3D(Deg2Rad * 70,Deg2Rad * 45,Deg2Rad * -30, &obb.orientationMatrix);
+    point = ClosetPointToOOB(point, obb);
+    
 }
 
 void PhysicsEngine::Destroy()
@@ -100,8 +109,7 @@ bool PhysicsEngine::DestroyBody(uint32_t _bodyID)
 Vec3 PhysicsEngine::GetPosition(uint32_t _id)
 {
     const PrimitiveInfo& primitiveInfo = m_ObjectInfo.primitiveInfo.at( m_ObjectInfo.bodies.at(_id).primitiveIndex);
-    
-    return primitiveInfo.position;
+    return GetPositionFromPrimitive(primitiveInfo);
 }
 
 Quat PhysicsEngine::GetRotation(uint32_t _id)
@@ -152,7 +160,7 @@ void PhysicsEngine::InitBody(Body* _body, const BodyCreateInfo* _bodyCreateInfo)
         {
             m_ObjectInfo.primitiveInfo[i].bodyType = _bodyCreateInfo->bodyTypeInfo.bodyType;
             m_ObjectInfo.primitiveInfo[i].data = _bodyCreateInfo->bodyTypeInfo.data;
-            m_ObjectInfo.primitiveInfo[i].position = _bodyCreateInfo->position;
+            SetPositionFromPrimitive(&m_ObjectInfo.primitiveInfo[i]) = _bodyCreateInfo->position;
             
             _body->primitiveIndex = static_cast<uint32_t>(i);
             break;

@@ -22,5 +22,12 @@ namespace MotionCore
         uint32_t nbrOfPoint = 0;
     };
 
+
+    struct SATSphereSphereOut
+    {
+        numeric depth;
+        Vec3 normal;
+    };
+
 }
 

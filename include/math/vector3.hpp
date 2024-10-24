@@ -40,10 +40,14 @@ namespace Tbx
             return &x;
         }
 
+        TOOLBOX_INLINE constexpr static DataType Dot(const Vector3& _v1, const Vector3& _v2)
+        {
+            return _v1.x * _v2.x + _v1.y * _v2.y + _v1.z * _v2.z;
+        }
 
         TOOLBOX_INLINE DataType MagnitudeSquare() const
         {
-            return x * x + y * y + z * z;
+            return Dot(*this, *this);
         }
 
         TOOLBOX_INLINE DataType Magnitude() const
@@ -64,10 +68,6 @@ namespace Tbx
         }
 
 
-        TOOLBOX_INLINE constexpr static DataType Dot(const Vector3& _v1, const Vector3& _v2)
-        {
-            return _v1.x * _v2.x + _v1.y * _v2.y + _v1.z * _v2.z;
-        }
 
         TOOLBOX_INLINE constexpr static Vector3 Cross(const Vector3& _v1, const Vector3& _v2)
         {
@@ -209,6 +209,10 @@ namespace Tbx
             return !(this == _other);
         }
 
+        bool IsZero() const
+        {
+            return IsZero<T>(Magnitude());
+        }
 
         TOOLBOX_INLINE static constexpr Vector3 Zero() { return Vector3(static_cast<T>(0)); };
 

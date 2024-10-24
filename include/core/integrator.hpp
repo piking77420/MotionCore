@@ -44,6 +44,8 @@ namespace MotionCore
         void ComputeRotation(Body* body, const PrimitiveInfo& _primitiveInfo) const;
         
         Tbx::Matrix3x3<numeric> GetInvertInertiaTensor(const Body& body, const PrimitiveInfo& _primitiveInfo) const;
+
+        void UpdatePrimitive(const Body& _body, PrimitiveInfo* _primitive);
     };
     
 }

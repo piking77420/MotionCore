@@ -163,6 +163,12 @@ namespace Tbx
             return x != _other.x || y != _other.y;
         }
 
+        bool IsZero() const
+        {
+            return IsZero<T>(Magnitude());
+        }
+
+
         std::string ToString() const
         {
             return  "X : " + std::to_string(x) + ", Y : " + std::to_string(y) + '\n';

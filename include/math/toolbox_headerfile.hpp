@@ -5,9 +5,9 @@
 #include <array>
 #include <string>
 
-#define ZERO 0.001f
+#define ZERO 0.0001f
 
-#define TOOLBOX_INLINE _forceinline 
+#define TOOLBOX_INLINE __forceinline 
 
 template<typename T>
 constexpr TOOLBOX_INLINE bool IsZero(T _zero) { return std::abs(_zero) <= ZERO; }

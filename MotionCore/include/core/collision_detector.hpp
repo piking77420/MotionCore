@@ -2,7 +2,6 @@
 
 #include "motion_core_header.h"
 #include "motion_core_typedef.h"
-#include "spatial_partitioning/bonding_volume_hierarchyAABB.h"
 
 namespace MotionCore
 {
@@ -13,21 +12,24 @@ namespace MotionCore
         CollisionDetector() = default;
 
         ~CollisionDetector() = default;
-        
+
         void FoundCollision(MotionCoreContext* _objectInfo);
     private:
 
         MotionCoreContext* motionCoreContext = nullptr;
         
-        void ComputeWorldABBB(PrimitiveInfo* _primitiveInfo) const;
+        struct SphereCollisionInfo
+        {
+            // collision normal from body1
+            Vec3 normal;
+            numeric depth;
+            bool hitResult = false;
+        };
+        static SphereCollisionInfo SphereCollision(numeric _sphereRadius1, numeric _sphereRadius2, const Vec3& _bodyPos1, const Vec3& _bodyPos2);
 
-        MotionCore::AABB GetLocalAABB(const PrimitiveInfo& _primitiveInfoy) const;
+        void ComputeWorldABBB(Body* _body) const;
 
-        void BroadPhase();
-
-        //BoundingVolumeHierarchyAABB bvh;
-
-        std::vector<ObjectWithBoundingVolume> bvhObjects;
+        MotionCore::AABB GetLocalAABB(Body* _body) const;
     };
 }
 
