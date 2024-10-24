@@ -1,1 +1,0 @@
-﻿#include "primitive/capsule.h"
