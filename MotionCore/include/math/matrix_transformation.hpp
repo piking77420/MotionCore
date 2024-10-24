@@ -291,7 +291,7 @@ namespace Tbx
 
     template <class T>
     constexpr static void OrthoGraphicMatrix(float left, float right, float bottom, float top, float zNear, float zFar,
-                                             Matrix4x4<T> _outMatrix)
+                                             Matrix4x4<T>* _outMatrix)
     {
         T topBottomDiff = top - bottom;
         T rightLeftDiff = right - left;

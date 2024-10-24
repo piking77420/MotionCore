@@ -8,7 +8,7 @@ using namespace MotionCore;
 
 void MotionCoreAllocator::Initialize()
 {
-	
+
 }
 
 void MotionCoreAllocator::Destroy()

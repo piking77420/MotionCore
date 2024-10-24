@@ -1,5 +1,5 @@
 # MotionCore
-Physics Engine base on 2 Book
+Physics Engine base on 2 Books
 
 # Source
 Game Physics engine devellopment by Ian Milington : 
