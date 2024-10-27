@@ -244,7 +244,7 @@ namespace Tbx
 
     // Graphic //
     template <typename T>
-    void LookAtRH(const Vector3<T>& _eye, const Vector3<T>& _center, const Vector3<T>& _up, Matrix4x4<T>* _matrix)
+    Matrix4x4<T> LookAtRH(const Vector3<T>& _eye, const Vector3<T>& _center, const Vector3<T>& _up)
     {
         Vector3<T> f = (_center - _eye).Normalize();
         Vector3<T> s = Vector3<T>::Cross(f, _up).Normalize();
@@ -264,13 +264,12 @@ namespace Tbx
         result[3][1] = -Vector3<T>::Dot(u, _eye);
         result[3][2] = Vector3<T>::Dot(f, _eye);
 
-        (*_matrix) = result;
+       return result;
     }
 
 
     template <typename T>
-    void PerspectiveMatrix(const float fov, const float aspect, const float Near, const float Far,
-                           Matrix4x4<T>* _outMatrix)
+    Matrix4x4<T> PerspectiveMatrix(const T fov, const T aspect, const T Near, const T Far)
     {
         const T fFovRad = static_cast<T>(1) / std::tanf(fov / static_cast<T>(2.f));
         const T zdiff = Near - Far;
@@ -281,7 +280,7 @@ namespace Tbx
         const T r22 = (Far + Near) / zdiff;
         const T r32 = (static_cast<T>(2) * Far * Near) / zdiff;
 
-        *_outMatrix = {
+        return {
             {r00, 0.f, 0.f, 0.f},
             {0.f, r11, 0.f, 0.f},
             {0.f, 0.f, r22, static_cast<T>(-1.0)},
@@ -290,8 +289,7 @@ namespace Tbx
     };
 
     template <class T>
-    constexpr static void OrthoGraphicMatrix(float left, float right, float bottom, float top, float zNear, float zFar,
-                                             Matrix4x4<T>* _outMatrix)
+    constexpr static Matrix4x4<T> OrthoGraphicMatrix(T left, T right, T bottom, T top, T zNear, T zFar)
     {
         T topBottomDiff = top - bottom;
         T rightLeftDiff = right - left;
@@ -305,12 +303,12 @@ namespace Tbx
         T r13 = -(top + bottom) / topBottomDiff;
         T r23 = -(zFar + zNear) / farMinusNear;
 
-        *_outMatrix = {
+       return {
             {r00, 0.f, 0.f, 0.f},
             {0.f, r11, 0.f, 0.f},
             {0.f, 0.f, r22, 0.f},
             {r03, r13, r23, 1.f}
-        };
+       };
     }
 
     // Determinant //
