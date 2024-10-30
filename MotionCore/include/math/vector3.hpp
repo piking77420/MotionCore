@@ -55,7 +55,7 @@ namespace Tbx
         {
             const DataType mag = Magnitude();
 
-            if (IsEqualTo<DataType>(mag, static_cast<T>(1)))
+            if (IsEqualTo<DataType>(mag, static_cast<T>(1)) || mag <= ZERO)
                 return *this;
 
             const DataType InvMagnitude = static_cast<T>(1) / mag;
@@ -71,9 +71,9 @@ namespace Tbx
 
         TOOLBOX_INLINE constexpr static Vector3 Cross(const Vector3& _v1, const Vector3& _v2)
         {
-            return Vector3(_v1.y * _v2.z - _v1.z * _v2.y,
+            return {_v1.y * _v2.z - _v1.z * _v2.y,
                 _v1.z * _v2.x - _v1.x * _v2.z,
-                _v1.x * _v2.y - _v1.y * _v2.x);
+                _v1.x * _v2.y - _v1.y * _v2.x};
         }
 
         constexpr static TOOLBOX_INLINE DataType DistanceSquare(const Vector3& _a, const Vector3& _b)
