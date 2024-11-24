@@ -1,6 +1,18 @@
 ﻿#pragma once
 #include "toolbox_headerfile.hpp"
 
+
+
+constexpr uint32_t TBX_PERMUTE_0X = 0;
+constexpr uint32_t TBX_PERMUTE_0Y = 1;
+constexpr uint32_t TBX_PERMUTE_0Z = 2;
+constexpr uint32_t TBX_PERMUTE_0W = 3;
+constexpr uint32_t TBX_PERMUTE_1X = 4;
+constexpr uint32_t TBX_PERMUTE_1Y = 5;
+constexpr uint32_t TBX_PERMUTE_1Z = 6;
+constexpr uint32_t TBX_PERMUTE_1W = 7;
+
+
 namespace Tbx
 {
 
@@ -185,4 +197,23 @@ namespace Tbx
             return "X : " + std::to_string(x) + ", Y : " + std::to_string(y) + ", Z : " + std::to_string(z) + ", W : " << std::to_string(w) << '\n';
         }
     };
+
+    template <uint32_t PermuteX, uint32_t PermuteY, uint32_t PermuteZ, uint32_t PermuteW>
+    static Vector4<float> Permute(const Vector4<float>& _vec1, const Vector4<float>& _vec2)
+    {
+        auto selectComponent = [&](uint32_t index) -> float {
+            if (index < 4)
+                return _vec1[index];
+            if (index < 8)
+                return _vec2[index - 4];
+            throw std::exception("Invalid permutation index");
+            };
+
+        const float x = selectComponent(PermuteX);
+        const float y = selectComponent(PermuteY);
+        const float z = selectComponent(PermuteZ);
+        const float w = selectComponent(PermuteW);
+
+        return { x, y, z, w };
+    }
 }

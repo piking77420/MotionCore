@@ -170,6 +170,19 @@ namespace Tbx
             return result;
         }
 
+
+        Vec ExtractEulerAngleXYZ()
+        {
+            const T T1 = std::atan2(m_Data[2][1], m_Data[2][2]);
+            const T C2 = std::sqrt(m_Data[0][0] * m_Data[0][0] + m_Data[1][0] * m_Data[1][0]);
+            const T T2 = std::atan2(-m_Data[2][0], C2);
+            const T S1 = std::sin(T1);
+            const T C1 = std::cos(T1);
+            const T T3 = std::atan2(S1 * m_Data[0][2] - C1 * m_Data[0][1], C1 * m_Data[1][1] - S1 * m_Data[1][2]);
+
+            return {-T1, -T2, -T3};
+        }
+
     private:
         std::array<Vec, Size> m_Data;
     };
