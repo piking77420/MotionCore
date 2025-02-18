@@ -248,7 +248,7 @@ namespace Tbx
     {
         Vector3<T> f = (_center - _eye).Normalize();
         Vector3<T> s = Vector3<T>::Cross(f, _up).Normalize();
-        Vector3<T> u(Vector3<T>::Cross(s, f));
+        Vector3<T> u = Vector3<T>::Cross(s, f);
 
         Matrix4x4<T> result = Matrix4x4<T>::Identity();
         result[0][0] = s.x;
@@ -260,11 +260,13 @@ namespace Tbx
         result[0][2] = -f.x;
         result[1][2] = -f.y;
         result[2][2] = -f.z;
+
+        // Apply translation to the matrix (dot products for camera position)
         result[3][0] = -Vector3<T>::Dot(s, _eye);
         result[3][1] = -Vector3<T>::Dot(u, _eye);
         result[3][2] = Vector3<T>::Dot(f, _eye);
 
-       return result;
+        return result;
     }
 
 
@@ -301,10 +303,10 @@ namespace Tbx
         const T r32 = (static_cast<T>(2) * Far * Near) / zdiff;
 
         return {
-                {r00, 0.f, 0.f, 0.f},
-                {0.f, -r11, 0.f, 0.f},
-                {0.f, 0.f, r22, static_cast<T>(-1.0)},
-                {0, 0, r32, 0.f}
+            {r00, 0.f, 0.f, 0.f},
+            {0.f, -r11, 0.f, 0.f},
+            {0.f, 0.f, r22, static_cast<T>(-1.0)},
+            {0, 0, r32, 0.f}
         };
     };
 
@@ -323,12 +325,12 @@ namespace Tbx
         T r13 = -(top + bottom) / topBottomDiff;
         T r23 = -(zFar + zNear) / farMinusNear;
 
-       return {
+        return {
             {r00, 0.f, 0.f, 0.f},
             {0.f, r11, 0.f, 0.f},
             {0.f, 0.f, r22, 0.f},
             {r03, r13, r23, 1.f}
-       };
+        };
     }
 
     // Determinant //
@@ -426,109 +428,135 @@ namespace Tbx
     template <class T>
     void AdjoinMatrix(const Matrix4x4<T>& matrix, Matrix4x4<T>* _out)
     {
-        Matrix4x4<T> copy = matrix.Transpose();
+        Matrix4x4<T> copy = matrix;
 
-        Matrix3x3<T> m1 = Matrix3x3<T>(Vector3<T>(copy[1][1], copy[1][2], copy[1][3]),
-                                       Vector3<T>(copy[2][1], copy[2][2], copy[2][3]),
-                                       Vector3<T>(copy[3][1], copy[3][2], copy[3][3]));
-        (*_out)[0][0] = Determinant(m1);
+        // First row
+        (*_out)[0][0] = Determinant(Matrix3x3<T>({
+            {copy[1][1], copy[1][2], copy[1][3]},
+            {copy[2][1], copy[2][2], copy[2][3]},
+            {copy[3][1], copy[3][2], copy[3][3]}
+        }));
 
-        Matrix3x3<T> m2 = Matrix3x3<T>(Vector3<T>(copy[1][0], copy[1][2], copy[1][3]),
-                                       Vector3<T>(copy[2][0], copy[2][2], copy[2][3]),
-                                       Vector3<T>(copy[3][0], copy[3][2], copy[3][3]));
-        (*_out)[0][1] = -Determinant(m2);
+        (*_out)[0][1] = -Determinant(Matrix3x3<T>({
+            {copy[1][0], copy[1][2], copy[1][3]},
+            {copy[2][0], copy[2][2], copy[2][3]},
+            {copy[3][0], copy[3][2], copy[3][3]}
+        }));
 
-        Matrix3x3<T> m3 = Matrix3x3<T>(Vector3<T>(copy[1][0], copy[1][1], copy[1][3]),
-                                       Vector3<T>(copy[2][0], copy[2][1], copy[2][3]),
-                                       Vector3<T>(copy[3][0], copy[3][1], copy[3][3]));
-        (*_out)[0][2] = Determinant(m3);
+        (*_out)[0][2] = Determinant(Matrix3x3<T>({
+            {copy[1][0], copy[1][1], copy[1][3]},
+            {copy[2][0], copy[2][1], copy[2][3]},
+            {copy[3][0], copy[3][1], copy[3][3]}
+        }));
 
-        Matrix3x3<T> m4 = Matrix3x3<T>(Vector3<T>(copy[1][0], copy[1][1], copy[1][2]),
-                                       Vector3<T>(copy[2][0], copy[2][1], copy[2][2]),
-                                       Vector3<T>(copy[3][0], copy[3][1], copy[3][2]));
-        (*_out)[0][3] = -Determinant(m4);
+        (*_out)[0][3] = -Determinant(Matrix3x3<T>({
+            {copy[1][0], copy[1][1], copy[1][2]},
+            {copy[2][0], copy[2][1], copy[2][2]},
+            {copy[3][0], copy[3][1], copy[3][2]}
+        }));
 
+        // Second row
+        (*_out)[1][0] = -Determinant(Matrix3x3<T>({
+            {copy[0][1], copy[0][2], copy[0][3]},
+            {copy[2][1], copy[2][2], copy[2][3]},
+            {copy[3][1], copy[3][2], copy[3][3]}
+        }));
 
-        m1 = Matrix3x3<T>(Vector3<T>(copy[0][1], copy[0][2], copy[0][3]),
-                          Vector3<T>(copy[2][1], copy[2][2], copy[2][3]),
-                          Vector3<T>(copy[3][1], copy[3][2], copy[3][3]));
-        (*_out)[1][0] = -Determinant(m1);
+        (*_out)[1][1] = Determinant(Matrix3x3<T>({
+            {copy[0][0], copy[0][2], copy[0][3]},
+            {copy[2][0], copy[2][2], copy[2][3]},
+            {copy[3][0], copy[3][2], copy[3][3]}
+        }));
 
-        m2 = Matrix3x3<T>(Vector3<T>(copy[0][0], copy[0][2], copy[0][3]),
-                          Vector3<T>(copy[2][0], copy[2][2], copy[2][3]),
-                          Vector3<T>(copy[3][0], copy[3][2], copy[3][3]));
-        (*_out)[1][1] = Determinant(m2);
+        (*_out)[1][2] = -Determinant(Matrix3x3<T>({
+            {copy[0][0], copy[0][1], copy[0][3]},
+            {copy[2][0], copy[2][1], copy[2][3]},
+            {copy[3][0], copy[3][1], copy[3][3]}
+        }));
 
-        m3 = Matrix3x3<T>(Vector3<T>(copy[0][0], copy[0][1], copy[0][3]),
-                          Vector3<T>(copy[2][0], copy[2][1], copy[2][3]),
-                          Vector3<T>(copy[3][0], copy[3][1], copy[3][3]));
-        (*_out)[1][2] = -Determinant(m3);
+        (*_out)[1][3] = Determinant(Matrix3x3<T>({
+            {copy[0][0], copy[0][1], copy[0][2]},
+            {copy[2][0], copy[2][1], copy[2][2]},
+            {copy[3][0], copy[3][1], copy[3][2]}
+        }));
 
-        m4 = Matrix3x3<T>(Vector3<T>(copy[0][0], copy[0][1], copy[0][2]),
-                          Vector3<T>(copy[2][0], copy[2][1], copy[2][2]),
-                          Vector3<T>(copy[3][0], copy[3][1], copy[3][2]));
-        (*_out)[1][3] = Determinant(m4);
+        // Third row
+        (*_out)[2][0] = Determinant(Matrix3x3<T>({
+            {copy[0][1], copy[0][2], copy[0][3]},
+            {copy[1][1], copy[1][2], copy[1][3]},
+            {copy[3][1], copy[3][2], copy[3][3]}
+        }));
 
+        (*_out)[2][1] = -Determinant(Matrix3x3<T>({
+            {copy[0][0], copy[0][2], copy[0][3]},
+            {copy[1][0], copy[1][2], copy[1][3]},
+            {copy[3][0], copy[3][2], copy[3][3]}
+        }));
 
-        m1 = Matrix3x3<T>(Vector3<T>(copy[0][1], copy[0][2], copy[0][3]),
-                          Vector3<T>(copy[1][1], copy[1][2], copy[1][3]),
-                          Vector3<T>(copy[3][1], copy[3][2], copy[3][3]));
-        (*_out)[2][0] = Determinant(m1);
+        (*_out)[2][2] = Determinant(Matrix3x3<T>({
+            {copy[0][0], copy[0][1], copy[0][3]},
+            {copy[1][0], copy[1][1], copy[1][3]},
+            {copy[3][0], copy[3][1], copy[3][3]}
+        }));
 
-        m2 = Matrix3x3<T>(Vector3<T>(copy[0][0], copy[0][2], copy[0][3]),
-                          Vector3<T>(copy[1][0], copy[1][2], copy[1][3]),
-                          Vector3<T>(copy[3][0], copy[3][2], copy[3][3]));
-        (*_out)[2][1] = -Determinant(m2);
+        (*_out)[2][3] = -Determinant(Matrix3x3<T>({
+            {copy[0][0], copy[0][1], copy[0][2]},
+            {copy[1][0], copy[1][1], copy[1][2]},
+            {copy[3][0], copy[3][1], copy[3][2]}
+        }));
 
-        m3 = Matrix3x3<T>(Vector3<T>(copy[0][0], copy[0][1], copy[0][3]),
-                          Vector3<T>(copy[1][0], copy[1][1], copy[1][3]),
-                          Vector3<T>(copy[3][0], copy[3][1], copy[3][3]));
-        (*_out)[2][2] = Determinant(m3);
+        // Fourth row
+        (*_out)[3][0] = -Determinant(Matrix3x3<T>({
+            {copy[0][1], copy[0][2], copy[0][3]},
+            {copy[1][1], copy[1][2], copy[1][3]},
+            {copy[2][1], copy[2][2], copy[2][3]}
+        }));
 
-        m4 = Matrix3x3<T>(Vector3<T>(copy[0][0], copy[0][1], copy[0][2]),
-                          Vector3<T>(copy[1][0], copy[1][1], copy[1][2]),
-                          Vector3<T>(copy[3][0], copy[3][1], copy[3][2]));
-        (*_out)[2][3] = -Determinant(m4);
+        (*_out)[3][1] = Determinant(Matrix3x3<T>({
+            {copy[0][0], copy[0][2], copy[0][3]},
+            {copy[1][0], copy[1][2], copy[1][3]},
+            {copy[2][0], copy[2][2], copy[2][3]}
+        }));
 
+        (*_out)[3][2] = -Determinant(Matrix3x3<T>({
+            {copy[0][0], copy[0][1], copy[0][3]},
+            {copy[1][0], copy[1][1], copy[1][3]},
+            {copy[2][0], copy[2][1], copy[2][3]}
+        }));
 
-        m1 = Matrix3x3<T>(Vector3<T>(copy[0][1], copy[0][2], copy[0][3]),
-                          Vector3<T>(copy[1][1], copy[1][2], copy[1][3]),
-                          Vector3<T>(copy[2][1], copy[2][2], copy[2][3]));
-        (*_out)[3][0] = -Determinant(m1);
+        (*_out)[3][3] = Determinant(Matrix3x3<T>({
+            {copy[0][0], copy[0][1], copy[0][2]},
+            {copy[1][0], copy[1][1], copy[1][2]},
+            {copy[2][0], copy[2][1], copy[2][2]}
+        }));
 
-        m2 = Matrix3x3<T>(Vector3<T>(copy[0][0], copy[0][2], copy[0][3]),
-                          Vector3<T>(copy[1][0], copy[1][2], copy[1][3]),
-                          Vector3<T>(copy[2][0], copy[2][2], copy[2][3]));
-        (*_out)[3][1] = Determinant(m2);
-
-        m3 = Matrix3x3<T>(Vector3<T>(copy[0][0], copy[0][1], copy[0][3]),
-                          Vector3<T>(copy[1][0], copy[1][1], copy[1][3]),
-                          Vector3<T>(copy[2][0], copy[2][1], copy[2][3]));
-        (*_out)[3][2] = -Determinant(m3);
-
-        m4 = Matrix3x3<T>(Vector3<T>(copy[0][0], copy[0][1], copy[0][2]),
-                          Vector3<T>(copy[1][0], copy[1][1], copy[1][2]),
-                          Vector3<T>(copy[2][0], copy[2][1], copy[2][2]));
-        (*_out)[3][3] = Determinant(m4);
+        *_out = _out->Transpose();
     }
 
     template <typename T>
     void Invert(const Matrix4x4<T>& _matrix, Matrix4x4<T>* _outMatrix)
     {
+        // Compute the determinant of the matrix
+        const T determinant = Determinant(_matrix);
+
+        if (determinant == static_cast<T>(0))
+        {
+            return;
+        }
+
+        const T invertedDeterminant = static_cast<T>(1) / determinant;
+
         Matrix4x4<T> adj;
         AdjoinMatrix(_matrix, &adj);
-        const T determinant = Determinant(_matrix);
-        const T invertedDeternimant = static_cast<T>(1) / determinant;
 
-        Matrix4x4<T> result;
+        // Perform the inversion
         for (int i = 0; i < 4; i++)
         {
             for (int k = 0; k < 4; k++)
             {
-                result[i][k] = invertedDeternimant * adj[i][k];
+                (*_outMatrix)[i][k] = invertedDeterminant * adj[i][k];
             }
         }
-        *_outMatrix = result;
     }
 
     template <class T>
@@ -558,7 +586,7 @@ namespace Tbx
         result[2][0] = m1;
         result[2][1] = -m2;
         result[2][2] = m3;
-        
+
         return result;
     }
 

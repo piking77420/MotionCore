@@ -17,9 +17,7 @@ namespace Tbx
         constexpr Vector2() = default;
 
         constexpr Vector2(DataType valueX, DataType valueY) : x(valueX), y(valueY) {}
-
-        constexpr Vector2(DataType valueX) : x(valueX), y(valueX) {}
-
+        
         ~Vector2() = default;
 
         TOOLBOX_INLINE constexpr DataType* GetPtr()

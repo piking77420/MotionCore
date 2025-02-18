@@ -20,6 +20,15 @@ namespace Tbx
 
         ~Matrix4x4() = default;
 
+        template <typename U>
+        Matrix4x4(const Matrix4x4<U>& other)
+        {
+            for (size_t i = 0; i < Size; i++)
+                for (size_t j = 0; j < Size; j++)
+                    m_Data[i][j] = static_cast<T>(other[i][j]);
+        }
+
+
         static Matrix4x4 Identity()
         {
             Matrix4x4 result;
@@ -31,7 +40,7 @@ namespace Tbx
 
             return result;
         }
-
+        
         constexpr Matrix4x4(DataType x1, DataType y1, DataType z1, DataType w1,
             DataType x2, DataType y2, DataType z2, DataType w2,
             DataType x3, DataType y3, DataType z3, DataType w3,
@@ -109,15 +118,15 @@ namespace Tbx
 
         Matrix4x4 operator*(const Matrix4x4& _other) const
         {
-            Matrix4x4 result = {};
+            Matrix4x4 result = {}; // Initialize to zero
 
-            for (size_t rows = 0; rows < Size; rows++)
+            for (size_t col = 0; col < Size; col++)  // Iterate columns first
             {
-                for (size_t coloms = 0; coloms < Size; coloms++)
+                for (size_t row = 0; row < Size; row++)  // Then rows
                 {
-                    for (size_t dot = 0; dot < Size; dot++)
+                    for (size_t dot = 0; dot < Size; dot++)  // Perform dot product
                     {
-                        result.m_Data[coloms][rows] += m_Data[dot][rows] * _other.m_Data[coloms][dot];
+                        result.m_Data[col][row] += m_Data[dot][row] * _other.m_Data[col][dot];
                     }
                 }
             }
@@ -139,15 +148,15 @@ namespace Tbx
             return result;
         }
 
-        Vec operator*(const Vec& _vector4)
+        Vec operator*(const Vec& _vector4) const
         {
-            Vec result = 0;
+            Vec result = {};
 
             for (size_t i = 0; i < Size; i++)
             {
                 for (size_t j = 0; j < Size; j++)
                 {
-                    result[i] += m_Data[i][j] * _vector4[j];
+                    result[i] += m_Data[j][i] * _vector4[j];
                 }
             }
 
@@ -156,12 +165,12 @@ namespace Tbx
 
         bool operator==(const Matrix4x4& _other) const
         {
-
+            const T epsilon = static_cast<T>(1e-6); // Adjust epsilon as needed
             for (size_t i = 0; i < Size; ++i)
             {
                 for (size_t j = 0; j < Size; ++j)
                 {
-                    if (m_Data[i][j] != _other[i][j])
+                    if (std::abs(m_Data[i][j] - _other[i][j]) > epsilon)
                     {
                         return false;
                     }

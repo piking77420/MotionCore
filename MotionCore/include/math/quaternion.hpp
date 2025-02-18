@@ -222,19 +222,16 @@ namespace Tbx
 		{
 			Vec3 c, s;
 
-			c = Vec3(std::cos(eulerAngle.x / static_cast<T>(2)),
-				std::cos(eulerAngle.y / static_cast<T>(2)),
-				std::cos(eulerAngle.z / static_cast<T>(2)));
-			s = Vec3(std::sin(eulerAngle.x / static_cast<T>(2)),
-				std::sin(eulerAngle.y / static_cast<T>(2)),
-				std::sin(eulerAngle.z / static_cast<T>(2)));
+			Vec3 halfAngle = eulerAngle * static_cast<T>(0.5);
+			c = Vec3(std::cos(halfAngle.x), std::cos(halfAngle.y), std::cos(halfAngle.z));
+			s = Vec3(std::sin(halfAngle.x), std::sin(halfAngle.y), std::sin(halfAngle.z));
 
-			DataType i = s.x * c.y * c.z + c.x * s.y * s.z;
-			DataType j = c.x * s.y * c.z - s.x * c.y * s.z;
-			DataType k = c.x * c.y * s.z + s.x * s.y * c.z;
-			DataType w = c.x * c.y * c.z - s.x * s.y * s.z;
+			T w = c.x * c.y * c.z + s.x * s.y * s.z;
+			T i = s.x * c.y * c.z - c.x * s.y * s.z;
+			T j = c.x * s.y * c.z + s.x * c.y * s.z;
+			T k = c.x * c.y * s.z - s.x * s.y * c.z;
 
-			return { { i, j, k}, w };
+			return Quaternion(i, j, k, w);
 		}
 
 		static inline void SinCos(const Vector4<T>& angles, Vector4<T>& sinOut, Vector4<T>& cosOut)
@@ -245,6 +242,7 @@ namespace Tbx
 			}
 		}
 
+		/*
 		static Quaternion FromEuler(const Vector4<T>& _vector4) // <Pitch, Yaw, Roll, 0>
 		{
 			constexpr Vector4<T>  Sign = { 1.0f, -1.0f, -1.0f, 1.0f };
@@ -256,23 +254,23 @@ namespace Tbx
 			Vector4<T> sinAngles, cosAngles;
 			SinCos(halfAngles, sinAngles, cosAngles);
 
-			Vector4<T> P0 = Permute<TBX_PERMUTE_0X, TBX_PERMUTE_1X, TBX_PERMUTE_1X, TBX_PERMUTE_1X>(sinAngles, cosAngles);
-			Vector4<T> Y0 = Permute<TBX_PERMUTE_1Y, TBX_PERMUTE_0Y, TBX_PERMUTE_1Y, TBX_PERMUTE_1Y>(sinAngles, cosAngles);
-			Vector4<T> R0 = Permute<TBX_PERMUTE_1Z, TBX_PERMUTE_1Z, TBX_PERMUTE_0Z, TBX_PERMUTE_1Z>(sinAngles, cosAngles);
+			Vector4<T> P0 = Permute<T,TBX_PERMUTE_0X, TBX_PERMUTE_1X, TBX_PERMUTE_1X, TBX_PERMUTE_1X>(sinAngles, cosAngles);
+			Vector4<T> Y0 = Permute<T,TBX_PERMUTE_1Y, TBX_PERMUTE_0Y, TBX_PERMUTE_1Y, TBX_PERMUTE_1Y>(sinAngles, cosAngles);
+			Vector4<T> R0 = Permute<T,TBX_PERMUTE_1Z, TBX_PERMUTE_1Z, TBX_PERMUTE_0Z, TBX_PERMUTE_1Z>(sinAngles, cosAngles);
 
-			Vector4<T> P1 = Permute<TBX_PERMUTE_0X, TBX_PERMUTE_1X, TBX_PERMUTE_1X, TBX_PERMUTE_1X>(cosAngles, sinAngles);
-			Vector4<T> Y1 = Permute<TBX_PERMUTE_1Y, TBX_PERMUTE_0Y, TBX_PERMUTE_1Y, TBX_PERMUTE_1Y>(cosAngles, sinAngles);
-			Vector4<T> R1 = Permute<TBX_PERMUTE_1Z, TBX_PERMUTE_1Z, TBX_PERMUTE_0Z, TBX_PERMUTE_1Z>(cosAngles, sinAngles);
+			Vector4<T> P1 = Permute<T,TBX_PERMUTE_0X, TBX_PERMUTE_1X, TBX_PERMUTE_1X, TBX_PERMUTE_1X>(cosAngles, sinAngles);
+			Vector4<T> Y1 = Permute<T,TBX_PERMUTE_1Y, TBX_PERMUTE_0Y, TBX_PERMUTE_1Y, TBX_PERMUTE_1Y>(cosAngles, sinAngles);
+			Vector4<T> R1 = Permute<T,TBX_PERMUTE_1Z, TBX_PERMUTE_1Z, TBX_PERMUTE_0Z, TBX_PERMUTE_1Z>(cosAngles, sinAngles);
 
 			// Compute quaternions
 			Vector4<T> Q1 = P1 * Sign;
 			Vector4<T> Q0 = P0 * Y0;
 			Q1 = Q1 * Y1;
 			Q0 = Q0 * R0;
-			Vector4<T> Q = (Q1 * R1)  + Q0;
+			const Vector4<T> Q = (Q1 * R1)  + Q0;
 
 			return {Q.x, Q.y, Q.z, Q.w};
-		}
+		}*/
 
 		static Quaternion FromMatrix(const Matrix3x3<T>& matrix)
 		{

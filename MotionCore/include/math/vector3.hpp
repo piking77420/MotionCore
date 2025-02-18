@@ -18,11 +18,7 @@ namespace Tbx
         constexpr Vector3(DataType valueX, DataType valueY, DataType valueZ) : x(valueX), y(valueY), z(valueZ)
         {
         }
-
-        constexpr Vector3(DataType valueX) : x(valueX), y(valueX), z(valueX)
-        {
-        }
-
+        
         template<typename U>
         operator Vector3<U>() const {
             return Vector3<U>(static_cast<U>(x), static_cast<U>(y), static_cast<U>(z));
@@ -102,27 +98,27 @@ namespace Tbx
         }
 
 
-        Vector3 operator-() const
+        TOOLBOX_INLINE Vector3 operator-() const
         {
             return { -x, -y, -z };
         }
 
-        Vector3 operator+(const Vector3& other) const
+        TOOLBOX_INLINE Vector3 operator+(const Vector3& other) const
         {
             return { x + other.x, y + other.y, z + other.z };
         }
 
-        Vector3 operator-(const Vector3& other) const
+        TOOLBOX_INLINE Vector3 operator-(const Vector3& other) const
         {
             return { x - other.x, y - other.y, z - other.z };
         }
 
-        Vector3 operator*(const Vector3& other) const
+        TOOLBOX_INLINE Vector3 operator*(const Vector3& other) const
         {
             return { x * other.x, y * other.y, z * other.z };
         }
 
-        Vector3 operator/(const Vector3& other) const
+        TOOLBOX_INLINE Vector3 operator/(const Vector3& other) const
         {
             return { x / other.x, y / other.y, z / other.z };
         }
@@ -210,13 +206,16 @@ namespace Tbx
         }
 
 
-        TOOLBOX_INLINE static constexpr Vector3 Zero() { return Vector3(static_cast<T>(0)); };
+        TOOLBOX_INLINE static constexpr Vector3 Zero() { return {}; }
 
-        TOOLBOX_INLINE static constexpr Vector3 UnitX() { return { 1, 0, 0 }; };
+        TOOLBOX_INLINE static constexpr Vector3 UnitX() { return { static_cast<T>(1), static_cast<T>(0), static_cast<T>(0) }; };
 
-        TOOLBOX_INLINE static constexpr Vector3 UnitY() { return { 0, 1, 0 }; };
+        TOOLBOX_INLINE static constexpr Vector3 UnitY() { return { static_cast<T>(0), static_cast<T>(1), static_cast<T>(0) }; };
 
-        TOOLBOX_INLINE static constexpr Vector3 UnitZ() { return { 0, 0, 1 }; };
+        TOOLBOX_INLINE static constexpr Vector3 UnitZ() { return { static_cast<T>(0), static_cast<T>(0), static_cast<T>(1) }; };
+
+        TOOLBOX_INLINE static constexpr Vector3 UnitOne() { return { static_cast<T>(1), static_cast<T>(1), static_cast<T>(1) }; };
+
 
         std::string ToString() const
         {

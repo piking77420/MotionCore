@@ -30,9 +30,7 @@ namespace Tbx
         constexpr Vector4() = default;
 
         constexpr Vector4(DataType valueX, DataType valueY, DataType valueZ, DataType valueW) : x(valueX), y(valueY), z(valueZ), w(valueW) {}
-
-        constexpr Vector4(DataType valueX) : x(valueX), y(valueX), z(valueX), w(valueX) {}
-
+        
         ~Vector4() = default;
 
         constexpr DataType* GetPtr()
@@ -161,6 +159,48 @@ namespace Tbx
             return { x / value , y / value, z / value, w / value };
         }
 
+        constexpr Vector4& operator+=(DataType value)
+        {
+            this->x += value;
+            this->y += value;
+            this->z += value;
+            this->w += value;
+            
+            return *this;
+        }
+
+        constexpr Vector4& operator-=(DataType value)
+        {
+            this->x -= value;
+            this->y -= value;
+            this->z -= value;
+            this->w -= value;
+            
+            return *this;
+        }
+
+
+        constexpr Vector4& operator*=(DataType value)
+        {
+            this->x *= value;
+            this->y *= value;
+            this->z *= value;
+            this->w *= value;
+            
+            return *this;
+        }
+
+        constexpr Vector4& operator/=(DataType value)
+        {
+            this->x /= value;
+            this->y /= value;
+            this->z /= value;
+            this->w /= value;
+            
+            return *this;
+        }
+
+
         TOOLBOX_INLINE DataType& operator[](size_t index)
         {
             return *static_cast<T*>(&x + index);
@@ -198,10 +238,10 @@ namespace Tbx
         }
     };
 
-    template <uint32_t PermuteX, uint32_t PermuteY, uint32_t PermuteZ, uint32_t PermuteW>
-    static Vector4<float> Permute(const Vector4<float>& _vec1, const Vector4<float>& _vec2)
+    template <typename T, uint32_t PermuteX, uint32_t PermuteY, uint32_t PermuteZ, uint32_t PermuteW>
+    static Vector4<T> Permute(const Vector4<T>& _vec1, const Vector4<T>& _vec2)
     {
-        auto selectComponent = [&](uint32_t index) -> float {
+        auto selectComponent = [&](uint32_t index) -> T {
             if (index < 4)
                 return _vec1[index];
             if (index < 8)
@@ -209,10 +249,10 @@ namespace Tbx
             throw std::exception("Invalid permutation index");
             };
 
-        const float x = selectComponent(PermuteX);
-        const float y = selectComponent(PermuteY);
-        const float z = selectComponent(PermuteZ);
-        const float w = selectComponent(PermuteW);
+        const T x = selectComponent(PermuteX);
+        const T y = selectComponent(PermuteY);
+        const T z = selectComponent(PermuteZ);
+        const T w = selectComponent(PermuteW);
 
         return { x, y, z, w };
     }
