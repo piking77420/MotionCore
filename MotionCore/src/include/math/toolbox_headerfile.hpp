@@ -5,15 +5,17 @@
 #include <array>
 #include <string>
 
-#define ZERO 0.001f
-
 #define TOOLBOX_INLINE _forceinline 
+#define EPSILON 1e-6
+
+static constexpr float fEpsilon = 1e-6f;
+static constexpr double dEpsilon = 1e-6;
 
 template<typename T>
-constexpr TOOLBOX_INLINE bool IsZero(T _zero) { return std::abs(_zero) <= ZERO; }
-
-template<typename T>
-constexpr TOOLBOX_INLINE bool IsEqualTo(T _value, T _compare) { return IsZero<T>(std::abs(_compare) - std::abs(_value)); }
+constexpr bool IsEqual(T _value, T _compare, T epsilon = static_cast<T>(EPSILON))
+{
+    return std::abs(_value - _compare) <= epsilon;
+}
 
 constexpr float Deg2Rad { static_cast<float>(M_PI) / 180.0f};
 constexpr float Rad2Deg {57.29578f};

@@ -52,7 +52,7 @@ namespace Tbx
         {
             const DataType mag = Magnitude();
 
-            if (IsEqualTo<DataType>(mag, static_cast<T>(1)))
+            if (IsEqual<DataType>(mag, static_cast<T>(1)))
                 return this;
 
             const DataType InvMagnitude = static_cast<T>(1) / mag;

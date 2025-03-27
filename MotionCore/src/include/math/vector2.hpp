@@ -16,7 +16,7 @@ namespace Tbx
 
         constexpr Vector2() = default;
 
-        constexpr Vector2(DataType valueX, DataType valueY) : x(valueX), y(valueY) {}
+        constexpr Vector2(DataType valueX, DataType valueY) : x(valueX), y(valueY) {} 
         
         ~Vector2() = default;
 
@@ -49,12 +49,10 @@ namespace Tbx
         {
             const DataType mag = Magnitude();
 
-            if (IsEqualTo<DataType>(mag, static_cast<T>(1)))
+            if (IsEqual<DataType>(mag, static_cast<T>(1)))
                 return *this;
 
-            const DataType InvMagnitude = static_cast<T>(1) / mag;
-
-            return { x * InvMagnitude, y * InvMagnitude };
+            return { x / mag, y / mag };
         }
         constexpr static TOOLBOX_INLINE DataType DistanceSquare(const Vector2& _a, const Vector2& _b)
         {
@@ -141,6 +139,32 @@ namespace Tbx
         }
 
 
+        TOOLBOX_INLINE Vector2& operator+=(DataType _value)
+        {
+            x += _value;
+            y += _value;
+            return *this;
+        }
+
+        TOOLBOX_INLINE Vector2& operator-=(DataType _value)
+        {
+            x -= _value;
+            y -= _value;
+            return *this;
+        }
+        TOOLBOX_INLINE Vector2& operator*=(DataType _value)
+        {
+            x *= _value;
+            y *= _value;
+            return *this;
+        }
+        TOOLBOX_INLINE Vector2& operator/=(DataType _value)
+        {
+            x /= _value;
+            y /= _value;
+            return *this;
+        }
+
         TOOLBOX_INLINE DataType& operator[](size_t index)
         {
             return *static_cast<T*>(&x + index);
@@ -156,7 +180,7 @@ namespace Tbx
             return x == _other.x && y == _other.y;
         }
 
-        TOOLBOX_INLINE bool operator!=(const Vector2& _other)
+        TOOLBOX_INLINE bool operator!=(const Vector2& _other) const
         {
             return x != _other.x || y != _other.y;
         }
@@ -165,6 +189,27 @@ namespace Tbx
         {
             return  "X : " + std::to_string(x) + ", Y : " + std::to_string(y) + '\n';
         }
+
+        TOOLBOX_INLINE static constexpr Vector2 Zero()
+        {
+            return { static_cast<T>(0), static_cast<T>(0) };
+        }
+
+        TOOLBOX_INLINE static constexpr Vector2 UnitX()
+        {
+            return { static_cast<T>(1), static_cast<T>(0) };
+        }
+
+        TOOLBOX_INLINE static constexpr Vector2 UnitY()
+        {
+            return { static_cast<T>(0), static_cast<T>(1) };
+        }
+
+        TOOLBOX_INLINE static constexpr Vector2 One()
+        {
+            return { static_cast<T>(1), static_cast<T>(1) };
+        }
+
     private:
 
     };

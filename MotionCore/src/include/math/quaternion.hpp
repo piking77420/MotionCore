@@ -63,7 +63,7 @@ namespace Tbx
 		{
 			const DataType mag = Magnitude();
 
-			if (IsEqualTo<DataType>(mag, static_cast<T>(1)))
+			if (IsEqual<DataType>(mag, static_cast<T>(1)))
 				return *this;
 
 			const DataType InvMagnitude = static_cast<T>(1) / mag;
@@ -203,8 +203,8 @@ namespace Tbx
 
 		TOOLBOX_INLINE bool operator==(const Quaternion& _other) const
 		{
-			return IsEqualTo(imaginary.x, _other.imaginary.x) && IsEqualTo(imaginary.y, _other.imaginary.y) && IsEqualTo(imaginary.z, _other.imaginary.z)
-				&& IsEqualTo(real, _other.real);
+			return IsEqual(imaginary.x, _other.imaginary.x) && IsEqual(imaginary.y, _other.imaginary.y) && IsEqual(imaginary.z, _other.imaginary.z)
+				&& IsEqual(real, _other.real);
 		}
 		Vec3 ToEulerAngles() const
 		{
@@ -290,7 +290,7 @@ namespace Tbx
 
 			bool flip = false;
 
-			if (cosOmega < -std::numeric_limits<U>::epsilon())
+			if (cosOmega < -EPSILON)
 			{
 				flip = true;
 				cosOmega = -cosOmega;
@@ -298,7 +298,7 @@ namespace Tbx
 
 			float s1, s2;
 
-			if (cosOmega > (1.0f - std::numeric_limits<U>::epsilon()))
+			if (cosOmega > (1.0f - EPSILON))
 			{
 				// Too close, do straight linear interpolation.
 				s1 = 1.0f - t;
