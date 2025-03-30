@@ -146,16 +146,6 @@ namespace Tbx
             return {m_Data[0][0], m_Data[1][1], m_Data[2][2]};
         }
 
-        std::string ToString() const
-        {
-            return std::to_string(m_Data[0].x) + " " + std::to_string(m_Data[1].x) + " " + std::to_string(m_Data[2].x)
-                + '\n'
-                + std::to_string(m_Data[0].y) + " " + std::to_string(m_Data[1].y) + " " + std::to_string(m_Data[2].y)
-                + '\n' +
-                std::to_string(m_Data[0].z) + " " + std::to_string(m_Data[1].z) + " " + std::to_string(m_Data[2].z)
-                + '\n';
-        }
-
         Matrix3x3 Transpose() const
         {
             Matrix3x3 result = 0;

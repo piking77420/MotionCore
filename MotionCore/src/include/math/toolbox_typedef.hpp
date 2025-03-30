@@ -50,3 +50,88 @@ namespace Tbx
     using Quaterniond = Quaternion<double>;
     using Quaternionld = Quaternion<long double>;
 }
+
+
+#include <iostream>
+
+template <typename T>
+std::ostream& operator<<(std::ostream& ostream, Tbx::Vector2<T> vec)
+{
+    ostream << "x : " << vec.x << ", " << "y : " << vec.y << '\n';
+
+    return ostream;
+}
+
+template <typename T>
+std::ostream& operator<<(std::ostream& ostream, Tbx::Vector3<T> vec)
+{
+    ostream << "x : " << vec.x << ", " << "y : " << vec.y << ", " << "z : " << vec.z << '\n';
+
+    return ostream;
+}
+
+template <typename T>
+std::ostream& operator<<(std::ostream& ostream, Tbx::Vector4<T> vec)
+{
+    ostream << "x : " << vec.x << ", " << "y : " << vec.y << ", " << "z : " << vec.z << ", " << "w : " << vec.w << '\n';
+
+    return ostream;
+}
+
+// C++20 (and later) code
+#if __cplusplus >= 202002L
+
+#include <format>
+
+template <typename T>
+struct std::formatter<Tbx::Vector2<T>> : std::formatter<std::string> 
+{
+    // Parse format specifiers (if any)
+    constexpr auto parse(std::format_parse_context& ctx) -> decltype(ctx.begin()) {
+        // For simplicity, we don't handle custom format specifiers here
+        return ctx.begin();
+    }
+
+    auto format(const Tbx::Vector2<T>& v, std::format_context& ctx) const -> std::format_context::iterator {
+        // Create a string representation of vec2
+        std::string s = "x : " + std::to_string(v.x) + ", " + "y : " + std::to_string(v.y);
+        // Delegate formatting to the standard string formatter
+        return std::formatter<std::string>::format(s, ctx);
+    }
+};
+
+template <typename T>
+struct std::formatter<Tbx::Vector3<T>> : std::formatter<std::string>
+{
+    // Parse format specifiers (if any)
+    constexpr auto parse(std::format_parse_context& ctx) -> decltype(ctx.begin()) {
+        // For simplicity, we don't handle custom format specifiers here
+        return ctx.begin();
+    }
+
+    auto format(const Tbx::Vector3<T>& v, std::format_context& ctx) const -> std::format_context::iterator {
+        // Create a string representation of vec2
+        std::string s = "x : " + std::to_string(v.x) + ", " + "y : " + std::to_string(v.y) + ", " + "z : " + std::to_string(v.z);
+        // Delegate formatting to the standard string formatter
+        return std::formatter<std::string>::format(s, ctx);
+    }
+};
+
+template <typename T>
+struct std::formatter<Tbx::Vector4<T>> : std::formatter<std::string> 
+{
+    // Parse format specifiers (if any)
+    constexpr auto parse(std::format_parse_context& ctx) -> decltype(ctx.begin()) {
+        // For simplicity, we don't handle custom format specifiers here
+        return ctx.begin();
+    }
+
+    auto format(const Tbx::Vector4<T>& v, std::format_context& ctx) const -> std::format_context::iterator {
+        // Create a string representation of vec2
+        std::string s = "x : " + std::to_string(v.x) + ", " + "y : " + std::to_string(v.y) + ", " + "z : " + std::to_string(v.z) + ", " + "w : " + std::to_string(v.w);
+        // Delegate formatting to the standard string formatter
+        return std::formatter<std::string>::format(s, ctx);
+    }
+};
+
+#endif

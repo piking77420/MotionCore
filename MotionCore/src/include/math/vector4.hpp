@@ -195,12 +195,6 @@ namespace Tbx
         constexpr Vector4 UnitZ() { return { 0, 0 ,1 }; };
 
         constexpr Vector4 UnitW() { return { 0, 0 ,1 , 1 }; };
-
-        [[nodiscard]]
-        std::string ToString() const
-        {
-            return "X : " + std::to_string(x) + ", Y : " + std::to_string(y) + ", Z : " + std::to_string(z) + ", W : " << std::to_string(w) << '\n';
-        }
     };
 
     template <typename T, uint32_t PermuteX, uint32_t PermuteY, uint32_t PermuteZ, uint32_t PermuteW>

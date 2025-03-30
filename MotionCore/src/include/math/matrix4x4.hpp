@@ -190,19 +190,8 @@ namespace Tbx
             return { m_Data[0][0], m_Data[1][1], m_Data[2][2], m_Data[3][3] };
         }
 
-        std::string ToString() const
-        {
-            return std::to_string(m_Data[0].x) + " " + std::to_string(m_Data[1].x) + " " + std::to_string(m_Data[2].x) + " " + std::to_string(m_Data[3].x)
-                + '\n'
-                + std::to_string(m_Data[0].y) + " " + std::to_string(m_Data[1].y) + " " + std::to_string(m_Data[2].y) + " " + std::to_string(m_Data[3].y)
-                + '\n'
-                + std::to_string(m_Data[0].z) + " " + std::to_string(m_Data[1].z) + " " + std::to_string(m_Data[2].z) + " " + std::to_string(m_Data[3].z)
-                + '\n'
-                + std::to_string(m_Data[0].w) + " " + std::to_string(m_Data[1].w) + " " + std::to_string(m_Data[2].w) + " " + std::to_string(m_Data[3].w)
-                + '\n';
-        }
     private:
-        std::array<Vec, Size> m_Data;
+        Vec data[Size];
 
     };
 
