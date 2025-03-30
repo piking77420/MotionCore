@@ -11,8 +11,8 @@ namespace Tbx
     public:
         using DataType = T;
 
-        T x = static_cast<T>(0);
-        T y = static_cast<T>(0);
+        T x;
+        T y;
 
         constexpr Vector2() = default;
 

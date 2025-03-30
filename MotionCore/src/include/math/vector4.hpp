@@ -22,65 +22,30 @@ namespace Tbx
     public:
         using DataType = T;
 
-        T x = 0.f;
-        T y = 0.f;
-        T z = 0.f;
-        T w = 0.f;
+        T x;
+        T y;
+        T z;
+        T w;
 
         constexpr Vector4() = default;
 
-        constexpr Vector4(DataType valueX, DataType valueY, DataType valueZ, DataType valueW) : x(valueX), y(valueY), z(valueZ), w(valueW) {}
+        constexpr Vector4(DataType valueX, DataType valueY, DataType valueZ, DataType valueW);
         
         ~Vector4() = default;
 
-        constexpr DataType* GetPtr()
-        {
-            return &x;
-        }
+        constexpr DataType* GetPtr();
 
-        constexpr const DataType* GetPtr() const
-        {
-            return &x;
-        }
+        constexpr const DataType* GetPtr() const;
 
-        DataType Magnitude() const
-        {
-            return std::sqrt(x * x + y * y + z * z + w * w);
-        }
+        DataType Magnitude() const;
 
-        Vector4<DataType> Normalize() const
-        {
-            const DataType mag = Magnitude();
+        Vector4<DataType> Normalize() const;
 
-            if (IsEqual<DataType>(mag, static_cast<T>(1)))
-                return this;
+        FORCEINLINE constexpr static float Dot(const Vector4& _v1, const Vector4& _v2);
 
-            const DataType InvMagnitude = static_cast<T>(1) / mag;
+        FORCEINLINE constexpr static DataType DistanceSquare(const Vector4& _a, const Vector4& _b);
 
-            return { x * InvMagnitude, y * InvMagnitude, z * InvMagnitude, w * InvMagnitude };
-        }
-
-        constexpr static float Dot(const Vector4& _v1, const Vector4& _v2)
-        {
-            return _v1.x * _v2.x + _v1.y * _v2.y + _v1.z * _v2.z + _v1.w * _v2.w;
-        }
-
-        constexpr static TOOLBOX_INLINE DataType DistanceSquare(const Vector4& _a, const Vector4& _b)
-        {
-            const DataType dx = _a.x - _b.x;
-            const DataType dy = _a.y - _b.y;
-            const DataType dz = _a.z - _b.z;
-            const DataType dw = _a.w - _b.w;
-            const DataType result = (dx * dx + dy * dy + dz * dz);
-
-            return result;
-        }
-
-        [[nodiscard]]
-        static TOOLBOX_INLINE DataType Distance(const Vector4& _a, const Vector4& _b)
-        {
-            return std::sqrt(DistanceSquare(_a, _b));
-        }
+        FORCEINLINE constexpr static DataType Distance(const Vector4& _a, const Vector4& _b);
 
         constexpr Vector4 operator-()
         {

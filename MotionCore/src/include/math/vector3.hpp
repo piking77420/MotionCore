@@ -7,220 +7,89 @@ namespace Tbx
     class Vector3
     {
     public:
-        using DataType = T;
+        T x;
+        T y;
+        T z;
 
-        T x = static_cast<T>(0);
-        T y = static_cast<T>(0);
-        T z = static_cast<T>(0);
+        using DataType = T;
 
         constexpr Vector3() = default;
 
-        constexpr Vector3(DataType valueX, DataType valueY, DataType valueZ) : x(valueX), y(valueY), z(valueZ)
-        {
-        }
-        
+        constexpr Vector3(DataType valueX, DataType valueY, DataType valueZ);
+
         template<typename U>
-        operator Vector3<U>() const {
-            return Vector3<U>(static_cast<U>(x), static_cast<U>(y), static_cast<U>(z));
-        }
+        operator Vector3<U>() const;
 
         ~Vector3() = default;
 
-        TOOLBOX_INLINE constexpr DataType* GetPtr()
-        {
-            return &x;
-        }
+        FORCEINLINE constexpr DataType* GetPtr();
 
-        TOOLBOX_INLINE constexpr const DataType* GetPtr() const
-        {
-            return &x;
-        }
+        FORCEINLINE constexpr const DataType* GetPtr() const;
 
+        FORCEINLINE DataType MagnitudeSquare() const;
 
-        TOOLBOX_INLINE DataType MagnitudeSquare() const
-        {
-            return x * x + y * y + z * z;
-        }
+        FORCEINLINE DataType Magnitude() const;
 
-        TOOLBOX_INLINE DataType Magnitude() const
-        {
-            return std::sqrt(MagnitudeSquare());
-        }
+        FORCEINLINE Vector3 Normalize() const;
 
-        TOOLBOX_INLINE Vector3 Normalize() const
-        {
-            const DataType mag = Magnitude();
+        FORCEINLINE constexpr static DataType Dot(const Vector3& _v1, const Vector3& _v2);
 
-            if (IsEqual<DataType>(mag, static_cast<T>(1)) || mag <= ZERO)
-                return *this;
+        FORCEINLINE constexpr static Vector3 Cross(Vector3 _v1, Vector3 _v2);
 
-            const DataType InvMagnitude = static_cast<T>(1) / mag;
+        constexpr static FORCEINLINE DataType DistanceSquare(const Vector3& _a, const Vector3& _b);
 
-            return { x * InvMagnitude, y * InvMagnitude, z * InvMagnitude };
-        }
+        static FORCEINLINE DataType Distance(const Vector3& _a, const Vector3& _b);
 
+        FORCEINLINE Vector3 operator-() const;
 
-        TOOLBOX_INLINE constexpr static DataType Dot(const Vector3& _v1, const Vector3& _v2)
-        {
-            return _v1.x * _v2.x + _v1.y * _v2.y + _v1.z * _v2.z;
-        }
+        FORCEINLINE Vector3 operator+(const Vector3& other) const;
 
-        TOOLBOX_INLINE constexpr static Vector3 Cross(const Vector3& _v1, const Vector3& _v2)
-        {
-            return {_v1.y * _v2.z - _v1.z * _v2.y,
-                _v1.z * _v2.x - _v1.x * _v2.z,
-                _v1.x * _v2.y - _v1.y * _v2.x};
-        }
+        FORCEINLINE Vector3 operator-(const Vector3& other) const;
 
-        constexpr static TOOLBOX_INLINE DataType DistanceSquare(const Vector3& _a, const Vector3& _b)
-        {
-            const DataType dx = _a.x - _b.x;
-            const DataType dy = _a.y - _b.y;
-            const DataType dz = _a.z - _b.z;
-            const DataType result = (dx * dx + dy * dy + dz * dz);
+        FORCEINLINE Vector3 operator*(const Vector3& other) const;
 
-            return result;
-        }
+        FORCEINLINE Vector3 operator/(const Vector3& other) const;
 
-        [[nodiscard]]
-        static TOOLBOX_INLINE DataType Distance(const Vector3& _a, const Vector3& _b)
-        {
-            return std::sqrt(DistanceSquare(_a, _b));
-        }
+        FORCEINLINE constexpr void operator+=(const Vector3& _Row1) noexcept;
 
-        // In radian
-        static inline Vector3 FromSphericalCoord(DataType _radius, DataType _pitch, DataType _head)
-        {
-            DataType x = _radius * std::cos(_pitch) * std::sinf(_head);
-            DataType y = _radius * -std::sinf(_pitch);
-            DataType z = _radius * std::cos(_pitch) * std::cosf(_head);
-            return { x, y, z };
-        }
+        FORCEINLINE constexpr void operator-=(const Vector3& _Row1) noexcept;
+
+        FORCEINLINE constexpr void operator*=(const Vector3& _Row1) noexcept;
+
+        FORCEINLINE constexpr void operator/=(const Vector3& _Row1) noexcept;
+
+        FORCEINLINE Vector3 operator+(DataType value) const;
+
+        FORCEINLINE Vector3 operator-(DataType value) const;
+
+        FORCEINLINE Vector3 operator*(DataType value) const;
+
+        FORCEINLINE void operator*=(DataType value);
+
+        FORCEINLINE Vector3 operator/(DataType value) const;
+
+        FORCEINLINE void operator/=(DataType value) const;
+
+        FORCEINLINE DataType& operator[](size_t index);
+
+        FORCEINLINE const DataType& operator[](size_t index) const;
+
+        FORCEINLINE bool operator==(const Vector3& _other) const;
+
+        FORCEINLINE bool operator!=(const Vector3& _other);
 
 
-        TOOLBOX_INLINE Vector3 operator-() const
-        {
-            return { -x, -y, -z };
-        }
+        FORCEINLINE static constexpr Vector3 Zero() { return { static_cast<T>(0), static_cast<T>(0), static_cast<T>(0) }; }
 
-        TOOLBOX_INLINE Vector3 operator+(const Vector3& other) const
-        {
-            return { x + other.x, y + other.y, z + other.z };
-        }
+        FORCEINLINE static constexpr Vector3 UnitX() { return { static_cast<T>(1), static_cast<T>(0), static_cast<T>(0) }; };
 
-        TOOLBOX_INLINE Vector3 operator-(const Vector3& other) const
-        {
-            return { x - other.x, y - other.y, z - other.z };
-        }
+        FORCEINLINE static constexpr Vector3 UnitY() { return { static_cast<T>(0), static_cast<T>(1), static_cast<T>(0) }; };
 
-        TOOLBOX_INLINE Vector3 operator*(const Vector3& other) const
-        {
-            return { x * other.x, y * other.y, z * other.z };
-        }
+        FORCEINLINE static constexpr Vector3 UnitZ() { return { static_cast<T>(0), static_cast<T>(0), static_cast<T>(1) }; };
 
-        TOOLBOX_INLINE Vector3 operator/(const Vector3& other) const
-        {
-            return { x / other.x, y / other.y, z / other.z };
-        }
-
-        constexpr TOOLBOX_INLINE void operator+=(const Vector3& _Row1) noexcept
-        {
-            x += _Row1.x;
-            y += _Row1.y;
-            z += _Row1.z;
-        }
-
-        constexpr TOOLBOX_INLINE void operator-=(const Vector3& _Row1) noexcept
-        {
-            x -= _Row1.x;
-            y -= _Row1.y;
-            z -= _Row1.z;
-        }
-
-        constexpr TOOLBOX_INLINE void operator*=(const Vector3& _Row1) noexcept
-        {
-            x *= _Row1.x;
-            y *= _Row1.y;
-            z *= _Row1.z;
-        }
-
-        constexpr TOOLBOX_INLINE void operator/=(const Vector3& _Row1) noexcept
-        {
-            x /= _Row1.x;
-            y /= _Row1.y;
-            z /= _Row1.z;
-        }
-
-        TOOLBOX_INLINE Vector3 operator+(DataType value) const
-        {
-            return { x + value, y + value, z + value };
-        }
-
-        TOOLBOX_INLINE Vector3 operator-(DataType value) const
-        {
-            return { x - value, y - value, z - value };
-        }
-
-        TOOLBOX_INLINE Vector3 operator*(DataType value) const
-        {
-            return { x * value, y * value, z * value };
-        }
-
-        TOOLBOX_INLINE void operator*=(DataType value)
-        {
-            x *= value;
-            y *= value;
-            z *= value;
-        }
-
-        TOOLBOX_INLINE Vector3 operator/(DataType value) const
-        {
-            return { x / value, y / value, z / value };
-        }
-
-        TOOLBOX_INLINE void operator/=(DataType value) const
-        {
-            x /= value;
-            y /= value;
-            z /= value;
-        }
-
-        TOOLBOX_INLINE DataType& operator[](size_t index) 
-        {
-            return *static_cast<T*>(&x + index);
-        }
-
-        TOOLBOX_INLINE const DataType& operator[](size_t index) const
-        {
-            return *static_cast<const T*>(&x + index);
-        }
-
-        TOOLBOX_INLINE bool operator==(const Vector3& _other) const
-        {
-            return x == _other.x && y == _other.y && z == _other.z;
-        }
-
-        TOOLBOX_INLINE bool operator!=(const Vector3& _other)
-        {
-            return !(this == _other);
-        }
-
-
-        TOOLBOX_INLINE static constexpr Vector3 Zero() { return {}; }
-
-        TOOLBOX_INLINE static constexpr Vector3 UnitX() { return { static_cast<T>(1), static_cast<T>(0), static_cast<T>(0) }; };
-
-        TOOLBOX_INLINE static constexpr Vector3 UnitY() { return { static_cast<T>(0), static_cast<T>(1), static_cast<T>(0) }; };
-
-        TOOLBOX_INLINE static constexpr Vector3 UnitZ() { return { static_cast<T>(0), static_cast<T>(0), static_cast<T>(1) }; };
-
-        TOOLBOX_INLINE static constexpr Vector3 UnitOne() { return { static_cast<T>(1), static_cast<T>(1), static_cast<T>(1) }; };
-
-
-        std::string ToString() const
-        {
-            return "X : " + std::to_string(x) + ", Y : " + std::to_string(y) + ", Z : " + std::to_string(z) + '\n';
-        }
+        FORCEINLINE static constexpr Vector3 UnitOne() { return { static_cast<T>(1), static_cast<T>(1), static_cast<T>(1) }; };
     };
+  
 }
 
+#include "math/vector3.inl"
