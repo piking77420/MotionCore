@@ -37,29 +37,29 @@ namespace Tbx
 
 		~Quaternion() = default;
 
-		constexpr static TOOLBOX_INLINE Quaternion Identity() { return { Vec3::Zero(), static_cast<DataType>(1) }; }
+		constexpr static FORCEINLINE Quaternion Identity() { return { Vec3::Zero(), static_cast<DataType>(1) }; }
 
-		TOOLBOX_INLINE DataType MagnitudeSquare() const
+		FORCEINLINE DataType MagnitudeSquare() const
 		{
 			return imaginary.MagnitudeSquare() + real * real;
 		}
 
-		TOOLBOX_INLINE DataType Magnitude() const
+		FORCEINLINE DataType Magnitude() const
 		{
 			return std::sqrt(MagnitudeSquare());
 		}
 
-		TOOLBOX_INLINE Quaternion Conjugate() const
+		FORCEINLINE Quaternion Conjugate() const
 		{
 			return { -imaginary, real };
 		}
 
-		TOOLBOX_INLINE static constexpr DataType DotProduct(const Quaternion& q1, const Quaternion& q2)
+		FORCEINLINE static constexpr DataType DotProduct(const Quaternion& q1, const Quaternion& q2)
 		{
 			return q1.imaginary.x * q2.imaginary.x + q1.imaginary.y * q2.imaginary.y + q1.imaginary.z * q2.imaginary.z + q1.real * q2.real;
 		}
 
-		TOOLBOX_INLINE Quaternion Normalize() const
+		FORCEINLINE Quaternion Normalize() const
 		{
 			const DataType mag = Magnitude();
 
@@ -92,17 +92,17 @@ namespace Tbx
 			return { rotAxis, dot + 1 };
 		}
 
-		TOOLBOX_INLINE Quaternion operator+(const Quaternion& _other)
+		FORCEINLINE Quaternion operator+(const Quaternion& _other)
 		{
 			return { imaginary + _other.imaginary, real + _other.real };
 		}
 
-		TOOLBOX_INLINE Quaternion operator-(const Quaternion& _other)
+		FORCEINLINE Quaternion operator-(const Quaternion& _other)
 		{
 			return { imaginary - _other.imaginary, real - _other.real };
 		}
 
-		TOOLBOX_INLINE Quaternion operator*(const Quaternion& _other) const
+		FORCEINLINE Quaternion operator*(const Quaternion& _other) const
 		{
 			const DataType newReal = real * _other.real
 				- Vec3::Dot(imaginary, _other.imaginary);
@@ -119,14 +119,14 @@ namespace Tbx
 			return { { i, j, k}, newReal };
 		}
 
-		TOOLBOX_INLINE Vec3 operator*(const Vec3& _vec) const
+		FORCEINLINE Vec3 operator*(const Vec3& _vec) const
 		{
 			Quaternion vecQuat(_vec.x, _vec.y, _vec.z, 0.f);
 			Quaternion resQuat = Conjugate() * vecQuat * (*this);
 			return resQuat.imaginary;
 		}
 
-		TOOLBOX_INLINE Quaternion operator+(const Vec3& _vec) const
+		FORCEINLINE Quaternion operator+(const Vec3& _vec) const
 		{
 			Quaternion result = *this;
 
@@ -141,67 +141,67 @@ namespace Tbx
 			return result;
 		}
 
-		TOOLBOX_INLINE Quaternion operator+(T _value)
+		FORCEINLINE Quaternion operator+(T _value)
 		{
 			return { imaginary + _value, real + _value };
 		}
 
-		TOOLBOX_INLINE Quaternion operator-(T _value)
+		FORCEINLINE Quaternion operator-(T _value)
 		{
 			return { imaginary - _value, real - _value };
 		}
 
-		TOOLBOX_INLINE Quaternion operator*(T _value)
+		FORCEINLINE Quaternion operator*(T _value)
 		{
 			return { imaginary * _value, real * _value };
 		}
 
-		TOOLBOX_INLINE Quaternion operator/(T _value)
+		FORCEINLINE Quaternion operator/(T _value)
 		{
 			return { imaginary / _value, real / _value };
 		}
 
-		TOOLBOX_INLINE void operator+=(const Quaternion& _other)
+		FORCEINLINE void operator+=(const Quaternion& _other)
 		{
 			*this = *this + _other;
 		}
 
-		TOOLBOX_INLINE void operator-=(const Quaternion& _other)
+		FORCEINLINE void operator-=(const Quaternion& _other)
 		{
 			*this = *this - _other;
 		}
 
-		TOOLBOX_INLINE void operator*=(const Quaternion& _other)
+		FORCEINLINE void operator*=(const Quaternion& _other)
 		{
 			*this = *this * _other;
 		}
 
-		TOOLBOX_INLINE void operator+=(T _value)
+		FORCEINLINE void operator+=(T _value)
 		{
 			*this = *this + _value;
 		}
 
-		TOOLBOX_INLINE void operator-=(T _value)
+		FORCEINLINE void operator-=(T _value)
 		{
 			*this = *this - _value;
 		}
 
-		TOOLBOX_INLINE void operator*=(T _value)
+		FORCEINLINE void operator*=(T _value)
 		{
 			*this = *this * _value;
 		}
 
-		TOOLBOX_INLINE void operator/=(T _value)
+		FORCEINLINE void operator/=(T _value)
 		{
 			*this = *this / _value;
 		}
 
-		TOOLBOX_INLINE void operator+=(const Vec3 _vec)
+		FORCEINLINE void operator+=(const Vec3 _vec)
 		{
 			*this = *this + _vec;
 		}
 
-		TOOLBOX_INLINE bool operator==(const Quaternion& _other) const
+		FORCEINLINE bool operator==(const Quaternion& _other) const
 		{
 			return IsEqual(imaginary.x, _other.imaginary.x) && IsEqual(imaginary.y, _other.imaginary.y) && IsEqual(imaginary.z, _other.imaginary.z)
 				&& IsEqual(real, _other.real);
@@ -284,7 +284,7 @@ namespace Tbx
 		}
 
 		template<typename U>
-		[[nodiscard]] static TOOLBOX_INLINE Quaternion Slerp(const Quaternion& t1, const Quaternion& t2, U t)
+		[[nodiscard]] static FORCEINLINE Quaternion Slerp(const Quaternion& t1, const Quaternion& t2, U t)
 		{
 			float cosOmega = DotProduct(t1, t2);
 

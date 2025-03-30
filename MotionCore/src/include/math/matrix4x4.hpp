@@ -95,23 +95,23 @@ namespace Tbx
             m_Data[3] = _vec1;
         }
 
-        constexpr TOOLBOX_INLINE const DataType* GetPtr() const noexcept
+        constexpr FORCEINLINE const DataType* GetPtr() const noexcept
         {
             return &m_Data[0][0];
         }
 
-        TOOLBOX_INLINE DataType* GetPtr() noexcept
+        FORCEINLINE DataType* GetPtr() noexcept
         {
             return &m_Data[0][0];
         }
 
 
-        TOOLBOX_INLINE const Vec& operator[](size_t _size) const
+        FORCEINLINE const Vec& operator[](size_t _size) const
         {
             return m_Data[_size];
         }
 
-        TOOLBOX_INLINE Vec& operator[](size_t _size)
+        FORCEINLINE Vec& operator[](size_t _size)
         {
             return m_Data[_size];
         }
@@ -209,7 +209,7 @@ namespace Tbx
 
 
     template <typename T>
-    TOOLBOX_INLINE Matrix4x4<T> Multiply(const Matrix4x4<T>& matrix, const T _scalar)
+    FORCEINLINE Matrix4x4<T> Multiply(const Matrix4x4<T>& matrix, const T _scalar)
     {
         Matrix4x4<T> result;
         Matrix4x4<T> m = matrix.Transpose();

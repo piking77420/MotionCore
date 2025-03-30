@@ -77,12 +77,12 @@ namespace Tbx
         }
 
 
-        TOOLBOX_INLINE Vec operator[](size_t _size) const
+        FORCEINLINE Vec operator[](size_t _size) const
         {
             return m_Data[_size];
         }
 
-        TOOLBOX_INLINE Vec& operator[](size_t _size)
+        FORCEINLINE Vec& operator[](size_t _size)
         {
             return m_Data[_size];
         }

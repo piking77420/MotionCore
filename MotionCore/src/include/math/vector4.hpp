@@ -107,7 +107,7 @@ namespace Tbx
             return { x / _other.x , y / _other.y, z / _other.z,  w / _other.w };
         }
 
-        constexpr TOOLBOX_INLINE void operator+= (const Vector4& _other) noexcept
+        constexpr FORCEINLINE void operator+= (const Vector4& _other) noexcept
         {
             x += _other.x;
             y += _other.y;
@@ -115,7 +115,7 @@ namespace Tbx
             w += _other.w;
         }
 
-        constexpr TOOLBOX_INLINE void operator-= (const Vector4& _other) noexcept
+        constexpr FORCEINLINE void operator-= (const Vector4& _other) noexcept
         {
             x -= _other.x;
             y -= _other.y;
@@ -123,7 +123,7 @@ namespace Tbx
             w -= _other.w;
         }
 
-        constexpr TOOLBOX_INLINE void operator*= (const Vector4& _other) noexcept
+        constexpr FORCEINLINE void operator*= (const Vector4& _other) noexcept
         {
             x *= _other.x;
             y *= _other.y;
@@ -131,7 +131,7 @@ namespace Tbx
             w *= _other.w;
         }
 
-        constexpr TOOLBOX_INLINE void operator/= (const Vector4& _other) noexcept
+        constexpr FORCEINLINE void operator/= (const Vector4& _other) noexcept
         {
             x /= _other.x;
             y /= _other.y;
@@ -165,7 +165,7 @@ namespace Tbx
             this->y += value;
             this->z += value;
             this->w += value;
-            
+
             return *this;
         }
 
@@ -175,7 +175,7 @@ namespace Tbx
             this->y -= value;
             this->z -= value;
             this->w -= value;
-            
+
             return *this;
         }
 
@@ -186,7 +186,7 @@ namespace Tbx
             this->y *= value;
             this->z *= value;
             this->w *= value;
-            
+
             return *this;
         }
 
@@ -196,27 +196,27 @@ namespace Tbx
             this->y /= value;
             this->z /= value;
             this->w /= value;
-            
+
             return *this;
         }
 
 
-        TOOLBOX_INLINE DataType& operator[](size_t index)
+        FORCEINLINE DataType& operator[](size_t index)
         {
             return *static_cast<T*>(&x + index);
         }
 
-        TOOLBOX_INLINE const DataType& operator[](size_t index) const
+        FORCEINLINE const DataType& operator[](size_t index) const
         {
             return *static_cast<const T*>(&x + index);
         }
 
-        TOOLBOX_INLINE bool operator==(const Vector4& _other) const
+        FORCEINLINE bool operator==(const Vector4& _other) const
         {
             return x == _other.x && y == _other.y && z == _other.z && w == _other.w;
         }
 
-        TOOLBOX_INLINE bool operator!=(const Vector4& _other)
+        FORCEINLINE bool operator!=(const Vector4& _other)
         {
             return !(this == _other);
         }
