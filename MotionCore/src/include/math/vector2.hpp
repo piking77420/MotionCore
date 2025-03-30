@@ -1,14 +1,13 @@
 ﻿#pragma once
 
-#include "toolbox_headerfile.hpp"
+    #include "toolbox_headerfile.hpp"
 
 namespace Tbx
 {
 
     template <typename T>
-    class Vector2
+    struct Vector2
     {
-    public:
         using DataType = T;
 
         T x;
@@ -16,202 +15,80 @@ namespace Tbx
 
         constexpr Vector2() = default;
 
-        constexpr Vector2(DataType valueX, DataType valueY) : x(valueX), y(valueY) {} 
+        constexpr Vector2(DataType valueX, DataType valueY);
         
         ~Vector2() = default;
 
-        TOOLBOX_INLINE constexpr DataType* GetPtr()
-        {
-            return &x;
-        }
+         constexpr FORCEINLINE DataType* GetPtr();
 
-        TOOLBOX_INLINE constexpr const DataType* GetPtr() const
-        {
-            return &x;
-        }
-        constexpr static TOOLBOX_INLINE DataType Dot(const Vector2 _v1, const Vector2 _v2)
-        {
-            return _v1.x * _v2.x + _v1.y * _v2.y;
-        }
+        constexpr FORCEINLINE const DataType* GetPtr() const;
 
-        TOOLBOX_INLINE DataType MagnitudeSquare() const
-        {
-            Vector2 v = *this;
-            return Dot(v, v);
-        }
+        constexpr static FORCEINLINE DataType Dot(const Vector2 _v1, const Vector2 _v2);
 
-        TOOLBOX_INLINE DataType Magnitude() const
-        {
-            return std::sqrt(MagnitudeSquare());
-        }
+        FORCEINLINE DataType MagnitudeSquare() const;
 
-        TOOLBOX_INLINE Vector2 Normalize() const
-        {
-            const DataType mag = Magnitude();
+        FORCEINLINE DataType Magnitude() const;
 
-            if (IsEqual<DataType>(mag, static_cast<T>(1)))
-                return *this;
+        FORCEINLINE Vector2 Normalize() const;
 
-            return { x / mag, y / mag };
-        }
-        constexpr static TOOLBOX_INLINE DataType DistanceSquare(const Vector2& _a, const Vector2& _b)
-        {
-            const DataType dx = _a.x - _b.x;
-            const DataType dy = _a.y - _b.y;
-            const DataType result = (dx * dx + dy * dy);
+        constexpr static FORCEINLINE DataType DistanceSquare(Vector2 _a, Vector2 _b);
 
-            return result;
-        }
+        static FORCEINLINE DataType Distance(Vector2 _a, Vector2 _b);
 
-        [[nodiscard]]
-        static TOOLBOX_INLINE DataType Distance(const Vector2& _a, const Vector2& _b)
-        {
-            return std::sqrt(DistanceSquare(_a, _b));
-        }
+        constexpr static FORCEINLINE DataType Cross(const Vector2 _v1, const Vector2 _v2);
 
-        constexpr static TOOLBOX_INLINE DataType Cross(const Vector2 _v1, const Vector2 _v2)
-        {
-            return _v1.x * _v2.y - _v1.y * _v2.x;
-        }
+        FORCEINLINE Vector2 operator-() const;
 
-        TOOLBOX_INLINE Vector2 operator-() const
-        {
-            return { -x, -y };
-        }
+        FORCEINLINE Vector2 operator+(const Vector2 _other) const;
 
-        TOOLBOX_INLINE Vector2 operator+(const Vector2 _other) const
-        {
-            return { x + _other.x, y + _other.y };
-        }
+        FORCEINLINE Vector2 operator-(const Vector2 _other) const;
 
-        TOOLBOX_INLINE Vector2 operator-(const Vector2 _other) const
-        {
-            return { x - _other.x, y - _other.y };
-        }
+        FORCEINLINE Vector2 operator/(const Vector2 _other) const;
 
-        TOOLBOX_INLINE Vector2 operator/(const Vector2 _other) const
-        {
-            return { x / _other.x, y / _other.y };
-        }
+        FORCEINLINE void operator+=(const Vector2 _other);
 
-        TOOLBOX_INLINE void operator+=(const Vector2 _other)
-        {
-            x += _other.x;
-            y += _other.y;
-        }
+        FORCEINLINE void operator-=(const Vector2 _other);
 
-        TOOLBOX_INLINE void operator-=(const Vector2 _other)
-        {
-            x -= _other.x;
-            y -= _other.y;
-        }
+        FORCEINLINE void operator*=(const Vector2 _other);
 
-        TOOLBOX_INLINE void operator*=(const Vector2 _other)
-        {
-            x *= _other.x;
-            y *= _other.y;
-        }
+        FORCEINLINE void operator/=(const Vector2 _other);
 
-        TOOLBOX_INLINE void operator/=(const Vector2 _other)
-        {
-            x /= _other.x;
-            y /= _other.y;
-        }
+        FORCEINLINE Vector2 operator+(DataType _value) const;
 
-        TOOLBOX_INLINE Vector2 operator+(DataType _value) const
-        {
-            return { x + _value , y + _value };
-        }
+        FORCEINLINE Vector2 operator-(DataType _value) const;
 
-        TOOLBOX_INLINE Vector2 operator-(DataType _value) const
-        {
-            return { x - _value , y - _value };
-        }
+        FORCEINLINE Vector2 operator*(DataType _value) const;
 
-        TOOLBOX_INLINE Vector2 operator*(DataType _value) const
-        {
-            return { x * _value , y * _value };
-        }
+        FORCEINLINE Vector2 operator/(DataType _value) const;
 
-        TOOLBOX_INLINE Vector2 operator/(DataType _value) const
-        {
-            return { x / _value , y / _value };
-        }
+        FORCEINLINE Vector2& operator+=(DataType _value);
 
+        FORCEINLINE Vector2& operator-=(DataType _value);
 
-        TOOLBOX_INLINE Vector2& operator+=(DataType _value)
-        {
-            x += _value;
-            y += _value;
-            return *this;
-        }
+        FORCEINLINE Vector2& operator*=(DataType _value);
 
-        TOOLBOX_INLINE Vector2& operator-=(DataType _value)
-        {
-            x -= _value;
-            y -= _value;
-            return *this;
-        }
-        TOOLBOX_INLINE Vector2& operator*=(DataType _value)
-        {
-            x *= _value;
-            y *= _value;
-            return *this;
-        }
-        TOOLBOX_INLINE Vector2& operator/=(DataType _value)
-        {
-            x /= _value;
-            y /= _value;
-            return *this;
-        }
+        FORCEINLINE Vector2& operator/=(DataType _value);
 
-        TOOLBOX_INLINE DataType& operator[](size_t index)
-        {
-            return *static_cast<T*>(&x + index);
-        }
+        FORCEINLINE DataType& operator[](size_t index);
 
-        TOOLBOX_INLINE const DataType& operator[](size_t index) const
-        {
-            return *static_cast<const T*>(&x + index);
-        }
+        FORCEINLINE const DataType& operator[](size_t index) const;
 
-        TOOLBOX_INLINE bool operator==(const Vector2& _other) const
-        {
-            return x == _other.x && y == _other.y;
-        }
+        FORCEINLINE bool operator==(const Vector2& _other) const;
 
-        TOOLBOX_INLINE bool operator!=(const Vector2& _other) const
-        {
-            return x != _other.x || y != _other.y;
-        }
+        FORCEINLINE bool operator!=(const Vector2& _other) const;
 
-        std::string ToString() const
-        {
-            return  "X : " + std::to_string(x) + ", Y : " + std::to_string(y) + '\n';
-        }
+        FORCEINLINE static constexpr Vector2 Zero();
 
-        TOOLBOX_INLINE static constexpr Vector2 Zero()
-        {
-            return { static_cast<T>(0), static_cast<T>(0) };
-        }
+        FORCEINLINE static constexpr Vector2 UnitX();
 
-        TOOLBOX_INLINE static constexpr Vector2 UnitX()
-        {
-            return { static_cast<T>(1), static_cast<T>(0) };
-        }
+        FORCEINLINE static constexpr Vector2 UnitY();
 
-        TOOLBOX_INLINE static constexpr Vector2 UnitY()
-        {
-            return { static_cast<T>(0), static_cast<T>(1) };
-        }
-
-        TOOLBOX_INLINE static constexpr Vector2 One()
-        {
-            return { static_cast<T>(1), static_cast<T>(1) };
-        }
-
-    private:
+        FORCEINLINE static constexpr Vector2 One();
 
     };
 
+
+   
 }
+
+#include "math/vector2.inl"

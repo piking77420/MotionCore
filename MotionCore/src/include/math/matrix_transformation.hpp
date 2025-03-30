@@ -4,6 +4,7 @@
 
 namespace Tbx
 {
+    /*
     template <typename D, typename F, typename T>
     void MatrixCast(const F& _from, T* _to)
     {
@@ -722,4 +723,5 @@ namespace Tbx
         *_outModel = rot * scale;
         (*_outModel)[Matrix4x4<T>::Size - 1] = {_translation.x, _translation.y, _translation.z, static_cast<T>(1)};
     }
+    */
 }
