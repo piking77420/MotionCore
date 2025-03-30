@@ -5,7 +5,7 @@
 #include "vector3.hpp"
 #include "vector4.hpp"
 
-#include "matrix2x2.hpp"
+#include "matrix2x2_transformation.hpp"
 #include "matrix3x3.hpp"
 #include "matrix4x4.hpp"
 
