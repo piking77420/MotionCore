@@ -12,7 +12,7 @@ TEST(TestVec2, OperatorAdd)
 		Vector2i vec2i = { 2, -10 };
 		EXPECT_EQ(vec1i + vec2i, Vector2i::Zero());
 
-		
+
 		Vector2f vec1f = { -2.f, 10.f };
 		Vector2f vec2f = { 2.f, -10.f };
 		EXPECT_EQ(vec1f + vec2f, Vector2f::Zero());
@@ -21,7 +21,7 @@ TEST(TestVec2, OperatorAdd)
 		Vector2d vec2d = { 2, -10 };
 		EXPECT_EQ(vec1d + vec2d, Vector2d::Zero());
 	}
-	
+
 
 	// operator +=
 	{
@@ -38,13 +38,13 @@ TEST(TestVec2, OperatorAdd)
 		EXPECT_EQ(vec1d, Vector2d::Zero());
 
 	}
-	
 
-	
+
+
 }
 TEST(TestVec2, OperatorSub)
 {
-	
+
 	{
 		Vector2i vec1i = { 2, 10 };
 		Vector2i vec2i = { 2, 10 };
@@ -73,18 +73,18 @@ TEST(TestVec2, OperatorSub)
 		vec1d -= vec1d;
 		EXPECT_EQ(vec1d, Vector2d::Zero());
 	}
-	
+
 }
 
 TEST(TestVec2, OperatorMul)
 {
-	
+
 	{
-		
+
 		Vector2i vec1i = { 2, 10 };
 		vec1i = vec1i * 2;
 		EXPECT_EQ(vec1i, Vector2i(4, 20));
-		
+
 		Vector2f vec1f = { 2.f, 10.f };
 		vec1f = vec1f * 2.f;
 		EXPECT_EQ(vec1f, Vector2f(4.f, 20.f));
@@ -110,7 +110,7 @@ TEST(TestVec2, OperatorMul)
 
 TEST(TestVec2, OperatorDiv)
 {
-	
+
 	{
 		Vector2i vec1i = { 2, 10 };
 		vec1i = vec1i / 2;
@@ -139,6 +139,24 @@ TEST(TestVec2, OperatorDiv)
 		EXPECT_EQ(vec1d, Vector2d(1, 5));
 	}
 }
+
+TEST(TestVec2, OperatorEquals)
+{
+	{	// float
+		Vector2f vec1 = { 1.f, 1.f };
+		Vector2f vec2 = { 1.f, 1.f };
+		EXPECT_TRUE(vec1 == vec2);
+	}
+
+	{
+		// double
+		Vector2d vec1 = { 1, 1 };
+		Vector2d vec2 = { 1, 1 };
+		EXPECT_TRUE(vec1 == vec2);
+	}
+}
+
+
 
 TEST(TestVec2, MagnitudeSquare)
 {
@@ -226,7 +244,7 @@ TEST(TestVec2, Cross)
 		EXPECT_NEAR(Vector2f::Cross(vec1, vec2), 1.f, EPSILON);
 	}
 
-	{	
+	{
 		// double
 		Vector2d vec1 = { 1., 0. };
 		Vector2d vec2 = { 0., 1. };
