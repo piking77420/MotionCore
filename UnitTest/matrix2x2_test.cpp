@@ -82,7 +82,7 @@ TEST(Matrix2X2, Multiply)
 TEST(Matrix2X2, Determinant)
 {
 	Matrix2x2<float> m = Matrix2x2f(23.f, 53.f, 22.f, -42.f);
-	float v = m.Deternimant();
+	float v = m.Determinant();
 
 	EXPECT_TRUE(IsEqual(v, -2132.f));
 }
@@ -100,7 +100,7 @@ TEST(Matrix2X2, Trace)
 TEST(Matrix2X2, Rotation)
 {
 	float angle = 1.F;
-	Matrix2x2f m = Rotation(angle);
+	Matrix2x2f m = Rotation2x2(angle);
 	Matrix2x2f expected = Matrix2x2f(0.54030230586f, -0.8414709848f, 0.8414709848f, 0.54030230586f);
 	EXPECT_TRUE(m == expected);
 }
@@ -109,7 +109,7 @@ TEST(Matrix2X2, Rotation)
 TEST(Matrix2X2, Scale)
 {
 	float scale = 10.F;
-	Matrix2x2f m = Scale(scale);
+	Matrix2x2f m = Scale2x2(scale);
 	Matrix2x2f expected = Matrix2x2f(scale, 0.f, 0.f, scale);
 	EXPECT_TRUE(m == expected);
 }
