@@ -7,7 +7,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
 file(GLOB_RECURSE SOURCE_FILES src/source/*.c src/source/*.cpp)
-file(GLOB_RECURSE HEADER_FILES src/include/*.h src/include/*.hpp)
+file(GLOB_RECURSE HEADER_FILES src/include/*.h src/include/*.hpp src/inline/*.inl)
 
 
 if (BUILD_DYNAMIC_IMAGE)
@@ -20,3 +20,4 @@ else()
 endif()
 
 target_include_directories(${PROJECT_NAME} PUBLIC src/include)
+target_include_directories(${PROJECT_NAME} PUBLIC src/inline)
