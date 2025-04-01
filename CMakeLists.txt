@@ -14,6 +14,10 @@ endif()
 
 project(MotionCore VERSION 0.1.0 LANGUAGES C CXX)
 
+if(MSVC)
+    add_compile_options(/Zc:__cplusplus)
+endif()
+
 add_subdirectory(MotionCore)
 if (BUILD_SAMPLE)
     add_subdirectory(MotionCoreSample)
