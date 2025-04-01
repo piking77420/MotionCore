@@ -15,7 +15,7 @@ namespace Tbx
 
         ~Matrix2x2() = default;
 
-        constexpr Matrix2x2(DataType x1, DataType y1, DataType x2, DataType y2);
+        constexpr Matrix2x2(DataType m00, DataType m10, DataType m01, DataType m11);
 
         constexpr Matrix2x2(DataType _value);
 
@@ -42,9 +42,9 @@ namespace Tbx
 
         Matrix2x2 Transpose() const;
 
-        FORCEINLINE void Trace(T* array);
+        FORCEINLINE void Trace(T* array) const;
 
-        FORCEINLINE T Deternimant() const;
+        FORCEINLINE constexpr T Determinant() const;
 
     private:
         T m_Data[Size * Size];

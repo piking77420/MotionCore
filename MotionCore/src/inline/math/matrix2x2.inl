@@ -9,13 +9,13 @@ namespace Tbx
     }
 
     template <typename T>
-    constexpr Matrix2x2<T>::Matrix2x2(T _x1, T _y1, T _x2, T _y2)
+    constexpr Matrix2x2<T>::Matrix2x2(T m00, T m10, T m01, T m11)
     {
-        m_Data[0] = _x1;
-        m_Data[1] = _y1;
+        m_Data[0] = m00;
+        m_Data[1] = m10;
 
-        m_Data[2] = _x2;
-        m_Data[3] = _y2;
+        m_Data[2] = m01;
+        m_Data[3] = m11;
     }
 
     template <typename T>
@@ -32,17 +32,17 @@ namespace Tbx
     template <typename T>
     T& Matrix2x2<T>::Get(uint32_t _colom, uint32_t _row)
     {
-        assert(colom < Size && row < Size && "out of bounds");
+        assert(_colom < Size && _row < Size && "out of bounds");
 
-        return m_Data[(row * Size) + colom]
+        return m_Data[(_row * Size) + _colom];
     }
 
     template <typename T>
-    const T& Matrix2x2<T>::Get(uint32_t colom, uint32_t row) const
+    const T& Matrix2x2<T>::Get(uint32_t _colom, uint32_t _row) const
     {
-        assert(colom < Size && row < Size && "out of bounds");
+        assert(_colom < Size && _row < Size && "out of bounds");
 
-        return m_Data[(row * Size) + colom]
+        return m_Data[(_row * Size) + _colom];
     }
 
     template <typename T>
@@ -76,15 +76,12 @@ namespace Tbx
     template <typename T>
     Matrix2x2<T> Matrix2x2<T>::operator*(DataType _value)
     {
-        m_Data[0] *= type;
-        m_Data[1] *= type;
-        m_Data[2] *= type;
-        m_Data[3] *= type;
-
-        return { m_Data[0] * _value,
-            m_Data[1] * _value ,
+        return 
+        {   m_Data[0] * _value,
+            m_Data[1] * _value,
             m_Data[2] * _value,
-            m_Data[3] * _value, }
+            m_Data[3] * _value,
+        };
     }
 
     template <typename T>
@@ -135,14 +132,14 @@ namespace Tbx
     }
  
     template <typename T>
-    void Matrix2x2<T>::Trace(T* array)
+    void Matrix2x2<T>::Trace(T* array) const
     {
         array[0] = m_Data[0];
         array[1] = m_Data[3];
     }
 
     template <typename T>
-    T Matrix2x2<T>::Deternimant() const
+    constexpr T Matrix2x2<T>::Determinant() const
     {
         return m_Data[0] * m_Data[3] - m_Data[1] * m_Data[2];
     }
