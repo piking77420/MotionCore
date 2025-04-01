@@ -1,179 +1,50 @@
 ﻿#pragma once
-
-#include "vector3.hpp"
-
 namespace Tbx
 {
     template <typename T>
-    class Matrix3x3
+    struct Matrix3x3
     {
-    public:
-        using DataType = T;
-        using Vec = Vector3<DataType>;
         static constexpr size_t Size = 3;
-
 
         constexpr Matrix3x3() = default;
 
         ~Matrix3x3() = default;
 
-        static Matrix3x3 Identity()
-        {
-            Matrix3x3 result;
+        constexpr Matrix3x3(T m00, T m10, T m20,
+            T m01, T m11, T m21,
+            T m02, T m12, T m22);
 
-            for (int i = 0; i < 3; ++i)
-            {
-                result[i][i] = static_cast<DataType>(1);
-            }
+        constexpr Matrix3x3(T _value);
 
-            return result;
-        }
+        FORCEINLINE constexpr static Matrix3x3 Identity();
 
-        constexpr Matrix3x3(DataType x1, DataType y1, DataType z1,
-                            DataType x2, DataType y2, DataType z2,
-                            DataType x3, DataType y3, DataType z3)
-        {
-            m_Data[0].x = x1;
-            m_Data[0].y = y1;
-            m_Data[0].z = z1;
+        FORCEINLINE T& Get(uint32_t _colom, uint32_t _row);
 
-            m_Data[1].x = x2;
-            m_Data[1].y = y2;
-            m_Data[1].z = z2;
+        FORCEINLINE const T& Get(uint32_t _colom, uint32_t _row) const;
 
-            m_Data[2].x = x3;
-            m_Data[2].y = y3;
-            m_Data[2].z = z3;
-        }
+        FORCEINLINE T& operator[](uint32_t _offset);
 
-        constexpr Matrix3x3(const Vec& _vec1, const Vec& _vec2, const Vec& _vec3)
-        {
-            m_Data[0] = _vec1;
-            m_Data[1] = _vec2;
-            m_Data[2] = _vec3;
-        }
+        FORCEINLINE const T& operator[](uint32_t _offset) const;
 
-        constexpr Matrix3x3(DataType _value)
-        {
-            for (int i = 0; i < 3; i++)
-            {
-                for (int k = 0; k < 3; k++)
-                {
-                    m_Data[i][k] = _value;
-                }
-            }
-        }
+        Matrix3x3 operator*(const Matrix3x3& RESTRICT _other) const;
 
-        constexpr Matrix3x3(Vec _vec1, Vec _vec2)
-        {
-            m_Data[0] = _vec1;
-            m_Data[1] = _vec2;
-        }
+        void operator*=(const Matrix3x3& RESTRICT _other);
 
-        constexpr Matrix3x3(Vec _vec1)
-        {
-            m_Data[0] = _vec1;
-            m_Data[1] = _vec1;
-        }
+        FORCEINLINE bool operator==(const Matrix3x3& RESTRICT _other) const;
 
+        FORCEINLINE bool operator!=(const Matrix3x3& RESTRICT _other) const;
 
-        FORCEINLINE Vec operator[](size_t _size) const
-        {
-            return m_Data[_size];
-        }
+        void Trace(T* _trace) const;
 
-        FORCEINLINE Vec& operator[](size_t _size)
-        {
-            return m_Data[_size];
-        }
+        constexpr T Determinant() const;
 
-        Matrix3x3 operator*(const Matrix3x3& _other) const
-        {
-            Matrix3x3 result = {};
+        Matrix3x3 Transpose() const;
 
-
-            for (size_t rows = 0; rows < Size; rows++)
-            {
-                for (size_t coloms = 0; coloms < Size; coloms++)
-                {
-                    for (size_t dot = 0; dot < Size; dot++)
-                    {
-                        result.m_Data[coloms][rows] += m_Data[dot][rows] * _other[coloms][dot];
-                    }
-                }
-            }
-            return result;
-        }
-
-        Vector3<T> operator*(const Vector3<T>& _vec) const
-        {
-            Vector3<T> result = 0;
-
-            for (size_t i = 0; i < Size; i++)
-            {
-                for (size_t j = 0; j < Size; j++)
-                {
-                    result[i] += m_Data[i][j] * _vec[j];
-                }
-            }
-
-            return result;
-        }
-
-        void operator*=(Matrix3x3 _m2)
-        {
-            *this = *this * _m2;
-        }
-
-        bool operator==(const Matrix3x3& _other) const
-        {
-            for (size_t i = 0; i < Size; ++i)
-            {
-                for (size_t j = 0; j < Size; ++j)
-                {
-                    if (m_Data[i][j] != _other[i][j])
-                    {
-                        return false;
-                    }
-                }
-            }
-
-            return true;
-        }
-
-        Vector3<T> Trace()
-        {
-            return {m_Data[0][0], m_Data[1][1], m_Data[2][2]};
-        }
-
-        Matrix3x3 Transpose() const
-        {
-            Matrix3x3 result = 0;
-
-            for (size_t i = 0; i < Size; i++)
-            {
-                for (size_t j = 0; j < Size; j++)
-                {
-                    result[i][j] = m_Data[j][i];
-                }
-            }
-            return result;
-        }
-
-
-        Vec ExtractEulerAngleXYZ()
-        {
-            const T T1 = std::atan2(m_Data[2][1], m_Data[2][2]);
-            const T C2 = std::sqrt(m_Data[0][0] * m_Data[0][0] + m_Data[1][0] * m_Data[1][0]);
-            const T T2 = std::atan2(-m_Data[2][0], C2);
-            const T S1 = std::sin(T1);
-            const T C1 = std::cos(T1);
-            const T T3 = std::atan2(S1 * m_Data[0][2] - C1 * m_Data[0][1], C1 * m_Data[1][1] - S1 * m_Data[1][2]);
-
-            return {-T1, -T2, -T3};
-        }
-
+        void ExtractEulerAngleXYZ(T* _xyz);
     private:
-        std::array<Vec, Size> m_Data;
+        T m_Data[Size * Size];
     };
 }
+    
+
+#include "math/matrix3x3.inl"
