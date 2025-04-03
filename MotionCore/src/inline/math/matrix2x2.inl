@@ -64,11 +64,18 @@ namespace Tbx
     {
         assert(&_other != this && "other shoud not be this, for restricted keyworld");
 
-        const T m00 = m_Data[0] * _other[0] + m_Data[2] * _other[1];
-        const T m10 = m_Data[0] * _other[2] + m_Data[2] * _other[3];
+        const T s00 = m_Data[0], ot00 = _other[0];
+        const T s10 = m_Data[1], ot10 = _other[1];
 
-        const T m01 = m_Data[1] * _other[0] + m_Data[3] * _other[1];
-        const T m11 = m_Data[1] * _other[2] + m_Data[3] * _other[3];
+        const T s01 = m_Data[2], ot01 = _other[2];
+        const T s11 = m_Data[3], ot11 = _other[3];
+
+
+        const T m00 = s00 * ot00 + s01 * ot10;
+        const T m10 = s00 * ot01 + s01 * ot11;
+
+        const T m01 = s10 * ot00 + s11 * ot10;
+        const T m11 = s10 * ot01 + s11 * ot11;
 
         return { m00, m01, m10, m11 };
     }
@@ -127,7 +134,7 @@ namespace Tbx
     Matrix2x2<T> Matrix2x2<T>::Transpose() const
     {
         return {
-            Matrix2x2(m_Data[3], m_Data[2], m_Data[1], m_Data[0])
+            Matrix2x2(m_Data[0], m_Data[2], m_Data[1], m_Data[3])
         };
     }
  

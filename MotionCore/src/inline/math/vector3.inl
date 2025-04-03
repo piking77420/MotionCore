@@ -1,3 +1,4 @@
+#include "vector3.hpp"
 #pragma once
 
 namespace Tbx
@@ -185,6 +186,34 @@ namespace Tbx
         x /= value;
         y /= value;
         z /= value;
+    }
+
+    template<typename T>
+    T& Vector3<T>::operator[](size_t _offset)
+    {
+        assert(_offset < 3 && "Out of bounds");
+
+        return *(&x + _offset);
+    }
+
+    template<typename T>
+    const T& Vector3<T>::operator[](size_t _offset) const
+    {
+        assert(_offset < 3 && "Out of bounds");
+
+        return *(&x + _offset);
+    }
+
+    template<typename T>
+    bool Vector3<T>::operator==(const Vector3& _other) const
+    {
+        return IsEqual(x, _other.x) && IsEqual(y, _other.y) && IsEqual(z, _other.z);
+    }
+
+    template<typename T>
+    bool Vector3<T>::operator!=(const Vector3& _other)
+    {
+        return !(*this == _other);
     }
 
   

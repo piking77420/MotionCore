@@ -45,6 +45,9 @@ namespace Tbx
 
         Matrix4x4 Transpose() const;
 
+        T Determinant() const;
+
+
         FORCEINLINE bool operator==(const Matrix4x4& _other) const;
 
         FORCEINLINE bool operator!=(const Matrix4x4& _other) const;
