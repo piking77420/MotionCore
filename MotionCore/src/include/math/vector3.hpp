@@ -15,7 +15,7 @@ namespace Tbx
 
         constexpr Vector3() = default;
 
-        constexpr Vector3(DataType valueX, DataType valueY, DataType valueZ);
+        explicit constexpr Vector3(DataType valueX, DataType valueY, DataType valueZ);
 
         template<typename U>
         operator Vector3<U>() const;
@@ -70,9 +70,9 @@ namespace Tbx
 
         FORCEINLINE void operator/=(DataType value) const;
 
-        FORCEINLINE DataType& operator[](size_t index);
+        FORCEINLINE DataType& operator[](size_t _offset);
 
-        FORCEINLINE const DataType& operator[](size_t index) const;
+        FORCEINLINE const DataType& operator[](size_t _offset) const;
 
         FORCEINLINE bool operator==(const Vector3& _other) const;
 
