@@ -5,12 +5,15 @@
 #include "vector3.hpp"
 #include "vector4.hpp"
 
-#include "matrix2x2_transformation.hpp"
+
+// Coloms x Rows
+#include "matrix2x2.hpp"
 #include "matrix3x3.hpp"
 #include "matrix4x4.hpp"
 
 #include "quaternion.hpp"
 
+#include "matrix_transformation.hpp"
 
 namespace Tbx
 {
@@ -55,7 +58,7 @@ namespace Tbx
 #include <iostream>
 
 template <typename T>
-std::ostream& operator<<(std::ostream& ostream, Tbx::Vector2<T> vec)
+inline std::ostream& operator<<(std::ostream& ostream, Tbx::Vector2<T> vec)
 {
     ostream << "x : " << vec.x << ", " << "y : " << vec.y << '\n';
 
@@ -63,7 +66,7 @@ std::ostream& operator<<(std::ostream& ostream, Tbx::Vector2<T> vec)
 }
 
 template <typename T>
-std::ostream& operator<<(std::ostream& ostream, Tbx::Vector3<T> vec)
+inline std::ostream& operator<<(std::ostream& ostream, Tbx::Vector3<T> vec)
 {
     ostream << "x : " << vec.x << ", " << "y : " << vec.y << ", " << "z : " << vec.z << '\n';
 
@@ -71,12 +74,43 @@ std::ostream& operator<<(std::ostream& ostream, Tbx::Vector3<T> vec)
 }
 
 template <typename T>
-std::ostream& operator<<(std::ostream& ostream, Tbx::Vector4<T> vec)
+inline std::ostream& operator<<(std::ostream& ostream, Tbx::Vector4<T> vec)
 {
     ostream << "x : " << vec.x << ", " << "y : " << vec.y << ", " << "z : " << vec.z << ", " << "w : " << vec.w << '\n';
 
     return ostream;
 }
+
+template <typename T>
+inline std::ostream& operator<<(std::ostream& ostream, const Tbx::Matrix2x2<T>& matrix)
+{
+   ostream << "m00 : " << matrix[0] << "m10 : " << matrix[2] << '\n';
+   ostream << "m01 : " << matrix[1] << "m11 : " << matrix[3] << '\n';
+
+   return ostream;
+}
+
+template <typename T>
+inline std::ostream& operator<<(std::ostream& ostream, const Tbx::Matrix3x3<T>& matrix)
+{
+    ostream << "m00 : " << matrix[0] << " m01 : " << matrix[3] << " m02 : " << matrix[6] << '\n';
+    ostream << "m10 : " << matrix[1] << " m11 : " << matrix[4] << " m12 : " << matrix[7] << '\n';
+    ostream << "m20 : " << matrix[2] << " m21 : " << matrix[5] << " m22 : " << matrix[8] << '\n';
+
+    return ostream;
+}
+
+template <typename T>
+inline std::ostream& operator<<(std::ostream& ostream, const Tbx::Matrix4x4<T>& matrix)
+{
+    ostream << "m00 : " << matrix[0] << " m01 : " << matrix[4] << " m02 : " << matrix[8] << " m03 : " << matrix[12] << '\n';
+    ostream << "m10 : " << matrix[1] << " m11 : " << matrix[5] << " m12 : " << matrix[9] << " m13 : " << matrix[13] << '\n';
+    ostream << "m20 : " << matrix[2] << " m21 : " << matrix[6] << " m22 : " << matrix[10] << " m23 : " << matrix[14] << '\n';
+    ostream << "m30 : " << matrix[3] << " m31 : " << matrix[7] << " m32 : " << matrix[11] << " m33 : " << matrix[15] << '\n';
+
+    return ostream;
+}
+
 
 // C++20 (and later) code
 #if __cplusplus >= 202002L
@@ -94,7 +128,7 @@ struct std::formatter<Tbx::Vector2<T>> : std::formatter<std::string>
 
     auto format(const Tbx::Vector2<T>& v, std::format_context& ctx) const -> std::format_context::iterator {
         // Create a string representation of vec2
-        std::string s = "x : " + std::to_string(v.x) + ", " + "y : " + std::to_string(v.y);
+        const std::string s = "x : " + std::to_string(v.x) + ", " + "y : " + std::to_string(v.y);
         // Delegate formatting to the standard string formatter
         return std::formatter<std::string>::format(s, ctx);
     }
@@ -103,16 +137,12 @@ struct std::formatter<Tbx::Vector2<T>> : std::formatter<std::string>
 template <typename T>
 struct std::formatter<Tbx::Vector3<T>> : std::formatter<std::string>
 {
-    // Parse format specifiers (if any)
     constexpr auto parse(std::format_parse_context& ctx) -> decltype(ctx.begin()) {
-        // For simplicity, we don't handle custom format specifiers here
         return ctx.begin();
     }
 
     auto format(const Tbx::Vector3<T>& v, std::format_context& ctx) const -> std::format_context::iterator {
-        // Create a string representation of vec2
-        std::string s = "x : " + std::to_string(v.x) + ", " + "y : " + std::to_string(v.y) + ", " + "z : " + std::to_string(v.z);
-        // Delegate formatting to the standard string formatter
+        const std::string s = "x : " + std::to_string(v.x) + ", " + "y : " + std::to_string(v.y) + ", " + "z : " + std::to_string(v.z);
         return std::formatter<std::string>::format(s, ctx);
     }
 };
@@ -120,18 +150,71 @@ struct std::formatter<Tbx::Vector3<T>> : std::formatter<std::string>
 template <typename T>
 struct std::formatter<Tbx::Vector4<T>> : std::formatter<std::string> 
 {
-    // Parse format specifiers (if any)
     constexpr auto parse(std::format_parse_context& ctx) -> decltype(ctx.begin()) {
-        // For simplicity, we don't handle custom format specifiers here
         return ctx.begin();
     }
 
     auto format(const Tbx::Vector4<T>& v, std::format_context& ctx) const -> std::format_context::iterator {
-        // Create a string representation of vec2
-        std::string s = "x : " + std::to_string(v.x) + ", " + "y : " + std::to_string(v.y) + ", " + "z : " + std::to_string(v.z) + ", " + "w : " + std::to_string(v.w);
+        const std::string s = "x : " + std::to_string(v.x) + ", " + "y : " + std::to_string(v.y) + ", " + "z : " + std::to_string(v.z) + ", " + "w : " + std::to_string(v.w);
+        return std::formatter<std::string>::format(s, ctx);
+    }
+};
+
+template <typename T>
+struct std::formatter<Tbx::Matrix2x2<T>> : std::formatter<std::string>
+{
+    constexpr auto parse(std::format_parse_context& ctx) -> decltype(ctx.begin()) {
+        return ctx.begin();
+    }
+
+    auto format(const Tbx::Matrix2x2<T>& matrix, std::format_context& ctx) const -> std::format_context::iterator {
+
+        const std::string s = "\nm00 : " + std::to_string(matrix[0]) + "m10 : " + std::to_string(matrix[2]) + '\n'
+                      + "m01 : " + std::to_string(matrix[1]) + "m11 : " + std::to_string(matrix[3]) + '\n';
+
         // Delegate formatting to the standard string formatter
         return std::formatter<std::string>::format(s, ctx);
     }
 };
+
+
+template <typename T>
+struct std::formatter<Tbx::Matrix3x3<T>> : std::formatter<std::string>
+{
+    constexpr auto parse(std::format_parse_context& ctx) -> decltype(ctx.begin()) {
+        return ctx.begin();
+    }
+
+    auto format(const Tbx::Matrix3x3<T>& matrix, std::format_context& ctx) const -> std::format_context::iterator {
+
+        const std::string s =   "\nm00 : " + std::to_string(matrix[0]) + " m01 : " + std::to_string(matrix[3]) + " m02 : " + std::to_string(matrix[6]) + '\n'
+                        + "m10 : " + std::to_string(matrix[1]) + " m11 : " + std::to_string(matrix[4]) + " m12 : " + std::to_string(matrix[7]) + '\n'
+                        + "m20 : " + std::to_string(matrix[2]) + " m21 : " + std::to_string(matrix[5]) + " m22 : " + std::to_string(matrix[8]) << '\n';
+
+        // Delegate formatting to the standard string formatter
+        return std::formatter<std::string>::format(s, ctx);
+    }
+};
+
+template <typename T>
+struct std::formatter<Tbx::Matrix4x4<T>> : std::formatter<std::string>
+{
+    constexpr auto parse(std::format_parse_context& ctx) -> decltype(ctx.begin()) {
+        return ctx.begin();
+    }
+
+    auto format(const Tbx::Matrix4x4<T>& matrix, std::format_context& ctx) const -> std::format_context::iterator {
+
+        const std::string s =  "\nm00 : " +  std::to_string(matrix[0]) + " m01 : " + std::to_string(matrix[4]) + " m02 : " + std::to_string(matrix[8]) + " m03 : " + std::to_string(matrix[12]) + '\n'
+                       + "m10 : " + std::to_string(matrix[1]) + " m11 : " + std::to_string(matrix[5]) + " m12 : " + std::to_string(matrix[9]) + " m13 : " + std::to_string(matrix[13]) + '\n'
+                       + "m20 : " + std::to_string(matrix[2]) + " m21 : " + std::to_string(matrix[6]) + " m22 : " + std::to_string(matrix[10]) + " m23 : " + std::to_string(matrix[14]) + '\n'
+                       + "m30 : " + std::to_string(matrix[3]) + " m31 : " + std::to_string(matrix[7]) + " m32 : " + std::to_string(matrix[11]) + " m33 : " + std::to_string(matrix[15]) + '\n';
+
+        // Delegate formatting to the standard string formatter
+        return std::formatter<std::string>::format(s, ctx);
+    }
+};
+
+
 
 #endif
