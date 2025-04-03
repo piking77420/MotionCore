@@ -168,6 +168,19 @@ namespace Tbx
     }
 
     template<typename T>
+    Matrix4x4<T> Matrix4x4<T>::operator*(T _scalar) const
+    {
+        return
+        {
+            m_Data[0] * _scalar, m_Data[1] * _scalar, m_Data[2] * _scalar, m_Data[3] * _scalar,
+            m_Data[4] * _scalar, m_Data[5] * _scalar, m_Data[6] * _scalar, m_Data[7] * _scalar,
+            m_Data[8] * _scalar, m_Data[9] * _scalar, m_Data[10] * _scalar, m_Data[11] * _scalar,
+            m_Data[12] * _scalar, m_Data[13] * _scalar, m_Data[14] * _scalar, m_Data[15] * _scalar
+        };
+    }
+
+
+    template<typename T>
     inline Matrix4x4<T> Matrix4x4<T>::Transpose() const
     {
         return
@@ -177,6 +190,65 @@ namespace Tbx
             m_Data[2],m_Data[6],m_Data[10],m_Data[14],
             m_Data[3],m_Data[7],m_Data[11],m_Data[15]
         };
+    }
+
+    template<typename T>
+    void Tbx::Matrix4x4<T>::Trace(T* RESTRICT _trace) const
+    {
+        _trace[0] = m_Data[0];
+        _trace[1] = m_Data[5];
+        _trace[2] = m_Data[10];
+        _trace[3] = m_Data[15];
+    }
+
+    template<typename T>
+    T Matrix4x4<T>::Determinant() const
+    {
+        const Matrix3x3<T> m0(m_Data[5], m_Data[6], m_Data[7],
+            m_Data[9], m_Data[10], m_Data[11],
+            m_Data[13], m_Data[14], m_Data[15]);
+
+        const Matrix3x3<T> m1(m_Data[4], m_Data[6], m_Data[7],
+            m_Data[8], m_Data[10], m_Data[11],
+            m_Data[12], m_Data[14], m_Data[15]);
+
+        const Matrix3x3<T> m2(m_Data[4], m_Data[5], m_Data[7],
+            m_Data[8], m_Data[9], m_Data[11],
+            m_Data[12], m_Data[13], m_Data[15]);
+
+        const Matrix3x3<T> m3(m_Data[4], m_Data[5], m_Data[6],
+            m_Data[8], m_Data[9], m_Data[10],
+            m_Data[12], m_Data[13], m_Data[14]);
+
+        const T add0 = m_Data[0] * m0.Determinant();
+        const T add1 = -(m_Data[1] * static_cast<T>(1) * m1.Determinant());
+        const T add2 = m_Data[2] * m2.Determinant();
+        const T add3 = -(static_cast<T>(1) * m_Data[3] * m3.Determinant());
+
+        return add0 + add1 + add2 + add3;
+    }
+
+    template<typename T>
+    Matrix4x4<T> Matrix4x4<T>::Invert() const
+    {
+        const T det = Determinant();
+
+        if (det == static_cast<T>(0))
+        {
+            return Identity();
+        }
+
+        const T invDet = static_cast<T>(1) / det;
+
+        Matrix4x4<T> adjoinMatrix = AdjoinMatrix();
+
+        return adjoinMatrix * invDet;
+    }
+
+    template<typename T>
+    Matrix4x4<T> Matrix4x4<T>::AdjoinMatrix() const
+    {
+
     }
 
     template<typename T>
@@ -201,12 +273,5 @@ namespace Tbx
     }
 
 
-    template<typename T>
-    void Tbx::Matrix4x4<T>::Trace(T* RESTRICT _trace)
-    {
-        _trace[0] = m_Data[0];
-        _trace[1] = m_Data[5];
-        _trace[1] = m_Data[10];
-        _trace[1] = m_Data[15];
-    }
+   
 }

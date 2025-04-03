@@ -26,7 +26,7 @@ namespace Tbx
 
         constexpr Matrix4x4(DataType _value);
 
-        FORCEINLINE static Matrix4x4 Identity();
+        FORCEINLINE constexpr static Matrix4x4 Identity();
 
         FORCEINLINE T& Get(uint32_t _colom, uint32_t _row);
 
@@ -40,7 +40,9 @@ namespace Tbx
 
         FORCEINLINE constexpr DataType* GetPtr() noexcept;
 
-        Matrix4x4 operator*(const Matrix4x4& RESTRICT _other) const;
+        FORCEINLINE Matrix4x4 operator*(const Matrix4x4& RESTRICT _other) const;
+
+        Matrix4x4 operator*(T _scalar) const;
 
         Matrix4x4 Transpose() const;
 
@@ -49,8 +51,6 @@ namespace Tbx
         FORCEINLINE bool operator!=(const Matrix4x4& _other) const;
 
         void operator*=(const Matrix4x4& _other);
-
-        FORCEINLINE void Trace(T* RESTRICT _trace);
 
     private:
         T m_Data[Size * Size];

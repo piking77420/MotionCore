@@ -28,17 +28,23 @@ namespace Tbx
 
         Matrix3x3 operator*(const Matrix3x3& RESTRICT _other) const;
 
+        Matrix3x3 operator*(const T _scalar) const;
+
         void operator*=(const Matrix3x3& RESTRICT _other);
 
         FORCEINLINE bool operator==(const Matrix3x3& RESTRICT _other) const;
 
         FORCEINLINE bool operator!=(const Matrix3x3& RESTRICT _other) const;
 
-        void Trace(T* _trace) const;
+        FORCEINLINE void Trace(T* _trace) const;
 
         constexpr T Determinant() const;
 
-        Matrix3x3 Transpose() const;
+        FORCEINLINE Matrix3x3 Transpose() const;
+
+        Matrix3x3 AdjoinMatrix() const;
+
+        Matrix3x3 Invert() const;
 
         void ExtractEulerAngleXYZ(T* _xyz);
     private:

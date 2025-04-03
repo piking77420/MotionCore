@@ -28,13 +28,13 @@ namespace Tbx
         FORCEINLINE const T& operator[](uint32_t _offset) const;
 
         // Sould not be use to compute this*this
-        FORCEINLINE Matrix2x2 operator*(const Matrix2x2& RESTRICT _other);
+        Matrix2x2 operator*(const Matrix2x2& RESTRICT _other);
 
-        FORCEINLINE Matrix2x2 operator*(DataType _value);
+        Matrix2x2 operator*(DataType _value);
 
-        FORCEINLINE void operator*=(DataType type);
+        void operator*=(DataType type);
 
-        FORCEINLINE void operator*=(Matrix2x2 _m2);
+        void operator*=(Matrix2x2 _m2);
       
         FORCEINLINE bool operator==(const Matrix2x2& _other) const;
 
