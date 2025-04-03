@@ -6,9 +6,8 @@ namespace Tbx
 {
 
     template <typename T>
-    class Matrix4x4
+    struct Matrix4x4
     {
-    public:
         using DataType = T;
         static constexpr size_t Size = 4;
 
