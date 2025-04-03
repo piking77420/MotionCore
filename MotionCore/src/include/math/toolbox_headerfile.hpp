@@ -5,8 +5,6 @@
 #include <stdint.h>
 #include <cassert>
 
-#include "simd_define.h"
-
 #if defined(MOTION_DYNAMIC_IMAGE)
 #ifdef MOTION_CORE_EXPORTS
 #define MOTION_CORE_API __declspec(dllexport)

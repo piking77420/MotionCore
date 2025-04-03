@@ -1,3 +1,4 @@
+#include "matrix3x3.hpp"
 #pragma once
 
 namespace Tbx
@@ -18,6 +19,22 @@ namespace Tbx
         m_Data[6] = m02;
         m_Data[7] = m12;
         m_Data[8] = m22;
+    }
+
+    template<typename T>
+    inline constexpr Matrix3x3<T>::Matrix3x3(const Vector3<T>& _vec1, const Vector3<T>& _vec2, const Vector3<T>& _vec3)
+    {
+        m_Data[0] = _vec1.x;
+        m_Data[1] = _vec1.y;
+        m_Data[2] = _vec1.z;
+
+        m_Data[3] = _vec2.x;
+        m_Data[4] = _vec2.y;
+        m_Data[5] = _vec2.z;
+
+        m_Data[6] = _vec3.x;
+        m_Data[7] = _vec3.y;
+        m_Data[8] = _vec3.z;
     }
 
     template<typename T>
@@ -194,12 +211,13 @@ namespace Tbx
         const T m12 = Matrix2x2<T>(vec02.x, vec02.y, vec35.x, vec35.y).Determinant();
         const T m22 = Matrix2x2<T>(vec01.x, vec01.y, vec34.x, vec34.y).Determinant();
 
+        // Transposed already
         return
-            Matrix3x3(
-            m00, -m10, m20,
-            -m01, m11, -m21,
-            m02, -m12, m22
-        ).Transpose();
+        {
+                m00, -m01, m02,
+                -m10, m11, -m12,
+                m20, -m21, m22
+        }
     }
 
     template<typename T>

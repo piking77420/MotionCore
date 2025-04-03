@@ -1,5 +1,6 @@
 #pragma once
 
+
 namespace Tbx
 {
     template <typename T>
@@ -228,28 +229,74 @@ namespace Tbx
         return add0 + add1 + add2 + add3;
     }
 
+
+    template<typename T>
+    Matrix4x4<T> Matrix4x4<T>::AdjoinMatrix() const
+    {
+        using Vector3 = Vector3<T>;
+
+        const Vector3 vec1_2_3(m_Data[1], m_Data[2], m_Data[3]);
+        const Vector3 vec0_2_3(m_Data[0], m_Data[2], m_Data[3]);
+        const Vector3 vec0_1_3(m_Data[0], m_Data[1], m_Data[3]);
+        const Vector3 vec0_1_2(m_Data[0], m_Data[1], m_Data[2]);
+
+        const Vector3 vec5_6_7(m_Data[5], m_Data[6], m_Data[7]);
+        const Vector3 vec4_6_7(m_Data[4], m_Data[6], m_Data[7]);
+        const Vector3 vec4_5_7(m_Data[4], m_Data[5], m_Data[7]);
+        const Vector3 vec4_5_6(m_Data[4], m_Data[5], m_Data[6]);
+
+        const Vector3 vec9_10_11(m_Data[9], m_Data[10], m_Data[11]);
+        const Vector3 vec8_10_11(m_Data[8], m_Data[10], m_Data[11]);
+        const Vector3 vec8_9_11(m_Data[8], m_Data[9], m_Data[11]);
+        const Vector3 vec8_9_10(m_Data[8], m_Data[9], m_Data[10]);
+
+        const Vector3 vec13_14_15(m_Data[13], m_Data[14], m_Data[15]);
+        const Vector3 vec12_14_15(m_Data[12], m_Data[14], m_Data[15]);
+        const Vector3 vec12_13_15(m_Data[12], m_Data[13], m_Data[15]);
+        const Vector3 vec12_13_14(m_Data[12], m_Data[13], m_Data[14]);
+
+        const T m00 = Matrix3x3<T>(vec5_6_7, vec9_10_11, vec13_14_15).Determinant();
+        const T m10 = Matrix3x3<T>(vec4_6_7, vec8_10_11, vec12_14_15).Determinant();
+        const T m20 = Matrix3x3<T>(vec4_5_7, vec8_9_11, vec12_13_15).Determinant();
+        const T m30 = Matrix3x3<T>(vec4_5_6, vec8_9_10, vec12_13_14).Determinant();
+
+        const T m01 = Matrix3x3<T>(vec1_2_3, vec9_10_11, vec13_14_15).Determinant();
+        const T m11 = Matrix3x3<T>(vec0_2_3, vec8_10_11, vec12_14_15).Determinant();
+        const T m21 = Matrix3x3<T>(vec0_1_3, vec8_9_11, vec12_13_15).Determinant();
+        const T m31 = Matrix3x3<T>(vec0_1_2, vec8_9_10, vec12_13_14).Determinant();
+
+        const T m02 = Matrix3x3<T>(vec1_2_3, vec5_6_7, vec13_14_15).Determinant();
+        const T m12 = Matrix3x3<T>(vec0_2_3, vec4_6_7, vec12_14_15).Determinant();
+        const T m22 = Matrix3x3<T>(vec0_1_3, vec4_5_7, vec12_13_15).Determinant();
+        const T m32 = Matrix3x3<T>(vec0_1_2, vec4_5_6, vec12_13_14).Determinant();
+
+        const T m03 = Matrix3x3<T>(vec1_2_3, vec5_6_7, vec9_10_11).Determinant();
+        const T m13 = Matrix3x3<T>(vec0_2_3, vec4_6_7, vec8_10_11).Determinant();
+        const T m23 = Matrix3x3<T>(vec0_1_3, vec4_5_7, vec8_9_11).Determinant();
+        const T m33 = Matrix3x3<T>(vec0_1_2, vec4_5_6, vec8_9_10).Determinant();
+
+        // already transposed
+        return Matrix4x4<T>(
+            m00, -m10, m20, -m30,
+            -m01, m11, -m21, m31,
+            m02, -m12, m22, -m32,
+            -m03, m13, -m23, m33
+        );
+    }
+
     template<typename T>
     Matrix4x4<T> Matrix4x4<T>::Invert() const
     {
         const T det = Determinant();
-
-        if (det == static_cast<T>(0))
+        if (IsEqual(det, static_cast<T>(0)))
         {
             return Identity();
         }
 
         const T invDet = static_cast<T>(1) / det;
-
-        Matrix4x4<T> adjoinMatrix = AdjoinMatrix();
-
-        return adjoinMatrix * invDet;
+        return AdjoinMatrix() * invDet;
     }
 
-    template<typename T>
-    Matrix4x4<T> Matrix4x4<T>::AdjoinMatrix() const
-    {
-
-    }
 
     template<typename T>
     inline void Matrix4x4<T>::operator*=(const Matrix4x4& _other)

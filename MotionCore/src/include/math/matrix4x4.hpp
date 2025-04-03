@@ -47,9 +47,9 @@ namespace Tbx
 
         T Determinant() const;
 
-        Matrix4x4 Invert() const;
-
         Matrix4x4 AdjoinMatrix() const;
+
+        Matrix4x4 Invert() const;
 
         FORCEINLINE void Trace(T* RESTRICT _trace) const;
 

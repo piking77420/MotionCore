@@ -14,6 +14,8 @@ namespace Tbx
             T m01, T m11, T m21,
             T m02, T m12, T m22);
 
+        constexpr Matrix3x3(const Vector3<T>& _vec1, const Vector3<T>& _vec2, const Vector3<T>& _vec3);
+
         constexpr Matrix3x3(T _value);
 
         FORCEINLINE constexpr static Matrix3x3 Identity();
