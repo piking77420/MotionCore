@@ -103,6 +103,18 @@ namespace Tbx
     }
 
     template<typename T>
+    Matrix3x3<T> Matrix3x3<T>::operator*(const T _scalar) const
+    {
+         return
+        {
+            m_Data[0] * _scalar, m_Data[1] * _scalar, m_Data[2] * _scalar,
+            m_Data[3] * _scalar, m_Data[4] * _scalar, m_Data[5] * _scalar,
+            m_Data[6] * _scalar, m_Data[7] * _scalar, m_Data[8] * _scalar
+        };
+    }
+
+
+    template<typename T>
     void Matrix3x3<T>::operator*=(const Matrix3x3& RESTRICT _other)
     {
         return (*this * _other);
@@ -139,16 +151,74 @@ namespace Tbx
 
         return m0 + m1 + m2;
     }
+
     template<typename T>
     Matrix3x3<T> Matrix3x3<T>::Transpose() const
     {
         return
         {
-            m_Data[8], m_Data[7], m_Data[6],
-            m_Data[5], m_Data[4], m_Data[3],
-            m_Data[2], m_Data[1], m_Data[0]
+            m_Data[0], m_Data[3], m_Data[6],
+            m_Data[1], m_Data[4], m_Data[7],
+            m_Data[2], m_Data[5], m_Data[8]
         };
     }
+
+    template<typename T>
+    Matrix3x3<T> Matrix3x3<T>::AdjoinMatrix() const
+    {
+        using Vector2 = Vector2<T>;
+
+        const Vector2 vec78 = Vector2(m_Data[7], m_Data[8]);
+        const Vector2 vec68 = Vector2(m_Data[6], m_Data[8]);
+        const Vector2 vec67 = Vector2(m_Data[6], m_Data[7]);
+
+        const Vector2 vec01 = Vector2(m_Data[0], m_Data[1]);
+        const Vector2 vec02 = Vector2(m_Data[0], m_Data[2]);
+        const Vector2 vec12 = Vector2(m_Data[1], m_Data[2]);
+
+        const Vector2 vec34 = Vector2(m_Data[3], m_Data[4]);
+        const Vector2 vec45 = Vector2(m_Data[4], m_Data[5]);
+        const Vector2 vec35 = Vector2(m_Data[3], m_Data[5]);
+
+
+        const T m00 = Matrix2x2<T>(vec45.x, vec45.y, vec78.x, vec78.y).Determinant();
+        const T m10 = Matrix2x2<T>(vec35.x, vec35.y, vec68.x, vec68.y).Determinant();
+        const T m20 = Matrix2x2<T>(vec34.x, vec34.y, vec67.x, vec67.y).Determinant();
+
+        const T m01 = Matrix2x2<T>(vec12.x, vec12.y, vec78.x, vec78.y).Determinant();
+        const T m11 = Matrix2x2<T>(vec02.x, vec02.y, vec68.x, vec68.y).Determinant();
+        const T m21 = Matrix2x2<T>(vec01.x, vec01.y, vec67.x, vec67.y).Determinant();
+
+
+        const T m02 = Matrix2x2<T>(vec12.x, vec12.y, vec45.x, vec45.y).Determinant();
+        const T m12 = Matrix2x2<T>(vec02.x, vec02.y, vec35.x, vec35.y).Determinant();
+        const T m22 = Matrix2x2<T>(vec01.x, vec01.y, vec34.x, vec34.y).Determinant();
+
+        return
+            Matrix3x3(
+            m00, -m10, m20,
+            -m01, m11, -m21,
+            m02, -m12, m22
+        ).Transpose();
+    }
+
+    template<typename T>
+    Matrix3x3<T> Matrix3x3<T>::Invert() const
+    {
+        const T det = Determinant();
+
+        if (std::abs(det) < static_cast<T>(EPSILON))
+        {
+            return Identity();
+        }
+
+        const T invDet = static_cast<T>(1) / det;
+
+        return (AdjoinMatrix()) * invDet;
+    }
+
+  
+
     template<typename T>
     void Matrix3x3<T>::ExtractEulerAngleXYZ(T* _xyz)
 

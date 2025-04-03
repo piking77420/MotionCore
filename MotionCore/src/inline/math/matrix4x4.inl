@@ -3,12 +3,12 @@
 namespace Tbx
 {
     template <typename T>
-    static Matrix4x4<T> Matrix4x4<T>::Identity()
+    constexpr Matrix4x4<T> Matrix4x4<T>::Identity()
     {
         return
         {
             static_cast<T>(1),static_cast<T>(0),static_cast<T>(0),static_cast<T>(0),
-            static_cast<T>(0),static_cast<T>(1),static_cast<T>(1),static_cast<T>(0),
+            static_cast<T>(0),static_cast<T>(1),static_cast<T>(0),static_cast<T>(0),
             static_cast<T>(0),static_cast<T>(0),static_cast<T>(1),static_cast<T>(0),
             static_cast<T>(0),static_cast<T>(0),static_cast<T>(0),static_cast<T>(1)
         };
