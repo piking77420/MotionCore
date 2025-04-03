@@ -111,7 +111,7 @@ namespace Tbx
     template <typename T>
     FORCEINLINE const T& Matrix4x4<T>::operator[](size_t _offset) const
     {
-        assert(_offset < 4, "out of bounds");
+        assert(_offset < (Size * Size), "out of bounds");
 
         return m_Data[_offset];
     }
@@ -119,7 +119,7 @@ namespace Tbx
     template <typename T>
     FORCEINLINE T& Matrix4x4<T>::operator[](size_t _offset)
     {
-        assert(_offset < 4, "out of bounds");
+        assert(_offset < (Size * Size), "out of bounds");
         return m_Data[_offset];
     }
 

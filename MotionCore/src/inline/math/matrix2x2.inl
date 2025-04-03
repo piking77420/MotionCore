@@ -48,14 +48,14 @@ namespace Tbx
     template <typename T>
     T& Matrix2x2<T>::operator[](uint32_t _offset)
     {
-        assert(_offset < 4, "out of bounds");
+        assert(_offset < (Size * Size), "out of bounds");
         return m_Data[_offset];
     }
 
     template <typename T>
     const T& Matrix2x2<T>::operator[](uint32_t _offset) const
     {
-        assert(_offset < 4, "out of bounds");
+        assert(_offset < (Size * Size), "out of bounds");
         return m_Data[_offset];
     }
 
