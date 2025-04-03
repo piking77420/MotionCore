@@ -33,8 +33,8 @@
 
 #endif
 
-static constexpr float fEpsilon = 1e-6f;
-static constexpr double dEpsilon = 1e-6;
+static constexpr float fEpsilon = static_cast<float>(EPSILON);
+static constexpr double dEpsilon = static_cast<double>(EPSILON);
 
 template<typename T>
 constexpr bool IsEqual(T _value, T _compare, T epsilon = static_cast<T>(EPSILON))
