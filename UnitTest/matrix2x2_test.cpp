@@ -46,7 +46,7 @@ TEST(Matrix2X2, Transpose)
 
 		Matrix2x2<float> m = Matrix2x2f(x1, y1, x2, y2).Transpose();
 
-		EXPECT_TRUE(IsEqual(m[3], x1) && IsEqual(m[2], y1) && IsEqual(m[1], x2) && IsEqual(m[0], y2));
+		EXPECT_TRUE(IsEqual(m[0], x1) && IsEqual(m[1], x2) && IsEqual(m[2], y1) && IsEqual(m[3], y2));
 
 	}
 

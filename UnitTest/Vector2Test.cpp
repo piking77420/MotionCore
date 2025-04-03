@@ -8,25 +8,25 @@ TEST(TestVec2, OperatorAdd)
 {
 	// operator+
 	{
-		Vector2i vec1i = { -2, 10 };
-		Vector2i vec2i = { 2, -10 };
+		Vector2i vec1i = Vector2i( -2, 10 );
+		Vector2i vec2i = Vector2i( 2, -10 );
 		EXPECT_EQ(vec1i + vec2i, Vector2i::Zero());
 
 
-		Vector2f vec1f = { -2.f, 10.f };
-		Vector2f vec2f = { 2.f, -10.f };
+		Vector2f vec1f = Vector2f( -2.f, 10.f );
+		Vector2f vec2f = Vector2f( 2.f, -10.f );
 		EXPECT_EQ(vec1f + vec2f, Vector2f::Zero());
 
-		Vector2d vec1d = { -2, 10 };
-		Vector2d vec2d = { 2, -10 };
+		Vector2d vec1d = Vector2d( -2, 10 );
+		Vector2d vec2d = Vector2d( 2, -10 );
 		EXPECT_EQ(vec1d + vec2d, Vector2d::Zero());
 	}
 
 
 	// operator +=
 	{
-		Vector2i vec1i = { -2, 10 };
-		vec1i += { 2, -10 };
+		Vector2i vec1i = Vector2i(- 2, 10 );
+		vec1i += Vector2i( 2, -10 );
 		EXPECT_EQ(vec1i, Vector2i::Zero());
 
 		Vector2f vec1f = { -2.f, 10.f };
