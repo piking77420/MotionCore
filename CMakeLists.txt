@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.26)
 
-set(BUILD_DYNAMIC_IMAGE ON)
+set(BUILD_DYNAMIC_IMAGE OFF)
 set(BUILD_SAMPLE ON)
 set(BUILD_UNIT_TEST ON)
 
