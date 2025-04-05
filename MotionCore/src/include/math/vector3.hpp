@@ -78,16 +78,15 @@ namespace Tbx
 
         FORCEINLINE bool operator!=(const Vector3& _other);
 
+        FORCEINLINE static CONSTEVAL Vector3 Zero() { return Vector3(static_cast<T>(0), static_cast<T>(0), static_cast<T>(0)); }
 
-        FORCEINLINE static constexpr Vector3 Zero() { return { static_cast<T>(0), static_cast<T>(0), static_cast<T>(0) }; }
+        FORCEINLINE static CONSTEVAL Vector3 UnitX() { return Vector3(static_cast<T>(1), static_cast<T>(0), static_cast<T>(0)); }
 
-        FORCEINLINE static constexpr Vector3 UnitX() { return { static_cast<T>(1), static_cast<T>(0), static_cast<T>(0) }; };
+        FORCEINLINE static CONSTEVAL Vector3 UnitY() { return Vector3(static_cast<T>(0), static_cast<T>(1), static_cast<T>(0)); }
 
-        FORCEINLINE static constexpr Vector3 UnitY() { return { static_cast<T>(0), static_cast<T>(1), static_cast<T>(0) }; };
+        FORCEINLINE static CONSTEVAL Vector3 UnitZ() { return Vector3(static_cast<T>(0), static_cast<T>(0), static_cast<T>(1)); }
 
-        FORCEINLINE static constexpr Vector3 UnitZ() { return { static_cast<T>(0), static_cast<T>(0), static_cast<T>(1) }; };
-
-        FORCEINLINE static constexpr Vector3 UnitOne() { return { static_cast<T>(1), static_cast<T>(1), static_cast<T>(1) }; };
+        FORCEINLINE static CONSTEVAL Vector3 UnitOne() { return Vector3(static_cast<T>(1), static_cast<T>(1), static_cast<T>(1)); }
     };
   
 }

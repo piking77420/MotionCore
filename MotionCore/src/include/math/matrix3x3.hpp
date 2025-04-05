@@ -18,7 +18,7 @@ namespace Tbx
 
         constexpr Matrix3x3(T _value);
 
-        FORCEINLINE constexpr static Matrix3x3 Identity();
+        FORCEINLINE static CONSTEVAL Matrix3x3 Identity();
 
         FORCEINLINE T& Get(uint32_t _colom, uint32_t _row);
 

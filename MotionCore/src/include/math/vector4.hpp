@@ -186,15 +186,15 @@ namespace Tbx
             return !(this == _other);
         }
 
-        constexpr Vector4 Zero() { return Vector4(0); };
+        FORCEINLINE static CONSTEVAL Vector4 Zero() { return Vector4(static_cast<T>(0), static_cast<T>(0), static_cast<T>(0), static_cast<T>(0)); };
 
-        constexpr Vector4 UnitX() { return { 1, 0 ,0 }; };
+        FORCEINLINE static CONSTEVAL Vector4 UnitX() { return { static_cast<T>(1), static_cast<T>(0) ,static_cast<T>(0) }; };
 
-        constexpr Vector4 UnitY() { return { 0, 1 ,0 }; };
+        FORCEINLINE static CONSTEVAL Vector4 UnitY() { return { static_cast<T>(0), static_cast<T>(1) ,static_cast<T>(0) }; };
 
-        constexpr Vector4 UnitZ() { return { 0, 0 ,1 }; };
+        FORCEINLINE static CONSTEVAL Vector4 UnitZ() { return { static_cast<T>(0), static_cast<T>(0) ,static_cast<T>(1) }; };
 
-        constexpr Vector4 UnitW() { return { 0, 0 ,1 , 1 }; };
+        FORCEINLINE static CONSTEVAL Vector4 UnitW() { return { static_cast<T>(0), static_cast<T>(0) ,static_cast<T>(1) , static_cast<T>(1) }; };
     };
 
     template <typename T, uint32_t PermuteX, uint32_t PermuteY, uint32_t PermuteZ, uint32_t PermuteW>

@@ -1,10 +1,10 @@
-#pragma once
+
 
 
 namespace Tbx
 {
     template <typename T>
-    constexpr Matrix4x4<T> Matrix4x4<T>::Identity()
+    CONSTEVAL Matrix4x4<T> Matrix4x4<T>::Identity()
     {
         return
         {

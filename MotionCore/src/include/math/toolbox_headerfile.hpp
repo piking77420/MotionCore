@@ -36,6 +36,12 @@ static constexpr double dEpsilon = static_cast<double>(EPSILON);
 
 template<typename T>
 constexpr bool IsEqual(T _value, T _compare, T epsilon = static_cast<T>(EPSILON))
+#define CONSTEVAL consteval
+
+#else
+#define CONSTEVAL constexpr
+
+#endif
 {
     return std::abs(_value - _compare) <= epsilon;
 }

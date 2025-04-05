@@ -77,13 +77,13 @@ namespace Tbx
 
         FORCEINLINE bool operator!=(const Vector2& _other) const;
 
-        FORCEINLINE static constexpr Vector2 Zero();
+        FORCEINLINE static CONSTEVAL Vector2 Zero();
 
-        FORCEINLINE static constexpr Vector2 UnitX();
+        FORCEINLINE static CONSTEVAL Vector2 UnitX();
 
-        FORCEINLINE static constexpr Vector2 UnitY();
+        FORCEINLINE static CONSTEVAL Vector2 UnitY();
 
-        FORCEINLINE static constexpr Vector2 One();
+        FORCEINLINE static CONSTEVAL Vector2 One();
 
     };
 

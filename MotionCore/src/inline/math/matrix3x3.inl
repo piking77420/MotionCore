@@ -1,5 +1,4 @@
-#include "matrix3x3.hpp"
-#pragma once
+
 
 namespace Tbx
 {
@@ -54,7 +53,7 @@ namespace Tbx
     }
 
     template<typename T>
-    constexpr Matrix3x3<T> Matrix3x3<T>::Identity()
+    CONSTEVAL Matrix3x3<T> Matrix3x3<T>::Identity()
     {
         return
         {

@@ -1,9 +1,8 @@
-#pragma once
 
 namespace Tbx
 {
     template <typename T>
-    constexpr Matrix2x2<T> Matrix2x2<T>::Identity()
+    CONSTEVAL Matrix2x2<T> Matrix2x2<T>::Identity()
     {
         return { static_cast<T>(1), static_cast<T>(0), static_cast<T>(0), static_cast<T>(1) };
     }

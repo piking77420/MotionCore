@@ -1,4 +1,3 @@
-#pragma once
 
 namespace Tbx
 {
@@ -188,25 +187,25 @@ namespace Tbx
     }
 
     template<typename T>
-    FORCEINLINE constexpr Vector2<T> Vector2<T>::Zero()
+    FORCEINLINE CONSTEVAL Vector2<T> Vector2<T>::Zero()
     {
         return { static_cast<T>(0), static_cast<T>(0) };
     }
 
     template<typename T>
-    FORCEINLINE constexpr Vector2<T> Vector2<T>::UnitX()
+    FORCEINLINE CONSTEVAL Vector2<T> Vector2<T>::UnitX()
     {
         return { static_cast<T>(1), static_cast<T>(0) };
     }
 
     template<typename T>
-    FORCEINLINE constexpr Vector2<T> Vector2<T>::UnitY()
+    FORCEINLINE CONSTEVAL Vector2<T> Vector2<T>::UnitY()
     {
         return { static_cast<T>(0), static_cast<T>(1) };
     }
 
     template<typename T>
-    FORCEINLINE constexpr Vector2<T> Vector2<T>::One()
+    FORCEINLINE CONSTEVAL Vector2<T> Vector2<T>::One()
     {
         return { static_cast<T>(1), static_cast<T>(1) };
     }

@@ -9,7 +9,7 @@ namespace Tbx
         using DataType = T;
         static constexpr uint32_t Size = 2;
 
-        FORCEINLINE static constexpr Matrix2x2 Identity();
+        FORCEINLINE static CONSTEVAL Matrix2x2 Identity();
 
         constexpr Matrix2x2() = default;
 
