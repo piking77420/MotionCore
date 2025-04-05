@@ -147,6 +147,26 @@ namespace Tbx
 		return Scale3x3(_factorxyz.x, _factorxyz.y, _factorxyz.z);
 	}
 
+	template<typename T>
+	static void ToAxisAngle(const Matrix3x3<T>& _m, Tbx::Vector3<T>* _axis, T* _angle)
+	{
+		Tbx::Vector3<T> trace;
+		_m.Trace(trace.GetPtr());
+
+		const T traceV = trace.x + trace.y + trace.z;
+		const T angle = (std::acos(traceV) - static_cast<T>(1)) * static_cast<T>(0.5);
+
+
+		const T m57 = (_m[5] - _m[7]);
+		const T m67 = (_m[6] - _m[2]);
+		const T m13 = (_m[1] - _m[3]);
+
+		const T invN = static_cast<T>(1) / std::sin(angle) * static_cast<T>(0.5);
+
+		*_axis = Tbx::Vector3<T>(m57 * invN, m67 * invN, m13 * invN);
+		*_angle = angle;
+	}
+
 	template <typename T>
 	Matrix4x4<T> Rotation4x4(T _angleX, T _angleY, T _angleZ)
 	{
@@ -164,6 +184,7 @@ namespace Tbx
 			static_cast<T>(0), static_cast<T>(0) , static_cast<T>(0), static_cast<T>(1)
 		};
 	}
+
 
 	template <typename T>
 	Matrix4x4<T> Rotation4x4(const Quaternion<T>& _quaternion)
@@ -231,4 +252,6 @@ namespace Tbx
 			_translation[0], _translation[1] , _translation[2], static_cast<T>(1)
 		};
 	}
+
+	
 }
