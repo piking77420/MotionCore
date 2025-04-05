@@ -216,7 +216,7 @@ namespace Tbx
                 m00, -m01, m02,
                 -m10, m11, -m12,
                 m20, -m21, m22
-        }
+        };
     }
 
     template<typename T>
@@ -224,7 +224,7 @@ namespace Tbx
     {
         const T det = Determinant();
 
-        if (std::abs(det) < static_cast<T>(EPSILON))
+        if (std::abs(det) < static_cast<T>(Epsilon<T>()))
         {
             return Identity();
         }

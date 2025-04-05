@@ -1,8 +1,6 @@
 ﻿#pragma once
 #include "toolbox_headerfile.hpp"
 
-
-
 constexpr uint32_t TBX_PERMUTE_0X = 0;
 constexpr uint32_t TBX_PERMUTE_0Y = 1;
 constexpr uint32_t TBX_PERMUTE_0Z = 2;
@@ -29,7 +27,7 @@ namespace Tbx
 
         constexpr Vector4() = default;
 
-        constexpr Vector4(DataType valueX, DataType valueY, DataType valueZ, DataType valueW);
+        explicit constexpr Vector4(DataType valueX, DataType valueY, DataType valueZ, DataType valueW);
         
         ~Vector4() = default;
 
@@ -49,7 +47,7 @@ namespace Tbx
 
         constexpr Vector4 operator-()
         {
-            return { -x, -y, -z, -w };
+            return Vector4(-x, -y, -z, -w);
         }
 
         constexpr Vector4 operator+(const Vector4& _other)
@@ -200,6 +198,7 @@ namespace Tbx
     template <typename T, uint32_t PermuteX, uint32_t PermuteY, uint32_t PermuteZ, uint32_t PermuteW>
     static Vector4<T> Permute(const Vector4<T>& _vec1, const Vector4<T>& _vec2)
     {
+        /*
         auto selectComponent = [&](uint32_t index) -> T {
             if (index < 4)
                 return _vec1[index];
@@ -213,6 +212,10 @@ namespace Tbx
         const T z = selectComponent(PermuteZ);
         const T w = selectComponent(PermuteW);
 
-        return { x, y, z, w };
+        return { x, y, z, w };*/
+
+        return {};
     }
 }
+
+#include "math/vector4.inl"

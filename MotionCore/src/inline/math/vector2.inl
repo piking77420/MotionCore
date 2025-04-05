@@ -77,7 +77,7 @@ namespace Tbx
 
     template<typename T> Vector2<T> Vector2<T>::operator-() const
     {
-        return { -x, -y };
+        return Vector2<T>(-x, -y);
     }
 
     template<typename T> Vector2<T> Vector2<T>::operator+(const Vector2 _other) const

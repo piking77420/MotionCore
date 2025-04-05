@@ -1,5 +1,3 @@
-#include "vector3.hpp"
-#pragma once
 
 namespace Tbx
 {
@@ -50,21 +48,21 @@ namespace Tbx
 
         const T InvMagnitude = static_cast<T>(1) / mag;
 
-        return { x * InvMagnitude, y * InvMagnitude, z * InvMagnitude };
+        return Vector3<T>(x * InvMagnitude, y * InvMagnitude, z * InvMagnitude);
     }
 
     template<typename T>
-    FORCEINLINE constexpr static T Vector3<T>::Dot(const Vector3& _v1, const Vector3& _v2)
+    FORCEINLINE constexpr T Vector3<T>::Dot(const Vector3& _v1, const Vector3& _v2)
     {
         return _v1.x * _v2.x + _v1.y * _v2.y + _v1.z * _v2.z;
     }
 
     template<typename T>
-    FORCEINLINE constexpr static Vector3<T> Vector3<T>::Cross(Vector3<T> _v1, Vector3<T> _v2)
+    FORCEINLINE constexpr Vector3<T> Vector3<T>::Cross(Vector3<T> _v1, Vector3<T> _v2)
     {
-        return { _v1.y * _v2.z - _v1.z * _v2.y,
+        return Vector3<T>(_v1.y * _v2.z - _v1.z * _v2.y,
             _v1.z * _v2.x - _v1.x * _v2.z,
-            _v1.x * _v2.y - _v1.y * _v2.x };
+            _v1.x * _v2.y - _v1.y * _v2.x);
     }
 
     template<typename T>
@@ -88,7 +86,7 @@ namespace Tbx
     template<typename T>
     FORCEINLINE Vector3<T>  Vector3<T>::operator-() const
     {
-        return { -x, -y, -z };
+        return Vector3<T>(-x, -y, -z);
     }
 
     template<typename T>
@@ -150,19 +148,20 @@ namespace Tbx
     template<typename T>
     FORCEINLINE Vector3<T> Vector3<T>::operator+(DataType value) const
     {
-        return { x + value, y + value, z + value };
+        return Vector3<T>(x + value, y + value, z + value);
     }
+    
 
     template<typename T>
     FORCEINLINE Vector3<T>Vector3<T>::operator-(DataType value) const
     {
-        return { x - value, y - value, z - value };
+        return Vector3<T>(x - value, y - value, z - value );
     }
 
     template<typename T>
     FORCEINLINE Vector3<T> Vector3<T>::operator*(DataType value) const
     {
-        return { x * value, y * value, z * value };
+        return Vector3<T>(x * value, y * value, z * value );
     }
 
     template<typename T>
@@ -176,7 +175,7 @@ namespace Tbx
     template<typename T>
     FORCEINLINE Vector3<T> Vector3<T>::operator/(DataType value) const
     {
-        return { x / value, y / value, z / value };
+        return Vector3<T>(x / value, y / value, z / value );
     }
 
 

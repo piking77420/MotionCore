@@ -17,6 +17,9 @@ namespace Tbx
 
         constexpr Vector2(DataType valueX, DataType valueY);
         
+        // TO DO
+        //explicit constexpr Vector2(DataType valueX, DataType valueY);
+
         ~Vector2() = default;
 
          constexpr FORCEINLINE DataType* GetPtr();

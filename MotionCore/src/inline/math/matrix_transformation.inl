@@ -116,14 +116,14 @@ namespace Tbx
 		const T bd = b * d;
 		const T ac = a * c;
 		const T ab = a * b;
-		const T cd = c * d;
+		const T cd = c * d;	
 
 
 		return
 		{
-			aa + bb - cc - dd, static_cast<T>(2) * (bc + ad), static_cast<T>(2) * (bd + ac),
-			static_cast<T>(2) * (bc + ad), aa - bb + cc - dd, static_cast<T>(2) * (cd - ad),
-			static_cast<T>(2)* (bd - ac), static_cast<T>(2) * (cd - ab), aa - bb - cc + dd
+			aa + bb - cc - dd, static_cast<T>(2) * (bc + ad), static_cast<T>(2) * (bd - ac),
+			static_cast<T>(2) * (bc - ad), aa - bb + cc - dd, static_cast<T>(2) * (cd + ab),
+			static_cast<T>(2)* (bd + ac), static_cast<T>(2) * (cd - ab), aa - bb - cc + dd
 		};
 	}
 
