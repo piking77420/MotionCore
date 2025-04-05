@@ -1,43 +1,41 @@
 ﻿#pragma once
 #include <string>
 
-#include "toolbox_typedef.hpp"
 #include "vector3.hpp"
-#include "vector4.hpp"
 
 namespace Tbx
 {
 
 	template <typename T>
-	class Quaternion
+	struct Quaternion
 	{
 	public:
 		using DataType = T;
 		using Vec3 = Vector3<DataType>;
 
-		Vec3 imaginary = Vec3::Zero();
-		DataType real = static_cast<T>(0);
+		DataType real;
+		Vec3 imaginary;
 
-		Quaternion() = default;
+		constexpr Quaternion() = default;
 
-		Quaternion(const Vec3& _vec, const DataType _real) : imaginary(_vec), real(_real)
+		explicit constexpr Quaternion(const DataType _real,  const Vec3& _vec) : real(_real), imaginary(_vec)
 		{
 
 		}
 
-		Quaternion(const DataType _x, const DataType _y, const DataType _z, const DataType _real) : imaginary({ _x, _y, _z }), real(_real)
+		explicit constexpr Quaternion(const DataType _real, const DataType _x, const DataType _y, const DataType _z) : imaginary(Vec3(_x, _y, _z)), real(_real)
 		{
 
 		}
 
-		template<typename U>
+		template<typename U>	
 		operator Quaternion<U>() const {
-			return Quaternion<U>(static_cast<Vector3<U>>(imaginary), static_cast<U>(real));
+			return Quaternion<U>(static_cast<U>(real),  static_cast<Vector3<U>>(imaginary));
 		}
 
 		~Quaternion() = default;
 
-		constexpr static FORCEINLINE Quaternion Identity() { return { Vec3::Zero(), static_cast<DataType>(1) }; }
+		FORCEINLINE static CONSTEVAL Quaternion Identity() { return Quaternion(static_cast<DataType>(1) , Vec3::Zero()); }
 
 		FORCEINLINE DataType MagnitudeSquare() const
 		{
@@ -51,10 +49,10 @@ namespace Tbx
 
 		FORCEINLINE Quaternion Conjugate() const
 		{
-			return { -imaginary, real };
+			return Quaternion(real ,-imaginary);
 		}
 
-		FORCEINLINE static constexpr DataType DotProduct(const Quaternion& q1, const Quaternion& q2)
+		FORCEINLINE static constexpr DataType Dot(const Quaternion& q1, const Quaternion& q2)
 		{
 			return q1.imaginary.x * q2.imaginary.x + q1.imaginary.y * q2.imaginary.y + q1.imaginary.z * q2.imaginary.z + q1.real * q2.real;
 		}
@@ -68,7 +66,7 @@ namespace Tbx
 
 			const DataType InvMagnitude = static_cast<T>(1) / mag;
 
-			return { imaginary.x * InvMagnitude, imaginary.y * InvMagnitude, imaginary.z * InvMagnitude, real * InvMagnitude };
+			return  Quaternion(real * InvMagnitude ,imaginary * InvMagnitude);
 		}
 
 		Quaternion Inverse() const
@@ -76,163 +74,127 @@ namespace Tbx
 			return Conjugate() / MagnitudeSquare();
 		}
 
-		Quaternion LookAt(Vec3 _sourcePoint, Vec3 _destPoint, const Vec3 forward) const
+		// thanks to Vlad
+		// https://stackoverflow.com/questions/12088610/conversion-between-euler-quaternion-like-in-unity3d-engine
+		static Vec3 ToEulerAngles(const Quaternion& q)
 		{
-			Vec3 forwardVector = (_destPoint - _sourcePoint).Normalize();
+			const Matrix3x3<T> m = Rotation3x3(q);
 
-			Vec3 rotAxis = Vec3::Cross(forward, forwardVector);
-			DataType dot = Vec3::Dot(forward, forwardVector);
+			T T1 = std::atan2(m[7], m[8]);
+			T C2 = std::sqrt(m[0] * m[0] + m[3] * m[3]);
+			T T2 = std::atan2(-m[6], C2);
+			T S1 = std::sin(T1);
+			T C1 = std::cos(T1);
+			T T3 = std::atan2(S1 * m[2] - C1 * m[1], C1 * m[4] - S1 * m[5]);
 
-			Quaternion q;
-			q.imaginary.x = rotAxis.x;
-			q.imaginary.y = rotAxis.y;
-			q.imaginary.z = rotAxis.z;
-			q.real = dot + static_cast<DataType>(1);
-
-			return { rotAxis, dot + 1 };
+			return Vec3(-T1, -T2, -T3);
 		}
-
-		FORCEINLINE Quaternion operator+(const Quaternion& _other)
+		
+		/*
+		static void ToAxisAngle(const Quaternion& q, Vec3* axis, T* angle)
 		{
-			return { imaginary + _other.imaginary, real + _other.real };
-		}
-
-		FORCEINLINE Quaternion operator-(const Quaternion& _other)
-		{
-			return { imaginary - _other.imaginary, real - _other.real };
-		}
-
-		FORCEINLINE Quaternion operator*(const Quaternion& _other) const
-		{
-			const DataType newReal = real * _other.real
-				- Vec3::Dot(imaginary, _other.imaginary);
-
-			const DataType i = imaginary.x * _other.real + real * _other.imaginary.x
-				- imaginary.z * _other.imaginary.y + imaginary.y * _other.imaginary.z;
-
-			const DataType j = imaginary.y * _other.real + imaginary.z * _other.imaginary.x
-				+ real * _other.imaginary.y - imaginary.x * _other.imaginary.z;
-
-			const DataType k = imaginary.z * _other.real - imaginary.y * _other.imaginary.x
-				+ imaginary.x * _other.imaginary.y + real * _other.imaginary.z;
-
-			return { { i, j, k}, newReal };
-		}
-
-		FORCEINLINE Vec3 operator*(const Vec3& _vec) const
-		{
-			Quaternion vecQuat(_vec.x, _vec.y, _vec.z, 0.f);
-			Quaternion resQuat = Conjugate() * vecQuat * (*this);
-			return resQuat.imaginary;
-		}
-
-		FORCEINLINE Quaternion operator+(const Vec3& _vec) const
-		{
-			Quaternion result = *this;
-
-			Quaternion q(_vec, static_cast<T>(0));
-			q *= result;
-
-			result.real += q.real * static_cast<T>(0.5);
-			result.imaginary.x += q.imaginary.x * static_cast<T>(0.5);
-			result.imaginary.y += q.imaginary.y * static_cast<T>(0.5);
-			result.imaginary.z += q.imaginary.z * static_cast<T>(0.5);
-
-			return result;
-		}
-
-		FORCEINLINE Quaternion operator+(T _value)
-		{
-			return { imaginary + _value, real + _value };
-		}
-
-		FORCEINLINE Quaternion operator-(T _value)
-		{
-			return { imaginary - _value, real - _value };
-		}
-
-		FORCEINLINE Quaternion operator*(T _value)
-		{
-			return { imaginary * _value, real * _value };
-		}
-
-		FORCEINLINE Quaternion operator/(T _value)
-		{
-			return { imaginary / _value, real / _value };
-		}
-
-		FORCEINLINE void operator+=(const Quaternion& _other)
-		{
-			*this = *this + _other;
-		}
-
-		FORCEINLINE void operator-=(const Quaternion& _other)
-		{
-			*this = *this - _other;
-		}
-
-		FORCEINLINE void operator*=(const Quaternion& _other)
-		{
-			*this = *this * _other;
-		}
-
-		FORCEINLINE void operator+=(T _value)
-		{
-			*this = *this + _value;
-		}
-
-		FORCEINLINE void operator-=(T _value)
-		{
-			*this = *this - _value;
-		}
-
-		FORCEINLINE void operator*=(T _value)
-		{
-			*this = *this * _value;
-		}
-
-		FORCEINLINE void operator/=(T _value)
-		{
-			*this = *this / _value;
-		}
-
-		FORCEINLINE void operator+=(const Vec3 _vec)
-		{
-			*this = *this + _vec;
-		}
-
-		FORCEINLINE bool operator==(const Quaternion& _other) const
-		{
-			return IsEqual(imaginary.x, _other.imaginary.x) && IsEqual(imaginary.y, _other.imaginary.y) && IsEqual(imaginary.z, _other.imaginary.z)
-				&& IsEqual(real, _other.real);
-		}
-		Vec3 ToEulerAngles() const
-		{
-			T roll = atan2f(2 * imaginary.x * real - 2 * imaginary.y * imaginary.z,
-			                    1 - 2 * imaginary.x * imaginary.x - 2 * imaginary.z * imaginary.z);
-			T pitch = atan2f(2 * imaginary.y * real - 2 * imaginary.x * imaginary.z,
-			                     1 - 2 * imaginary.y * imaginary.y - 2 * imaginary.z * imaginary.z);
-			T yaw = asinf(2 * imaginary.x * imaginary.y + 2 * imaginary.z * real);
+			const Matrix3x3<T> m = Rotation3x3(q);
+			T m57 = (m[5] - m[7]);
+			T m67 = (m[6] - m[2]);
+			T m13 = (m[1] - m[3]);
 
 
-			return { roll, pitch, yaw };
-		}
+			T n = std::sqrt(m57 * m57 + m67 * m67 + m13 * m13);
+
+			*axis = Vec3(m57 / n, m67 / n, m67 / n);
+			*angle = std::acos(m[)
+			return Vec3(m57 / n, m67 / n, m67 / n);
+		}*/
+
+
 
 		static Quaternion FromEuler(const Vec3& eulerAngle)
 		{
-			Vec3 c, s;
+			const T halfAngleX = eulerAngle.x * static_cast<T>(0.5);
+			const T halfAngleY = eulerAngle.y * static_cast<T>(0.5);
+			const T halfAngleZ = eulerAngle.z * static_cast<T>(0.5);
 
-			Vec3 halfAngle = eulerAngle * static_cast<T>(0.5);
-			c = Vec3(std::cos(halfAngle.x), std::cos(halfAngle.y), std::cos(halfAngle.z));
-			s = Vec3(std::sin(halfAngle.x), std::sin(halfAngle.y), std::sin(halfAngle.z));
+			const T cX = std::cos(halfAngleX), sX = std::sin(halfAngleX);
+			const T cY = std::cos(halfAngleY), sY = std::sin(halfAngleY);
+			const T cZ = std::cos(halfAngleZ), sZ = std::sin(halfAngleZ);
 
-			T w = c.x * c.y * c.z + s.x * s.y * s.z;
-			T i = s.x * c.y * c.z - c.x * s.y * s.z;
-			T j = c.x * s.y * c.z + s.x * c.y * s.z;
-			T k = c.x * c.y * s.z - s.x * s.y * c.z;
+			const T w = cX * cY * cZ + sX * sY * sZ;
+			const T x = sX * cY * cZ - cX * sY * sZ;
+			const T y = cX * sY * cZ + sX * cY * sZ;
+			const T z = cX * cY * sZ - sX * sY * cZ;
 
-			return Quaternion(i, j, k, w);
+			return Quaternion(w, Vec3(x, y, z));
 		}
+
+
+		static Quaternion LookRotation(Vec3 _Nforward, Vec3 _Nupwards)
+		{
+			// Calculate right vector
+			const Vec3 r = Vec3::Cross(_Nupwards, _Nforward).Normalize();
+
+			// Recalculate orthogonal up vector
+			const Vec3 orthoUp = Vec3::Cross(_Nforward, r);
+
+			// Create rotation matrix
+			// | r.x orthoUp.x f.x |
+			// | r.y orthoUp.y f.y |
+			// | r.z orthoUp.z f.z |
+
+			T m00 = r.x, m01 = orthoUp.x, m02 = _Nforward.x;
+			T m10 = r.y, m11 = orthoUp.y, m12 = _Nforward.y;
+			T m20 = r.z, m21 = orthoUp.z, m22 = _Nforward.z;
+
+			T trace = m00 + m11 + m22;
+
+			Quaternion q;
+
+			if (trace > static_cast<T>(0))
+			{
+				T s = std::sqrt(trace + static_cast<T>(1)) * static_cast<T>(0.5);
+				T invS = static_cast<T>(0.25) / s;
+
+				q.real = s;
+				q.imaginary.x = (m21 - m12) * invS;
+				q.imaginary.y = (m02 - m20) * invS;
+				q.imaginary.z = (m10 - m01) * invS;
+			}
+			else
+			{
+				if (m00 > m11 && m00 > m22)
+				{
+					T s = std::sqrt(static_cast<T>(1) + m00 - m11 - m22) * static_cast<T>(0.5);
+					T invS = static_cast<T>(0.25) / s;
+
+					q.real = (m21 - m12) * invS;
+					q.imaginary.x = s;
+					q.imaginary.y = (m01 + m10) * invS;
+					q.imaginary.z = (m02 + m20) * invS;
+				}
+				else if (m11 > m22)
+				{
+					T s = std::sqrt(static_cast<T>(1) + m11 - m00 - m22) * static_cast<T>(0.5);
+					T invS = static_cast<T>(0.25) / s;
+
+					q.real = (m02 - m20) * invS;
+					q.imaginary.x = (m01 + m10) * invS;
+					q.imaginary.y = s;
+					q.imaginary.z = (m12 + m21) * invS;
+				}
+				else
+				{
+					T s = std::sqrt(static_cast<T>(1) + m22 - m00 - m11) * static_cast<T>(0.5);
+					T invS = static_cast<T>(0.25) / s;
+
+					q.real = (m10 - m01) * invS;
+					q.imaginary.x = (m02 + m20) * invS;
+					q.imaginary.y = (m12 + m21) * invS;
+					q.imaginary.z = s;
+				}
+			}
+
+			return q.Normalize();
+		}
+
 
 		static inline void SinCos(const Vector4<T>& angles, Vector4<T>& sinOut, Vector4<T>& cosOut)
 		{
@@ -274,31 +236,44 @@ namespace Tbx
 
 		static Quaternion FromMatrix(const Matrix3x3<T>& matrix)
 		{
-			Quaternion q;
-			q.real = std::sqrt(static_cast<T>(1) + matrix[0][0] + matrix[1][1] + matrix[2][2]) / static_cast<T>(2);
-			q.imaginary.x = (matrix[2][1] - matrix[1][2]) / static_cast<T>(4) * q.real;
-			q.imaginary.y = (matrix[0][2] - matrix[2][0]) / static_cast<T>(4) * q.real;
-			q.imaginary.z = (matrix[1][0] - matrix[0][1]) / static_cast<T>(4) * q.real;
+			Quaternion<T> q;
+			T trace = matrix[0] + matrix[4] + matrix[8];  // Trace of the matrix
 
+
+			if (trace > static_cast<T>(0))
+			{
+				T s = std::sqrt(trace + static_cast<T>(1)) * static_cast<T>(0.5);
+				q.real = s;
+				s = q.real * static_cast<T>(4);
+				q.imaginary.x = (matrix[5] - matrix[7]) / s;
+				q.imaginary.y = (matrix[6] - matrix[2]) / s;
+				q.imaginary.z = (matrix[1] - matrix[3]) / s;
+			}
+			else
+			{
+				assert(false && "TO DO HANDLE EDGE CASE");
+			}
+			
+			
 			return q;
 		}
 
 		template<typename U>
-		[[nodiscard]] static FORCEINLINE Quaternion Slerp(const Quaternion& t1, const Quaternion& t2, U t)
+		static FORCEINLINE Quaternion Slerp(const Quaternion& q1, const Quaternion& q2, U t)
 		{
-			float cosOmega = DotProduct(t1, t2);
+			T cosOmega = Dot(q1, q2);
 
 			bool flip = false;
 
-			if (cosOmega < -EPSILON)
+			if (cosOmega < -Epsilon<T>())
 			{
 				flip = true;
 				cosOmega = -cosOmega;
 			}
 
-			float s1, s2;
+			T s1, s2;
 
-			if (cosOmega > (1.0f - EPSILON))
+			if (cosOmega > (static_cast<T>(1.0f) - Epsilon<T>()))
 			{
 				// Too close, do straight linear interpolation.
 				s1 = 1.0f - t;
@@ -306,8 +281,8 @@ namespace Tbx
 			}
 			else
 			{
-				float omega = std::cos(cosOmega);
-				float invSinOmega = 1.f / std::sin(omega);
+				T omega = std::cos(cosOmega);
+				T invSinOmega = 1.f / std::sin(omega);
 
 				s1 = std::sin((1.0f - t) * omega) * invSinOmega;
 				s2 = (flip)
@@ -316,20 +291,173 @@ namespace Tbx
 			}
 
 			Quaternion ans;
-			ans.imaginary.x = s1 * t1.imaginary.x + s2 * t2.imaginary.x;
-			ans.imaginary.y = s1 * t1.imaginary.y + s2 * t2.imaginary.y;
-			ans.imaginary.z = s1 * t1.imaginary.z + s2 * t2.imaginary.z;
-			ans.real = s1 * t1.real + s2 * t2.real;
+			ans.imaginary.x = s1 * q1.imaginary.x + s2 * q2.imaginary.x;
+			ans.imaginary.y = s1 * q1.imaginary.y + s2 * q2.imaginary.y;
+			ans.imaginary.z = s1 * q1.imaginary.z + s2 * q2.imaginary.z;
+			ans.real = s1 * q1.real + s2 * q2.real;
 
-			return ans;
+			return ans.Normalize();
 		}
 
-		[[nodiscard]]
-		std::string ToString() const
+		template<typename U>
+		static FORCEINLINE Quaternion Nlerp(const Quaternion& q1, const Quaternion& q2, U t)
 		{
-			return "X : " + std::to_string(imaginary.x) + ", Y : " + std::to_string(imaginary.y) + ", Z : " + std::to_string(imaginary.z) + ", W : " + std::to_string(real) + '\n';
+			T cosOmega = Dot(q1, q2);
+
+			bool flip = false;
+
+			// If the dot product is negative, flip the sign of q2 to take the shortest path
+			if (cosOmega < static_cast<T>(0))
+			{
+				flip = true;
+				cosOmega = -cosOmega;
+			}
+
+			T s1, s2;
+
+			// If the quaternions are very close, use linear interpolation directly
+			if (cosOmega > (static_cast<T>(1.0f) - Epsilon<T>()))
+			{
+				s1 = static_cast<T>(1.0f) - t;
+				s2 = flip ? -t : t;
+			}
+			else
+			{
+				// Otherwise, perform a standard linear interpolation between q1 and q2
+				T omega = std::acos(cosOmega);  // Angle between the quaternions
+				T invSinOmega = static_cast<T>(1.0f) / std::sin(omega);  // Inverse of sine of omega
+
+				s1 = std::sin((static_cast<T>(1.0f) - t) * omega) * invSinOmega;
+				s2 = flip ? -std::sin(t * omega) * invSinOmega : std::sin(t * omega) * invSinOmega;
+			}
+
+			// Perform the interpolation and construct the resulting quaternion
+			Quaternion<T> result;
+			result.real = s1 * q1.real + s2 * q2.real;
+			result.imaginary.x = s1 * q1.imaginary.x + s2 * q2.imaginary.x;
+			result.imaginary.y = s1 * q1.imaginary.y + s2 * q2.imaginary.y;
+			result.imaginary.z = s1 * q1.imaginary.z + s2 * q2.imaginary.z;
+
+			// Normalize the result to ensure it's a unit quaternion
+			return result.Normalize();
 		}
 
+		FORCEINLINE Quaternion operator+(const Quaternion& _other)
+		{
+			return Quaternion(real + _other.real, imaginary + _other.imaginary);
+		}
+
+		FORCEINLINE Quaternion operator-(const Quaternion& _other)
+		{
+			return Quaternion(real - _other.real,imaginary - _other.imaginary);
+		}
+
+		FORCEINLINE Quaternion operator*(const Quaternion& _other) const
+		{
+			const DataType newReal = real * _other.real
+				- Vec3::Dot(imaginary, _other.imaginary);
+
+			const DataType i = imaginary.x * _other.real + real * _other.imaginary.x
+				- imaginary.z * _other.imaginary.y + imaginary.y * _other.imaginary.z;
+
+			const DataType j = imaginary.y * _other.real + imaginary.z * _other.imaginary.x
+				+ real * _other.imaginary.y - imaginary.x * _other.imaginary.z;
+
+			const DataType k = imaginary.z * _other.real - imaginary.y * _other.imaginary.x
+				+ imaginary.x * _other.imaginary.y + real * _other.imaginary.z;
+
+			return Quaternion(newReal, Vector3<T>(i, j, k));
+		}
+
+		FORCEINLINE Vec3 operator*(const Vec3& _vec) const
+		{
+			Quaternion vecQuat(static_cast<T>(0), _vec.x, _vec.y, _vec.z);
+			Quaternion resQuat = Conjugate() * vecQuat * (*this);
+			return resQuat.imaginary;
+		}
+
+		FORCEINLINE Quaternion operator+(const Vec3& _vec) const
+		{
+			Quaternion result = *this;
+
+			Quaternion q(static_cast<T>(0), _vec);
+			q *= result;
+
+			result.real += q.real * static_cast<T>(0.5);
+			result.imaginary.x += q.imaginary.x * static_cast<T>(0.5);
+			result.imaginary.y += q.imaginary.y * static_cast<T>(0.5);
+			result.imaginary.z += q.imaginary.z * static_cast<T>(0.5);
+
+			return result;
+		}
+
+		FORCEINLINE Quaternion operator+(T _value)
+		{
+			return Quaternion(real + _value, imaginary + _value);
+		}
+
+		FORCEINLINE Quaternion operator-(T _value)
+		{
+			return Quaternion(real - _value, imaginary - _value);
+		}
+
+		FORCEINLINE Quaternion operator*(T _value)
+		{
+			return Quaternion(real * _value, imaginary * _value);
+		}
+
+		FORCEINLINE Quaternion operator/(T _value)
+		{
+			const DataType invv = static_cast<T>(1) / _value;
+
+			return Quaternion(real * invv, imaginary * invv);
+		}
+
+		FORCEINLINE void operator+=(const Quaternion& _other)
+		{
+			*this = *this + _other;
+		}
+
+		FORCEINLINE void operator-=(const Quaternion& _other)
+		{
+			*this = *this - _other;
+		}
+
+		FORCEINLINE void operator*=(const Quaternion& _other)
+		{
+			*this = *this * _other;
+		}
+
+		FORCEINLINE void operator+=(T _value)
+		{
+			*this = *this + _value;
+		}
+
+		FORCEINLINE void operator-=(T _value)
+		{
+			*this = *this - _value;
+		}
+
+		FORCEINLINE void operator*=(T _value)
+		{
+			*this = *this * _value;
+		}
+
+		FORCEINLINE void operator/=(T _value)
+		{
+			*this = *this / _value;
+		}
+
+		FORCEINLINE bool operator==(const Quaternion& _other) const
+		{
+			return IsEqual(real, _other.real) && IsEqual(imaginary.x, _other.imaginary.x) && IsEqual(imaginary.y, _other.imaginary.y) && IsEqual(imaginary.z, _other.imaginary.z);
+		}
+
+
+		FORCEINLINE bool operator!=(const Quaternion& _other) const
+		{
+			return !(*this == _other);
+		}
 
 	};
 
