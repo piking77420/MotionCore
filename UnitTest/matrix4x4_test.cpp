@@ -2,8 +2,6 @@
 
 #include "math/toolbox_typedef.hpp"
 
-#include <print>
-
 using namespace Tbx;
 
 TEST(Matrix4X4, Identity)
@@ -106,12 +104,12 @@ TEST(Matrix4X4, RotationXYZ)
 
 TEST(Matrix4X4, RotationQuaternion)
 {
-	const Quaternionf& q = Quaternionf(2.f, 3.f, 4.f, 1.f).Normalize();
+	const Quaternionf& q = Quaternionf(0.844623208f, 0.191341713f, 0.461939812f, 0.191341713f).Normalize();
 	const Matrix4x4<float> rot = Rotation4x4(q);
-	const Matrix4x4<float> rotResult = Matrix4x4<float>(-0.666667f, 0.666667f, 0.733333f, 0.f,
-														0.666667f, -0.333333f, 0.533333f, 0.f,
-														0.333333f, 0.666667f, 0.133333f, 0.f,
-															0.f, 0.f, 0.f, 1.f);
+	const Matrix4x4<float> rotResult = Matrix4x4<float>(0.5000000, 0.5000000, -0.7071068, 0.f,
+														-0.1464466, 0.8535534, 0.500000000, 0.f,
+														0.853553474, -0.146446586, 0.499999970, 0.f,
+														0.f, 0.f, 0.f, 1.f);
 
 	EXPECT_TRUE(rot == rotResult);
 }
@@ -127,14 +125,14 @@ TEST(Matrix4X4, Scale)
 TEST(Matrix4X4, TrsEuler)
 {
 	const Tbx::Vector3f translation = Tbx::Vector3f( 10.f, 9.f, 8.f );
-	const Tbx::Vector3f eulerAngle = Tbx::Vector3f(1.f, 2.f, 3.f );
+	const Tbx::Vector3f eulerAngle = Tbx::Vector3f(Vector3<float>(45, 45, 45) * fDeg2Rad).Normalize();
 	const Tbx::Vector3f scale = Tbx::Vector3f(1.f, 2.f, 3.f);
 
 	const Matrix4x4<float> trs = Trs4x4(translation, eulerAngle, scale);
 	const Matrix4x4<float> trsResult = Matrix4x4<float>
-		(0.411982268f, -0.681242704, 0.605127215, 0.f,
-			0.117453285, -1.28574562, -1.52743673, 0.f,
-			2.72789216, 1.05052638, -0.674535275, 0.f,
+		(0.702096164f, 0.706954062f, -0.0853042603f, 0.f,
+			-0.914673924, 1.07899725, 1.41390812, 0.f,
+			1.63741684, -1.37201095, 2.10628843, 0.f,
 			10.0000000, 9.00000000, 8.00000000, 1.f);
 
 	EXPECT_TRUE(trs == trsResult);
@@ -143,17 +141,38 @@ TEST(Matrix4X4, TrsEuler)
 TEST(Matrix4X4, TrsQ)
 {
 	const Tbx::Vector3f translation = Tbx::Vector3f( 10.f, 9.f, 8.f );
-	const Quaternionf q = Quaternionf(2.f, 3.f, 4.f, 1.f).Normalize();
+	const Quaternionf q = Quaternionf(0.844623208f, 0.191341713f, 0.461939812f, 0.191341713f).Normalize();
 	const Tbx::Vector3f scale = Tbx::Vector3f( 1.f, 2.f, 3.f );
 
 	const Matrix4x4<float> trs = Trs4x4(translation, q, scale);
 	const Matrix4x4<float> trsResult = Matrix4x4<float>
-		(-0.666666627, 0.666666627, 0.733333290, 0.f,
-			1.33333325, -0.666666567, 1.06666672, 0.f,
-			0.999999940, 2.00000000, 0.399999887, 0.f,
+		(0.500000000, 0.500000000, -0.707106888, 0.f,
+			-0.292893171, 1.70710683, 1.00000000, 0.f,
+			2.56066036, -0.439339757, 1.49999988, 0.f,
 			10.0000000, 9.00000000, 8.00000000, 1.f);
 
 
 	EXPECT_TRUE(trs == trsResult);
 
+}
+
+TEST(Matrix4X4, Inverse)
+{
+	const Matrix4x4<float> base = Matrix4x4<float>(
+		1.f, 2.f, 3.f, 4.f,
+		2.f, 3.f, 4.f, 1.f,
+		3.f, 4.f, 1.f, 2.f,
+		4.f, 1.f, 2.f, 3.f
+	);
+	EXPECT_FALSE(IsEqual(base.Determinant(), 0.f));
+
+	const Matrix4x4<float> baseInv = base.Invert();
+	const Matrix4x4<float> mInvr = Matrix4x4<float>(
+		-9.f / 40., 1. / 40., 1. / 40., 11. / 40.,
+		1. / 40., 1. / 40., 11. / 40., -9. / 40.,
+		1. / 40., 11. / 40., -9. / 40., 1. / 40.,
+		11. / 40., -9. / 40., 1. / 40., 1. / 40.
+	);
+
+	EXPECT_TRUE(baseInv == mInvr);
 }

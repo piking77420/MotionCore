@@ -188,13 +188,13 @@ TEST(TestVec2, Normalize)
 {
 	{	// float
 		Vector2f vec1 = { 10.f, 10.f };
-		EXPECT_NEAR(vec1.Normalize().Magnitude(), 1., EPSILON);
+		EXPECT_NEAR(vec1.Normalize().Magnitude(), 1., IsEqualValue<float>());
 	}
 
 	{	// double
 		Vector2d vec1 = { 10., 10. };
 		double value = vec1.Normalize().Magnitude();
-		EXPECT_NEAR(vec1.Normalize().Magnitude(), 1., EPSILON);
+		EXPECT_NEAR(vec1.Normalize().Magnitude(), 1., IsEqualValue<float>());
 	}
 }
 
@@ -205,7 +205,7 @@ TEST(TestVec2, DistanceSqr)
 		Vector2f vec1 = { 1.f, 0.f };
 		Vector2f vec2 = { 0.f, 1.f };
 
-		EXPECT_NEAR(Vector2f::DistanceSquare(vec1, vec2), 2.f, EPSILON);
+		EXPECT_NEAR(Vector2f::DistanceSquare(vec1, vec2), 2.f, IsEqualValue<float>());
 	}
 
 	{
@@ -213,7 +213,7 @@ TEST(TestVec2, DistanceSqr)
 		Vector2d vec1 = { 1., 0. };
 		Vector2d vec2 = { 0., 1. };
 
-		EXPECT_NEAR(Vector2d::DistanceSquare(vec1, vec2), 2., EPSILON);
+		EXPECT_NEAR(Vector2d::DistanceSquare(vec1, vec2), 2., IsEqualValue<float>());
 	}
 }
 
@@ -224,7 +224,7 @@ TEST(TestVec2, Distance)
 		Vector2f vec1 = { 1.f, 0.f };
 		Vector2f vec2 = { 0.f, 1.f };
 
-		EXPECT_NEAR(Vector2f::Distance(vec1, vec2), 1.414213f, EPSILON);
+		EXPECT_NEAR(Vector2f::Distance(vec1, vec2), 1.414213f, IsEqualValue<float>());
 	}
 
 	{
@@ -232,7 +232,7 @@ TEST(TestVec2, Distance)
 		Vector2d vec1 = { 1., 0. };
 		Vector2d vec2 = { 0., 1. };
 
-		EXPECT_NEAR(Vector2d::Distance(vec1, vec2), 1.414213, EPSILON);
+		EXPECT_NEAR(Vector2d::Distance(vec1, vec2), 1.414213, IsEqualValue<float>());
 	}
 }
 
@@ -241,14 +241,14 @@ TEST(TestVec2, Cross)
 	{	// float
 		Vector2f vec1 = { 1.f, 0.f };
 		Vector2f vec2 = { 0.f, 1.f };
-		EXPECT_NEAR(Vector2f::Cross(vec1, vec2), 1.f, EPSILON);
+		EXPECT_NEAR(Vector2f::Cross(vec1, vec2), 1.f, IsEqualValue<float>());
 	}
 
 	{
 		// double
 		Vector2d vec1 = { 1., 0. };
 		Vector2d vec2 = { 0., 1. };
-		EXPECT_NEAR(Vector2d::Cross(vec1, vec2), 1., EPSILON);
+		EXPECT_NEAR(Vector2d::Cross(vec1, vec2), 1., IsEqualValue<float>());
 	}
 }
 

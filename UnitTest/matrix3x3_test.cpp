@@ -107,10 +107,12 @@ TEST(Matrix3X3, RotationZ)
 
 TEST(Matrix3X3, RotationXYZ)
 {
-	const Matrix3x3<float> m = Rotation3x3(1.f, 2.f, 3.f);
-	const Matrix3x3<float> rotResult = Matrix3x3<float>(0.411982268f, -0.681242704f, 0.605127215f,
-		0.0587266423f, -0.642872810f, -0.763718367f,
-		0.909297407f, 0.350175470f, -0.224845082f);
+	const Tbx::Vector3f eulerAngle = Tbx::Vector3f(Vector3<float>(45, 45, 45) * fDeg2Rad).Normalize();
+
+	const Matrix3x3<float> m = Rotation3x3(eulerAngle);
+	const Matrix3x3<float> rotResult = Matrix3x3<float>(0.702096164f, 0.706954062f, -0.0853042603,
+		-0.457336962f, 0.539498627f, 0.706954062f,
+		0.545805633f, -0.457336962f, 0.702096164f);
 
 	EXPECT_TRUE(m == rotResult);
 
@@ -118,10 +120,12 @@ TEST(Matrix3X3, RotationXYZ)
 
 TEST(Matrix3X3, RotationQuaternion)
 {
-	const Quaternionf& q = Quaternionf(2.f, 3.f, 4.f, 1.f).Normalize();
+	const Quaternionf& q = Quaternionf(0.844623208f, 0.191341713f, 0.461939812f, 0.191341713f).Normalize();
 	const Matrix3x3<float> m = Rotation3x3(q);
 	
-	const Matrix3x3<float> result(-0.666667f, 0.666667f, 0.733333f, 0.666667f, -0.333333f, 0.533333f, 0.333333f, 0.666667f, 0.133333f);
+	const Matrix3x3<float> result(0.5000000f, 0.5000000f, -0.707106888f,
+		-0.146446586f, 0.853553414f, 0.500000000f,
+		0.853553474f, -0.146446586f, 0.499999970f);
 
 	EXPECT_TRUE(m == result);
 
