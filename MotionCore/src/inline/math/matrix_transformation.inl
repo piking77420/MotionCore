@@ -305,22 +305,9 @@ namespace Tbx
 	template<typename T>
 	Matrix4x4<T> PerspectiveMatrixFlipYAxis(const T fov, const T aspect, const T Near, const T Far)
 	{
-		const T fFovRad = static_cast<T>(1) / std::tanf(fov / static_cast<T>(2.f));
-		const T zdiff = Near - Far;
-
-		const T r00 = fFovRad / aspect;
-		const T r11 = fFovRad;
-
-		const T r22 = (Far + Near) / zdiff;
-		const T r32 = (static_cast<T>(2) * Far * Near) / zdiff;
-
-		return Matrix4x4<T>
-			(
-			r00, 0.f, 0.f, 0.f,
-			0.f, -r11, 0.f, 0.f,
-			0.f, 0.f, r22, static_cast<T>(-1.0),
-			0, 0, r32, 0.f
-			);
+		Matrix4x4<T> perspective = PerspectiveMatrix(fov, aspect, Near, Far);
+		perspective[5] *= static_cast<T>(-1);
+		return perspective;
 	}
 	template<class T>
 	constexpr Matrix4x4<T> OrthoGraphicMatrix(T left, T right, T bottom, T top, T zNear, T zFar)
