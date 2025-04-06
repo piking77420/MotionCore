@@ -6,7 +6,6 @@
 #include "vector4.hpp"
 
 
-// Coloms x Rows
 #include "matrix2x2.hpp"
 #include "matrix3x3.hpp"
 #include "matrix4x4.hpp"

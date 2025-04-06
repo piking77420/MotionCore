@@ -2,6 +2,10 @@ cmake_minimum_required(VERSION 3.26)
 
 project(MotionCore VERSION 0.1.0 LANGUAGES C CXX)
 
+if(MSVC)
+    add_compile_options(/MP)
+endif()
+
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
