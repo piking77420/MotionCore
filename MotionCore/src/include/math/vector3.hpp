@@ -40,16 +40,7 @@ namespace Tbx
 
         FORCEINLINE static DataType Distance(const Vector3& _a, const Vector3& _b);
 
-        FORCEINLINE static Vector3 NormalizeRadianVec3(Vector3 _randians)
-        {
-            return Vector3
-            (
-                NormalizeRadian<T>(_randians.x),
-                NormalizeRadian<T>(_randians.y),
-                NormalizeRadian<T>(_randians.z)
-            );
-        }
-
+        FORCEINLINE static Vector3 NormalizeRadianVec3(Vector3 _randians);
 
         FORCEINLINE Vector3 operator-() const;
 
