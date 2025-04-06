@@ -17,9 +17,15 @@ namespace Tbx
     }
 
     template <typename T>
+    inline T Vector4<T>::MagnitudeSquare() const
+    {
+        return POWER(x) + POWER(y) + POWER(z) + POWER(w);
+    }
+
+    template <typename T>
     inline T Vector4<T>::Magnitude() const
     {
-        return std::sqrt(x * x + y * y + z * z + w * w);
+        return std::sqrt(MagnitudeSquare());
     }
 
     template <typename T>
@@ -60,5 +66,164 @@ namespace Tbx
     constexpr T Vector4<T>::Distance(const Vector4& _a, const Vector4& _b)
     {
         return std::sqrt(DistanceSquare(_a, _b));
+    }
+
+    template <typename T>
+    constexpr Vector4<T> Vector4<T>::operator-()
+    {
+        return Vector4<T>(-x, -y, -z, -w);
+    }
+
+    template <typename T>
+     constexpr Vector4<T> Vector4<T>::operator+(const Vector4<T>& _other)
+    {
+        return Vector4<T>(x + _other.x, y + _other.y, z + _other.z, w + _other.w);
+    }
+
+    template <typename T>
+    constexpr Vector4<T> Vector4<T>::operator-(const Vector4<T>& _other)
+    {
+        return Vector4<T>(x - _other.x, y - _other.y, z - _other.z, w - _other.w);
+    }
+
+    template <typename T>
+    constexpr Vector4<T> Vector4<T>::operator*(const Vector4<T>& _other)
+    {
+        return Vector4<T>(x * _other.x, y * _other.y, z * _other.z, w * _other.w);
+    }
+
+    template <typename T>
+    constexpr Vector4<T> Vector4<T>::operator/(const Vector4<T>& _other)
+    {
+        return Vector4(x / _other.x, y / _other.y, z / _other.z, w / _other.w);
+    }
+
+    template <typename T>
+    constexpr FORCEINLINE void Vector4<T>::operator+= (const Vector4& _other) noexcept
+    {
+        x += _other.x;
+        y += _other.y;
+        z += _other.z;
+        w += _other.w;
+    }
+
+    template <typename T>
+    constexpr FORCEINLINE void Vector4<T>::operator-= (const Vector4& _other) noexcept
+    {
+        x -= _other.x;
+        y -= _other.y;
+        z -= _other.z;
+        w -= _other.w;
+    }
+
+    template <typename T>
+    constexpr FORCEINLINE void Vector4<T>::operator*= (const Vector4& _other) noexcept
+    {
+        x *= _other.x;
+        y *= _other.y;
+        z *= _other.z;
+        w *= _other.w;
+    }
+
+    template <typename T>
+    constexpr FORCEINLINE void Vector4<T>::operator/= (const Vector4& _other) noexcept
+    {
+        x /= _other.x;
+        y /= _other.y;
+        z /= _other.z;
+        w /= _other.w;
+    }
+
+    template <typename T>
+    constexpr Vector4<T> Vector4<T>::operator+(DataType value)
+    {
+        return Vector4(x + value, y + value, z + value, w + value);
+    }
+
+    template <typename T>
+    constexpr Vector4<T> Vector4<T>::operator-(DataType value)
+    {
+        return Vector4<T>(x - value, y - value, z - value, w - value);
+    }
+
+    template <typename T>
+    constexpr Vector4<T> Vector4<T>::operator*(DataType value)
+    {
+        return Vector4<T>(x * value, y * value, z * value, w * value);
+    }
+
+    template <typename T>
+    constexpr Vector4<T> Vector4<T>::operator/(DataType value)
+    {
+        return Vector4<T>(x / value, y / value, z / value, w / value);
+    }
+
+    template <typename T>
+    constexpr Vector4<T>& Vector4<T>::operator+=(DataType value)
+    {
+        this->x += value;
+        this->y += value;
+        this->z += value;
+        this->w += value;
+
+        return *this;
+    }
+
+    template <typename T>
+    constexpr Vector4<T>& Vector4<T>::operator-=(DataType value)
+    {
+        this->x -= value;
+        this->y -= value;
+        this->z -= value;
+        this->w -= value;
+
+        return *this;
+    }
+
+    template <typename T>
+    constexpr Vector4<T>& Vector4<T>::operator*=(DataType value)
+    {
+        this->x *= value;
+        this->y *= value;
+        this->z *= value;
+        this->w *= value;
+
+        return *this;
+    }
+
+    template <typename T>
+    constexpr Vector4<T>& Vector4<T>::operator/=(DataType value)
+    {
+        this->x /= value;
+        this->y /= value;
+        this->z /= value;
+        this->w /= value;
+
+        return *this;
+    }
+
+
+    template <typename T>
+    FORCEINLINE T& Vector4<T>::operator[](size_t index)
+    {
+        return *static_cast<T*>(&x + index);
+    }
+
+    template <typename T>
+    FORCEINLINE const T& Vector4<T>::operator[](size_t index) const
+    {
+        return *static_cast<const T*>(&x + index);
+    }
+
+    template <typename T>
+    FORCEINLINE bool Vector4<T>::operator==(const Vector4& _other) const
+    {
+        return x == _other.x && y == _other.y && z == _other.z && w == _other.w;
+    }
+
+    template <typename T>
+    FORCEINLINE bool Vector4<T>::operator!=(const Vector4& _other)
+    {
+        return !(*this == _other);
     }
 }

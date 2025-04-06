@@ -51,7 +51,7 @@ namespace Tbx
     {
         const T dx = _a.x - _b.x;
         const T dy = _a.y - _b.y;
-        const T result = (dx * dx + dy * dy);
+        const T result = (POWER(dx) + POWER(dy));
 
         return result;
     }

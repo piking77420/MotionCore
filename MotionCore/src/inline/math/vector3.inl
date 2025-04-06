@@ -29,7 +29,7 @@ namespace Tbx
     template<typename T>
     FORCEINLINE T Vector3<T>::MagnitudeSquare() const
     {
-        return x * x + y * y + z * z;
+        return POWER(x) + POWER(y) + POWER(z);
     }
 
     template<typename T>
@@ -66,7 +66,7 @@ namespace Tbx
     }
 
     template<typename T>
-    constexpr static FORCEINLINE T Vector3<T>::DistanceSquare(const Vector3<T>& _a, const Vector3<T>& _b)
+    constexpr FORCEINLINE T Vector3<T>::DistanceSquare(const Vector3<T>& _a, const Vector3<T>& _b)
     {
         const DataType dx = _a.x - _b.x;
         const DataType dy = _a.y - _b.y;
@@ -78,11 +78,22 @@ namespace Tbx
 
     
     template<typename T>
-    static FORCEINLINE T Vector3<T>::Distance(const Vector3<T>& _a, const Vector3<T>& _b)
+    FORCEINLINE T Vector3<T>::Distance(const Vector3<T>& _a, const Vector3<T>& _b)
     {
         return std::sqrt(DistanceSquare(_a, _b));
     }
 
+    template<typename T>
+    FORCEINLINE Vector3<T> Vector3<T>::NormalizeRadianVec3(Vector3 _randians)
+    {
+        return Vector3
+        (
+            NormalizeRadian<T>(_randians.x),
+            NormalizeRadian<T>(_randians.y),
+            NormalizeRadian<T>(_randians.z)
+        );
+    }
+    
     template<typename T>
     FORCEINLINE Vector3<T>  Vector3<T>::operator-() const
     {
@@ -92,25 +103,25 @@ namespace Tbx
     template<typename T>
     FORCEINLINE Vector3<T> Vector3<T>::operator+(const Vector3& other) const
     {
-        return { x + other.x, y + other.y, z + other.z };
+        return Vector3<T>(x + other.x, y + other.y, z + other.z);
     }
 
     template<typename T>
     FORCEINLINE Vector3<T>Vector3<T>::operator-(const Vector3& other) const
     {
-        return { x - other.x, y - other.y, z - other.z };
+        return Vector3<T>(x - other.x, y - other.y, z - other.z);
     }
 
     template<typename T>
     FORCEINLINE Vector3<T>Vector3<T>::operator*(const Vector3& other) const
     {
-        return { x * other.x, y * other.y, z * other.z };
+        return Vector3<T>(x * other.x, y * other.y, z * other.z);
     }
 
     template<typename T>
     FORCEINLINE Vector3<T>Vector3<T>::operator/(const Vector3& other) const
     {
-        return { x / other.x, y / other.y, z / other.z };
+        return Vector3<T>(x / other.x, y / other.y, z / other.z);
     }
 
     template<typename T>
