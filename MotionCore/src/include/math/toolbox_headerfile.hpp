@@ -96,3 +96,4 @@ namespace Tbx
 
 }
 
+#define POWER(x) x * x
