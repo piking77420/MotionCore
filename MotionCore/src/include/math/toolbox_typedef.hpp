@@ -111,6 +111,14 @@ inline std::ostream& operator<<(std::ostream& ostream, const Tbx::Matrix4x4<T>& 
     return ostream;
 }
 
+template <typename T>
+inline std::ostream& operator<<(std::ostream& ostream, const Tbx::Quaternion<T>& q)
+{
+    ostream << q.imaginary.x << " w : " << q.real << '\n';
+
+    return ostream;
+}
+
 
 // C++20 (and later) code
 #if __cplusplus >= 202002L
@@ -215,6 +223,20 @@ struct std::formatter<Tbx::Matrix4x4<T>> : std::formatter<std::string>
     }
 };
 
+template <typename T>
+struct std::formatter<Tbx::Quaternion<T>> : std::formatter<std::string>
+{
+    constexpr auto parse(std::format_parse_context& ctx) -> decltype(ctx.begin()) {
+        return ctx.begin();
+    }
+
+    auto format(const Tbx::Quaternion<T>& q, std::format_context& ctx) const -> std::format_context::iterator {
+
+        const std::string s = "x : " + std::to_string(q.imaginary.x) + ", " + "y : " + std::to_string(q.imaginary.y) + ", " + "z : " + std::to_string(q.imaginary.z) + ", " + "w : " + std::to_string(q.real);
+        // Delegate formatting to the standard string formatter
+        return std::formatter<std::string>::format(s, ctx);
+    }
+};
 
 
 #endif
