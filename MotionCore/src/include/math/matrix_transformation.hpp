@@ -69,6 +69,17 @@ namespace Tbx
     template <class T>
 	constexpr static Matrix4x4<T> OrthoGraphicMatrix(T left, T right, T bottom, T top, T zNear, T zFar);
 
+
+	// operator
+
+	template<typename T>
+	Vector2<T> operator*(const Matrix2x2<T>& RESTRICT _m, const Vector2<T>& RESTRICT _vec);
+
+	template<typename T>
+	Vector3<T> operator*(const Matrix3x3<T>& RESTRICT _m, const Vector3<T>& RESTRICT _vec);
+
+	template<typename T>
+	Vector4<T> operator*(const Matrix4x4<T>& RESTRICT _m, const Vector4<T>& RESTRICT _vec);
 }
 
 #include "math/matrix_transformation.inl"

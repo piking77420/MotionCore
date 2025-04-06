@@ -1,3 +1,4 @@
+#include "matrix_transformation.hpp"
 
 namespace Tbx
 {
@@ -263,18 +264,18 @@ namespace Tbx
 		Matrix4x4<T> result = Matrix4x4<T>::Identity();
 		result[0] = s.x;
 		result[4] = s.y;
-		result[9] = s.z;
+		result[8] = s.z;
 		result[1] = u.x;
 		result[5] = u.y;
-		result[10] = u.z;
+		result[9] = u.z;
 		result[2] = -f.x;
 		result[5] = -f.y;
-		result[11] = -f.z;
+		result[10] = -f.z;
 
 		// Apply translation to the matrix (dot products for camera position)
-		result[13] = -Vector3<T>::Dot(s, _eye);
-		result[14] = -Vector3<T>::Dot(u, _eye);
-		result[15] = Vector3<T>::Dot(f, _eye);
+		result[12] = -Vector3<T>::Dot(s, _eye);
+		result[13] = -Vector3<T>::Dot(u, _eye);
+		result[14] = Vector3<T>::Dot(f, _eye);
 
 		return result;
 	}
@@ -344,6 +345,36 @@ namespace Tbx
 				r03, r13, r23, 1.f
 			);
 		
+	}
+
+	template<typename T>
+	Vector2<T> operator*(const Matrix2x2<T>& RESTRICT _m, const Vector2<T>& RESTRICT _vec)
+	{
+		const T x = _m[0] * _vec.x + _m[2] * _vec.y;
+		const T y = _m[1] * _vec.x + _m[3] * _vec.y;
+
+		return 	Vector2<T>(x, y);
+	}
+
+	template<typename T>
+	Vector3<T> operator*(const Matrix3x3<T>& RESTRICT _m, const Vector3<T>& RESTRICT _vec)
+	{
+		const T x = _m[0] * _vec.x + _m[3] * _vec.y + _m[6] * _vec.z;
+		const T y = _m[1] * _vec.x + _m[4] * _vec.y + _m[7] * _vec.z;
+		const T z = _m[2] * _vec.x + _m[5] * _vec.y + _m[8] * _vec.z;
+
+		return Vector3<T>(x, y, z);
+	}
+
+	template<typename T>
+	Vector4<T> operator*(const Matrix4x4<T>& RESTRICT _m, const Vector4<T>& RESTRICT _vec)
+	{
+		const T x = _m[0] * _vec.x + _m[4] * _vec.y + _m[8] * _vec.z + _m[12] * _vec.w;
+		const T y = _m[1] * _vec.x + _m[5] * _vec.y + _m[9] * _vec.z + _m[13] * _vec.w;
+		const T z = _m[2] * _vec.x + _m[6] * _vec.y + _m[10] * _vec.z + _m[14] * _vec.w;
+		const T w = _m[3] * _vec.x + _m[7] * _vec.y + _m[11] * _vec.z + _m[15] * _vec.w;
+
+		return Vector4<T>(x, y, z, w);
 	}
 	
 	
