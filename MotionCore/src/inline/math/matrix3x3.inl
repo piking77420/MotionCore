@@ -82,7 +82,7 @@ namespace Tbx
     template<typename T>
     T& Matrix3x3<T>::operator[](uint32_t _offset)
     {
-        assert(_offset < (Size * Size), "out of bounds");
+        assert(_offset < (Size * Size) && "out of bounds");
 
         return m_Data[_offset];
     }
@@ -90,7 +90,7 @@ namespace Tbx
     template<typename T>
     const T& Matrix3x3<T>::operator[](uint32_t _offset) const
     {
-        assert(_offset < (Size * Size), "out of bounds");
+        assert(_offset < (Size * Size) && "out of bounds");
 
         return m_Data[_offset];
     }
