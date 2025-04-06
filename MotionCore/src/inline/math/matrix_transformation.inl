@@ -253,5 +253,99 @@ namespace Tbx
 		};
 	}
 
+	template<typename T>
+	Matrix4x4<T> LookAtRH(const Vector3<T>& _eye, const Vector3<T>& _center, const Vector3<T>& _up)
+	{
+		Vector3<T> f = (_center - _eye).Normalize();
+		Vector3<T> s = Vector3<T>::Cross(f, _up).Normalize();
+		Vector3<T> u = Vector3<T>::Cross(s, f);
+
+		Matrix4x4<T> result = Matrix4x4<T>::Identity();
+		result[0] = s.x;
+		result[4] = s.y;
+		result[9] = s.z;
+		result[1] = u.x;
+		result[5] = u.y;
+		result[10] = u.z;
+		result[2] = -f.x;
+		result[5] = -f.y;
+		result[11] = -f.z;
+
+		// Apply translation to the matrix (dot products for camera position)
+		result[13] = -Vector3<T>::Dot(s, _eye);
+		result[14] = -Vector3<T>::Dot(u, _eye);
+		result[15] = Vector3<T>::Dot(f, _eye);
+
+		return result;
+	}
+
+	template<typename T>
+	Matrix4x4<T> PerspectiveMatrix(const T fov, const T aspect, const T Near, const T Far)
+	{
+		const T fFovRad = static_cast<T>(1) / std::tanf(fov / static_cast<T>(2.f));
+		const T zdiff = Near - Far;
+
+		const T r00 = fFovRad / aspect;
+		const T r11 = fFovRad;
+
+		const T r22 = (Far + Near) / zdiff;
+		const T r32 = (static_cast<T>(2) * Far * Near) / zdiff;
+
+		return
+			Matrix4x4<T>
+			(
+				r00, 0.f, 0.f, 0.f,
+				0.f, r11, 0.f, 0.f,
+				0.f, 0.f, r22, static_cast<T>(-1.0),
+				0, 0, r32, 0.f
+			);
+	
+	}
+	template<typename T>
+	Matrix4x4<T> PerspectiveMatrixFlipYAxis(const T fov, const T aspect, const T Near, const T Far)
+	{
+		const T fFovRad = static_cast<T>(1) / std::tanf(fov / static_cast<T>(2.f));
+		const T zdiff = Near - Far;
+
+		const T r00 = fFovRad / aspect;
+		const T r11 = fFovRad;
+
+		const T r22 = (Far + Near) / zdiff;
+		const T r32 = (static_cast<T>(2) * Far * Near) / zdiff;
+
+		return Matrix4x4<T>
+			(
+			r00, 0.f, 0.f, 0.f,
+			0.f, -r11, 0.f, 0.f,
+			0.f, 0.f, r22, static_cast<T>(-1.0),
+			0, 0, r32, 0.f
+			);
+	}
+	template<class T>
+	constexpr Matrix4x4<T> OrthoGraphicMatrix(T left, T right, T bottom, T top, T zNear, T zFar)
+	{
+		T topBottomDiff = top - bottom;
+		T rightLeftDiff = right - left;
+		T farMinusNear = zFar - zNear;
+
+		T r00 = static_cast<T>(2) / rightLeftDiff;
+		T r11 = static_cast<T>(2) / topBottomDiff;
+		T r22 = -static_cast<T>(2) / farMinusNear;
+
+		T r03 = -(right + left) / rightLeftDiff;
+		T r13 = -(top + bottom) / topBottomDiff;
+		T r23 = -(zFar + zNear) / farMinusNear;
+
+		return Matrix4x4<T>
+			(
+				r00, 0.f, 0.f, 0.f,
+				0.f, r11, 0.f, 0.f,
+				0.f, 0.f, r22, 0.f,
+				r03, r13, r23, 1.f
+			);
+		
+	}
+	
+	
 	
 }

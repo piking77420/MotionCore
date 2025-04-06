@@ -56,6 +56,19 @@ namespace Tbx
 
 	template <typename T>
 	static FORCEINLINE Matrix4x4<T> Trs4x4(const Tbx::Vector3<T>& _translation, const Quaternion<T>& _rotation, const Tbx::Vector3<T>& _scale);
+
+	template <typename T>
+	static Matrix4x4<T> LookAtRH(const Vector3<T>& _eye, const Vector3<T>& _center, const Vector3<T>& _up);
+
+    template <typename T>
+	static Matrix4x4<T> PerspectiveMatrix(const T fov, const T aspect, const T Near, const T Far);
+
+    template <typename T>
+	Matrix4x4<T> PerspectiveMatrixFlipYAxis(const T fov, const T aspect, const T Near, const T Far);
+
+    template <class T>
+	constexpr static Matrix4x4<T> OrthoGraphicMatrix(T left, T right, T bottom, T top, T zNear, T zFar);
+
 }
 
 #include "math/matrix_transformation.inl"
