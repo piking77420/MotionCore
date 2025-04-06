@@ -269,7 +269,7 @@ namespace Tbx
 		result[5] = u.y;
 		result[9] = u.z;
 		result[2] = -f.x;
-		result[5] = -f.y;
+		result[6] = -f.y;
 		result[10] = -f.z;
 
 		// Apply translation to the matrix (dot products for camera position)
