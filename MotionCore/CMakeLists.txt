@@ -11,7 +11,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
 file(GLOB_RECURSE SOURCE_FILES src/source/*.c src/source/*.cpp)
-file(GLOB_RECURSE HEADER_FILES src/include/*.h src/include/*.hpp src/inline/*.inl)
+file(GLOB_RECURSE HEADER_FILES src/include/*.h src/include/*.hpp src/inline/*.inl 
+src/externals/include/*.h src/externals/include/*.hpp)
 
 
 if (BUILD_DYNAMIC_IMAGE)
@@ -23,5 +24,11 @@ else()
     add_library(${PROJECT_NAME} STATIC ${SOURCE_FILES} ${HEADER_FILES}) 
 endif()
 
+## OpenCl
+find_package(OpenCL REQUIRED)
+target_link_libraries(${PROJECT_NAME} PRIVATE OpenCL::OpenCL)
+
+
 target_include_directories(${PROJECT_NAME} PUBLIC src/include)
 target_include_directories(${PROJECT_NAME} PUBLIC src/inline)
+include_directories(${PROJECT_NAME} Public src/externals/include)

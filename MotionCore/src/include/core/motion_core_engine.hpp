@@ -2,13 +2,18 @@
 
 #include "motion_core_header.h"
 
-class MotionCoreEngine
+namespace MotionCore
 {
-public:
-	MOTION_CORE_API MotionCoreEngine();
+	class MotionCoreEngine
+	{
+	public:
+		MOTION_CORE_API MotionCoreEngine();
 
-	MOTION_CORE_API ~MotionCoreEngine() = default;
+		MOTION_CORE_API ~MotionCoreEngine() = default;
 
-	MOTION_CORE_API static void HelloEngine();
-};
+		MOTION_CORE_API static void HelloEngine();
+	};
+
+
+}
 
