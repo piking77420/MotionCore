@@ -9,7 +9,7 @@ using namespace Tbx;
 // Demonstrate some basic assertions.
 TEST(HelloTest, BasicAssertions) 
 {
-	MotionCoreEngine::HelloEngine();
+	//MotionCoreEngine::HelloEngine();
 
   // Expect two strings not to be equal.
   //EXPECT_STRNE("hello", "world");
