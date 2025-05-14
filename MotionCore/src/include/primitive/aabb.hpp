@@ -12,18 +12,29 @@ namespace MotionCore
 	};
 
 	template <typename T>
-	FORCEINLINE bool GetSize(const Aabb<T>& _aabb)
+	INLINE bool GetSize(const Tbx::Vector3<T>& _min, const Tbx::Vector3<T>& _max)
 	{
-		return (_sphere.max - _sphere.min);
+		return (max - min);
+	}
+	template <typename T>
+	INLINE bool GetSize(const Aabb<T>& _aabb)
+	{
+		return GetSize(_aabb.min, _aabb.max);
 	}
 
 	template <typename T>
-	INLINE bool Countain(Aabb<T>* _aabb, const Tbx::Vector3<T>& _point)
+	INLINE bool Countain(const Tbx::Vector3<T>& _min, const Tbx::Vector3<T>& _max, const Tbx::Vector3<T>& _point)
 	{
-		return (_point.x >= _aabb->min.x && _point.x <= _aabb->max.x) &&
-			(_point.y >= _aabb->min.y && _point.y <= _aabb->max.y) &&
-			(_point.z >= _aabb->min.z && _point.z <= _aabb->max.z);
+		return (_point.x >= _min.x && _point.x <= _max.x) &&
+			(_point.y >= _min.y && _point.y <= _max.y) &&
+			(_point.z >= _min.z && _point.z <= _max.z);
 	}
+	template <typename T>
+	INLINE bool Countain(const Aabb<T>& _aabb, const Tbx::Vector3<T>& _point)
+	{
+		return Countain(_aabb.min, _aabb.max);
+	}
+
 
 	// does _aabb1 countain _aabb2 ?
 	template <typename T>

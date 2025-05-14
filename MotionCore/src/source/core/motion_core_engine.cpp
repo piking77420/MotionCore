@@ -1,7 +1,8 @@
 #include "core/motion_core_engine.hpp"
 
 #include <iostream>
-
+#include <cstdio>
+#include <cstdlib>
 
 #define CL_TARGET_OPENCL_VERSION 300
 #include <CL/cl.h>
@@ -26,9 +27,34 @@ __kernel void hello(__global char* out) {
     out[13] = '\0';
 }
 )CLC";
+void MotionCore::MotionCoreEngine::Init(const MotionCoreEngineCreateInfo& _MotionCoreEngineCreateInfo)
+{
+    constexpr size_t allocAligne = alignof(RigidBody);
+
+    
+#ifdef _MSC_VER
+    bodies = reinterpret_cast<RigidBody*>(_aligned_malloc(_MotionCoreEngineCreateInfo.maxBodies * sizeof(RigidBody), allocAligne));
+#elif
+        bodies = std::aligned_alloc(allocAligne, num_allocated_bytes));
+
+#endif _MSC_VER
+
+}
 MotionCore::MotionCoreEngine::MotionCoreEngine()
 {
 	std::cout << "MotionCoreEngine " << std::endl;
+}
+MotionCore::MotionCoreEngine::~MotionCoreEngine()
+{
+    if (bodies != nullptr)
+    {
+#ifdef _MSC_VER
+        _aligned_free(bodies);
+        bodies = nullptr;
+#elif
+        std::free(bodies)
+#endif
+    }
 }
 void MotionCore::MotionCoreEngine::HelloEngine()
 {
