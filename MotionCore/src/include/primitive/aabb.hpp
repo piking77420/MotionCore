@@ -73,7 +73,7 @@ namespace MotionCore
 	template <typename T>
 	FORCEINLINE Tbx::Vector3<T> GetExtend(const Aabb<T>& _aabb)
 	{
-		return (_aabb.max - _aabb.min) * static_cast<T>(0.5));
+		return (_aabb.max - _aabb.min) * static_cast<T>(0.5);
 	}
 
 	template <typename T>

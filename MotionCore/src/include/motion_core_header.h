@@ -12,8 +12,22 @@ namespace MotionCore
 	using Vec4 = Tbx::Vector4<numeric>;
 
 	using Quat = Tbx::Quaternion<numeric>;
-
 	using Mat2 = Tbx::Matrix2x2<numeric>;
 	using Mat3 = Tbx::Matrix3x3<numeric>;
 	using Mat4 = Tbx::Matrix4x4<numeric>;
 }
+
+#if defined(MOTION_DYNAMIC_IMAGE)
+#ifdef MOTION_CORE_EXPORTS
+#define MOTION_CORE_API __declspec(dllexport)
+#elif MOTION_CORE_IMPORTS
+#define MOTION_CORE_API __declspec(dllimport)
+#else
+#define MOTION_CORE_API
+#endif
+#else
+#define MOTION_CORE_API
+#endif
+
+
+
