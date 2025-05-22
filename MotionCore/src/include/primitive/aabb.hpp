@@ -14,7 +14,7 @@ namespace MotionCore
 	template <typename T>
 	INLINE bool GetSize(const Tbx::Vector3<T>& _min, const Tbx::Vector3<T>& _max)
 	{
-		return (max - min);
+		return (_min - _max);
 	}
 	template <typename T>
 	INLINE bool GetSize(const Aabb<T>& _aabb)

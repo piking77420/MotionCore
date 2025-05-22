@@ -4,12 +4,14 @@
 
 namespace MotionCore
 {
+	
 	struct CreateBodyInfo
 	{
-		ColliderType type;
+		ShapeType type;
 		union 
 		{
 			numeric radius;
+			numeric height;
 			Quat q;
 		}info;
 		Vec3 position;
@@ -30,8 +32,8 @@ namespace MotionCore
 		MOTION_CORE_API MotionCoreEngine();
 
 		MOTION_CORE_API ~MotionCoreEngine();
-
-		MOTION_CORE_API static void HelloEngine();
+		
+		MOTION_CORE_API void InitExternalDevice();
 	private:
 		RigidBody* bodies = nullptr;
 		

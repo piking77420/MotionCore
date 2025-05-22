@@ -3,7 +3,7 @@
 
 namespace MotionCore
 {
-	enum class ColliderType
+	enum class ShapeType
 	{
 		Sphere,
 		Box,
@@ -13,40 +13,40 @@ namespace MotionCore
 	};
 
 
-	struct SphereCollider
+	struct SphereShape
 	{
 		numeric radius;
 	};
 
-	struct BoxCollider
+	struct BoxShape
 	{
-		Tbx::Matrix3x3<numeric> orientation;
-		Tbx::Vector3<numeric> size;
+		Vec3 size;
 	};
 
-	struct CapsuleCollider
+	struct CapsuleShape
 	{
-		Tbx::Matrix3x3<numeric> orientation;
+		Mat3 orientation;
 		numeric height;
 		numeric radius;
 	};
 
-	struct MeshCollider
+	struct MeshShape
 	{
 		uint32_t meshId;
 	};
 
 
-	struct Collider
+	struct Shape
 	{
-		ColliderType type;
+		bool isTrigger;
+		ShapeType type;
 		union 
 		{
-			SphereCollider sphereCollider;
-			BoxCollider boxCollider;
-			CapsuleCollider capsuleCollider;
-			MeshCollider meshCollider;
-		}colliderType;
+			SphereShape sphereShape;
+			BoxShape boxShape;
+			CapsuleShape capsuleShape;
+			MeshShape meshShape;
+		}ShapeType;
 
 	};
 
@@ -54,6 +54,14 @@ namespace MotionCore
 	struct RigidBody
 	{
 		numeric mass;
-		Collider collider;
+		Shape shape;
+
+		Vec3 position;
+		Vec3 velocity;
+		Vec3 accmulateForce;
+
+		Quat orientation;
+		Vec3 rotation;
+		
 	};
 }
