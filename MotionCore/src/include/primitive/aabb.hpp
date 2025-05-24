@@ -9,6 +9,14 @@ namespace MotionCore
 	{
 		Tbx::Vector3<T> min;
 		Tbx::Vector3<T> max;
+
+		Aabb(const Tbx::Vector3<T>& _min, const Tbx::Vector3<T>& _max)
+			: min(_min), max(_max)
+		{}
+
+		Aabb() = default;
+
+		~Aabb() = default;
 	};
 
 	template <typename T>
@@ -32,7 +40,14 @@ namespace MotionCore
 	template <typename T>
 	INLINE bool Countain(const Aabb<T>& _aabb, const Tbx::Vector3<T>& _point)
 	{
-		return Countain(_aabb.min, _aabb.max);
+		return Countain(_aabb.min, _aabb.max, _point);
+	}
+
+	// does AABB1 Contain ABBB 2
+	template <typename T>
+	INLINE bool Countain(const Aabb<T>& _aabb1, const Aabb<T>& _aabb2)
+	{
+		return Countain(_aabb1, _aabb2.min) && Countain(_aabb1, _aabb2.min);
 	}
 
 
@@ -91,7 +106,7 @@ namespace MotionCore
 	}
 
 	template <typename T>
-	FORCEINLINE T GetVolume(const Aabb<T>& _aabb)
+	INLINE T GetVolume(const Aabb<T>& _aabb)
 	{
 		// TO DO SIMD
 		const T dx = (_aabb.max.x - _aabb.min.x);
@@ -102,7 +117,15 @@ namespace MotionCore
 	}
 
 	template <typename T>
-	FORCEINLINE Tbx::Vector3<T> ClosestPoint(const Aabb<T>& _aabb, const Tbx::Vector3<T>& _point)
+	INLINE T GetSurfaceArea(const Aabb<T>& _aabb)
+	{
+		const Tbx::Vector3<T> size = GetSize(_aabb);
+		
+		return size.x * (size.y + size.z) + (size.y * size.z);
+	}
+
+	template <typename T>
+	INLINE Tbx::Vector3<T> ClosestPoint(const Aabb<T>& _aabb, const Tbx::Vector3<T>& _point)
 	{
 		// TO DO SIMD
 		Tbx::Vector3<T> result;
