@@ -100,7 +100,7 @@ namespace MotionCore
 	template <typename T>
 	FORCEINLINE std::pair<Tbx::Vector3<T>, Tbx::Vector3<T>> GetCenterAndExtend(const Aabb<T>& _aabb)
 	{
-		const Tbx::Vector3<T> extend = GetExtend();
+		const Tbx::Vector3<T> extend = GetExtend(_aabb);
 
 		return { _aabb.min + (extend * static_cast<T>(0.5)), extend };
 	}
