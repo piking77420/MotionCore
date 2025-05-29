@@ -119,8 +119,6 @@ inline std::ostream& operator<<(std::ostream& ostream, const Tbx::Quaternion<T>&
 }
 
 
-// C++20 (and later) code
-#if __cplusplus >= 202002L
 
 #include <format>
 
@@ -236,6 +234,3 @@ struct std::formatter<Tbx::Quaternion<T>> : std::formatter<std::string>
         return std::formatter<std::string>::format(s, ctx);
     }
 };
-
-
-#endif
