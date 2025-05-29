@@ -7,10 +7,6 @@ if(MSVC)
     add_compile_options(/MP)
 endif()
 
-# Set c++ standart
-set(CMAKE_CXX_STANDARD ${MOTION_CPP_VERSION})
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_CXX_EXTENSIONS OFF)
 
 # Collect source files
 set(SOURCE_FILES "")  # Initialize

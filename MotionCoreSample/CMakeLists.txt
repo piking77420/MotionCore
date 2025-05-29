@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.26)
 project(MotionCoreSample VERSION 0.1.0 LANGUAGES C CXX)
 
 
-set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
@@ -15,7 +15,6 @@ add_executable(${PROJECT_NAME} ${SOURCE_FILES} main.cpp ${HEADER_FILES})
 find_package(OpenGL REQUIRED)
 target_link_libraries(${PROJECT_NAME} PRIVATE OpenGL::GL)
 
-set(MOTION_CPP_VERSION 14)
 target_link_libraries(${PROJECT_NAME} PRIVATE MotionCore)
 
 if (BUILD_DYNAMIC_IMAGE)
