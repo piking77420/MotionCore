@@ -59,9 +59,7 @@ namespace Tbx
 
         void operator*=(const Matrix4x4& _other);
 
-    private:
-        T m_Data[Size * Size];
-
+        T data[Size * Size];
     };
    
 }

@@ -49,8 +49,8 @@ namespace Tbx
         Matrix3x3 Invert() const;
 
         void ExtractEulerAngleXYZ(T* _xyz);
-    private:
-        T m_Data[Size * Size];
+        
+        T data[Size * Size];
     };
 }
     

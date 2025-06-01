@@ -46,8 +46,7 @@ namespace Tbx
 
         FORCEINLINE constexpr T Determinant() const;
 
-    private:
-        T m_Data[Size * Size];
+        T data[Size * Size];
     };
 }
 
