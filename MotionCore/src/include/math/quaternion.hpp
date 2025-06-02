@@ -57,35 +57,6 @@ namespace Tbx
 			}
 		}
 
-		/*
-		static Quaternion FromEuler(const Vector4<T>& _vector4) // <Pitch, Yaw, Roll, 0>
-		{
-			constexpr Vector4<T>  Sign = { 1.0f, -1.0f, -1.0f, 1.0f };
-
-			// Half the angles
-			Vector4<T> halfAngles = {_vector4[0] * 0.5f, _vector4[1] * 0.5f, _vector4[2] * 0.5f, _vector4[3] * 0.5f};
-
-			// Calculate sine and cosine of half-angles
-			Vector4<T> sinAngles, cosAngles;
-			SinCos(halfAngles, sinAngles, cosAngles);
-
-			Vector4<T> P0 = Permute<T,TBX_PERMUTE_0X, TBX_PERMUTE_1X, TBX_PERMUTE_1X, TBX_PERMUTE_1X>(sinAngles, cosAngles);
-			Vector4<T> Y0 = Permute<T,TBX_PERMUTE_1Y, TBX_PERMUTE_0Y, TBX_PERMUTE_1Y, TBX_PERMUTE_1Y>(sinAngles, cosAngles);
-			Vector4<T> R0 = Permute<T,TBX_PERMUTE_1Z, TBX_PERMUTE_1Z, TBX_PERMUTE_0Z, TBX_PERMUTE_1Z>(sinAngles, cosAngles);
-
-			Vector4<T> P1 = Permute<T,TBX_PERMUTE_0X, TBX_PERMUTE_1X, TBX_PERMUTE_1X, TBX_PERMUTE_1X>(cosAngles, sinAngles);
-			Vector4<T> Y1 = Permute<T,TBX_PERMUTE_1Y, TBX_PERMUTE_0Y, TBX_PERMUTE_1Y, TBX_PERMUTE_1Y>(cosAngles, sinAngles);
-			Vector4<T> R1 = Permute<T,TBX_PERMUTE_1Z, TBX_PERMUTE_1Z, TBX_PERMUTE_0Z, TBX_PERMUTE_1Z>(cosAngles, sinAngles);
-
-			// Compute quaternions
-			Vector4<T> Q1 = P1 * Sign;
-			Vector4<T> Q0 = P0 * Y0;
-			Q1 = Q1 * Y1;
-			Q0 = Q0 * R0;
-			const Vector4<T> Q = (Q1 * R1)  + Q0;
-
-			return {Q.x, Q.y, Q.z, Q.w};
-		}*/
 
 		static Quaternion FromMatrix(const Matrix3x3<T>& matrix);
 

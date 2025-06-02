@@ -88,20 +88,20 @@ namespace Tbx
 	template<typename T>
 	Quaternion<T> Quaternion<T>::FromEuler(const Vec3& eulerAngle)
 	{
-		const T halfAngleX = eulerAngle.x * static_cast<T>(0.5);
-		const T halfAngleY = eulerAngle.y * static_cast<T>(0.5);
-		const T halfAngleZ = eulerAngle.z * static_cast<T>(0.5);
+		const T halfX = static_cast<T>(0.5) * eulerAngle.x;
+		const T halfY = static_cast<T>(0.5) * eulerAngle.y;
+		const T halfZ = static_cast<T>(0.5) * eulerAngle.z;
 
-		const T cX = std::cos(halfAngleX), sX = std::sin(halfAngleX);
-		const T cY = std::cos(halfAngleY), sY = std::sin(halfAngleY);
-		const T cZ = std::cos(halfAngleZ), sZ = std::sin(halfAngleZ);
+		const T cx = std::cos(halfX), sx = std::sin(halfX);
+		const T cy = std::cos(halfY), sy = std::sin(halfY);
+		const T cz = std::cos(halfZ), sz = std::sin(halfZ);
 
-		const T w = cX * cY * cZ + sX * sY * sZ;
-		const T x = sX * cY * cZ - cX * sY * sZ;
-		const T y = cX * sY * cZ + sX * cY * sZ;
-		const T z = cX * cY * sZ - sX * sY * cZ;
+		const T w = cx * cy * cz - sx * sy * sz;
+		const T x = sx * cy * cz + cx * sy * sz;
+		const T y = cx * sy * cz - sx * cy * sz;
+		const T z = cx * cy * sz + sx * sy * cz;
 
-		return Quaternion(w, Vec3(x, y, z));
+		return Quaternion<T>(w, Vec3(x, y, z)).Normalize();
 	}
 
 	template<typename T>
