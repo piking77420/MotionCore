@@ -10,8 +10,12 @@ namespace MotionCore
 		Tbx::Vector3<T> min;
 		Tbx::Vector3<T> max;
 
-		Aabb(const Tbx::Vector3<T>& _min, const Tbx::Vector3<T>& _max)
-			: min(_min), max(_max)
+		INLINE bool GetSize()
+		{
+			return GetSize(min, max);
+		}
+		
+		Aabb(const Tbx::Vector3<T>& _min, const Tbx::Vector3<T>& _max) : min(_min), max(_max)
 		{}
 
 		Aabb() = default;
@@ -24,11 +28,7 @@ namespace MotionCore
 	{
 		return (_min - _max);
 	}
-	template <typename T>
-	INLINE bool GetSize(const Aabb<T>& _aabb)
-	{
-		return GetSize(_aabb.min, _aabb.max);
-	}
+	
 
 	template <typename T>
 	INLINE bool Countain(const Tbx::Vector3<T>& _min, const Tbx::Vector3<T>& _max, const Tbx::Vector3<T>& _point)

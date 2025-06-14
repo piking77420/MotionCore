@@ -89,8 +89,6 @@ namespace Tbx
         FORCEINLINE static CONSTEVAL Vector3 UnitZ() { return Vector3(static_cast<T>(0), static_cast<T>(0), static_cast<T>(1)); }
 
         FORCEINLINE static CONSTEVAL Vector3 UnitOne() { return Vector3(static_cast<T>(1), static_cast<T>(1), static_cast<T>(1)); }
-
-        void Foo() const {};
     private:
     };
   

@@ -1,5 +1,7 @@
 
-#include <windows.h>
+#define NOMINMAX
+#include <Windows.h>
+
 #include <glad/glad.h>
 #include "glad/wgl.h"
 

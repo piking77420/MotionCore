@@ -8,20 +8,17 @@
 #include <gl/GL.h>
 
 #include "renderer.h"
-#include "data_structure/aabb_tree.hpp"
+#include "primitive/aabb.hpp"
+//#include "data_structure/aabb_tree.hpp"
 
 
 MotionCore::MotionCoreEngine m;
 
-
-
+//MotionCore::Aabb<MotionCore::numeric> d;
 
 int main()
 {
 	MotionCore::MotionCoreEngine mEngine;
-
-	mEngine.Init()
-	
 	Window w;
 	Renderer renderer;
 
