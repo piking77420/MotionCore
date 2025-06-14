@@ -1,6 +1,6 @@
 #include "window.hpp"
 
-
+Window* Window::instance = nullptr; 
 
 typedef HGLRC (APIENTRYP PFNWGLCREATECONTEXTATTRIBSARBPROC)(HDC, HGLRC, const int*);
 PFNWGLCREATECONTEXTATTRIBSARBPROC wglCreateContextAttribsARB = nullptr;
@@ -9,6 +9,8 @@ PFNWGLCREATECONTEXTATTRIBSARBPROC wglCreateContextAttribsARB = nullptr;
 
 LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
     switch (uMsg) {
+    case WM_COMMAND:
+    
     case WM_CLOSE: PostQuitMessage(0); return 0;
     case WM_DESTROY: return 0;
     default: return DefWindowProc(hwnd, uMsg, wParam, lParam);
@@ -18,6 +20,8 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
 
 Window::Window()
 {
+    instance = this;
+    
     shouldClose = false;
     width = 800;
     height = 600;

@@ -6,6 +6,8 @@
 class Window
 {
 public:
+    static Window* instance; 
+    
     Window();
     
     ~Window();
@@ -37,4 +39,5 @@ private:
     int height;
 
     bool shouldClose;
+
 };
