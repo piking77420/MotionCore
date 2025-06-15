@@ -16,6 +16,5 @@ public:
 private:
     Shader m_PrimaryShader;
 
-    // first, configure the cube's VAO (and VBO)
-    unsigned int VBO, cubeVAO;
+ 
 };
