@@ -97,7 +97,7 @@ namespace MotionCore
             }
             else
             {
-                const Aabb& objectNodeBound = m_Nodes.get()[boundedObject->nodeIndex]->bound;
+                const Aabb<numeric>& objectNodeBound = m_Nodes.get()[boundedObject->nodeIndex]->bound;
                 
                 // if objectNodeBound contain boundedObject;
                 // is ok proceed next one

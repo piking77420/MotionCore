@@ -17,6 +17,11 @@ target_link_libraries(${PROJECT_NAME} PRIVATE OpenGL::GL)
 
 target_link_libraries(${PROJECT_NAME} PRIVATE MotionCore)
 
+target_link_libraries(${PROJECT_NAME} PRIVATE 
+    $<$<CONFIG:Debug>:${CMAKE_CURRENT_LIST_DIR}/src/externals/Debug/glfw3.lib>
+    $<$<CONFIG:RelWithDebInfo>:${CMAKE_CURRENT_LIST_DIR}/src/externals/RelWithDebInfo/glfw3.lib>
+    $<$<CONFIG:Release>:${CMAKE_CURRENT_LIST_DIR}/src/externals/Release/glfw3.lib>
+)
 if (BUILD_DYNAMIC_IMAGE)
         # Avoid copy the pdb on realse
     add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
@@ -29,10 +34,6 @@ if (BUILD_DYNAMIC_IMAGE)
 endif()
 
 
-
-
-
-
 target_include_directories(${PROJECT_NAME} PUBLIC src/include)
-target_include_directories(${PROJECT_NAME} PRIVATE src/externals/include)
+target_include_directories(${PROJECT_NAME} PUBLIC src/externals/include)
 

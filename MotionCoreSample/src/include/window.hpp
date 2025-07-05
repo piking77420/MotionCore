@@ -1,21 +1,23 @@
+#pragma once
 
-#include <windows.h>
-#include <glad/glad.h>
-#include "glad/wgl.h"
+
+
 
 class Window
 {
 public:
+    static Window* instance; 
+    
     Window();
     
     ~Window();
 
+    void EnableCursor(bool value) const;
+
     void PoolEvents();
 
-    inline bool ShouldClose()
-    {
-        return shouldClose;
-    }
+    bool ShouldClose() const;
+  
 
     inline int GetWidth() const
     {
@@ -28,13 +30,14 @@ public:
     }
 
     void SwapBuffer() const;
+
+    void* GetWindowPtr() const
+    {
+        return m_WindowPtr;
+    }
 private:
-    HDC hdc;
-    HGLRC hglrc;
-    HWND hwnd;
+    int width = 0;
+    int height = 0;
 
-    int width;
-    int height;
-
-    bool shouldClose;
+    void* m_WindowPtr = nullptr;
 };
