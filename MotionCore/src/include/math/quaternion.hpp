@@ -1,6 +1,8 @@
 ﻿#pragma once
 #include <string>
 
+#include "toolbox_typedef.hpp"
+#include "toolbox_typedef.hpp"
 #include "vector3.hpp"
 
 namespace Tbx
@@ -24,7 +26,7 @@ namespace Tbx
 		~Quaternion() = default;
 
 		template<typename U>
-		operator Quaternion<U>() const;
+		explicit operator Quaternion<U>() const;
 
 		FORCEINLINE static CONSTEVAL Quaternion Identity();
 
@@ -42,7 +44,7 @@ namespace Tbx
 
 		// thanks to Vlad
 		// https://stackoverflow.com/questions/12088610/conversion-between-euler-quaternion-like-in-unity3d-engine
-		static Vec3 ToEulerAngles(const Quaternion& q);
+		static Quaternion<T>::Vec3 ToEulerAngles(const Quaternion& q);
 
 		static Quaternion FromEuler(const Vec3& eulerAngle);
 

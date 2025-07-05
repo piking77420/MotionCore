@@ -18,7 +18,7 @@ namespace Tbx
         explicit constexpr Vector3(DataType valueX, DataType valueY, DataType valueZ);
 
         template<typename U>
-        operator Vector3<U>() const;
+        explicit operator Vector3<U>() const;
 
         ~Vector3() = default;
 
@@ -90,7 +90,6 @@ namespace Tbx
 
         FORCEINLINE static CONSTEVAL Vector3 UnitOne() { return Vector3(static_cast<T>(1), static_cast<T>(1), static_cast<T>(1)); }
 
-        void Foo() const {};
     private:
     };
   

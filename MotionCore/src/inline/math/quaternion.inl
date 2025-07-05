@@ -1,4 +1,7 @@
 
+#include "math/toolbox_typedef.hpp"
+#include "math/toolbox_typedef.hpp"
+
 namespace Tbx
 {
 	template <typename T>
@@ -65,7 +68,7 @@ namespace Tbx
 	}
 
 	template<typename T>
-	Vector3<T> Quaternion<T>::ToEulerAngles(const Quaternion& q)
+	Quaternion<T>::Vec3 Quaternion<T>::ToEulerAngles(const Quaternion& q)
 	{
 		const Matrix3x3<T> m = Rotation3x3(q);
 
