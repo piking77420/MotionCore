@@ -26,11 +26,6 @@ const char* fragmentShader =
 "    FragColor = color;\n"
 "}\n";
 
-
-// first, configure the cube's VAO (and VBO)
-unsigned int VBO = 0;
-unsigned int  cubeVAO = 0;
-
 Renderer::Renderer()
 {
     gladLoadGL();
@@ -52,7 +47,27 @@ Renderer::Renderer()
     }
       
     m_PrimaryShader = Shader(vertexShader, fragmentShader, true);
-     // set up vertex data (and buffer(s)) and configure vertex attributes
+   
+ 
+}
+
+void Renderer::Draw(const Camera& camera)
+{
+   // Active le shader
+   m_PrimaryShader.Use();
+
+   // Envoie les uniforms
+   m_PrimaryShader.SetVec4("color", 1.f, 1.f, 1.f, 1.f);
+   m_PrimaryShader.SetMat4("view", camera.GetViewMatrix());
+   m_PrimaryShader.SetMat4("projection", camera.GetProjectionMatrix());
+   m_PrimaryShader.SetMat4("model", Tbx::Matrix4x4f::Identity());
+
+   
+}
+
+void Renderer::InitCubeMesh()
+{
+   // set up vertex data (and buffer(s)) and configure vertex attributes
     // ------------------------------------------------------------------
     float vertices[] = {
         -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
@@ -99,14 +114,14 @@ Renderer::Renderer()
     };
  
   // Génère VAO et VBO
-  glGenVertexArrays(1, &cubeVAO);
-  glGenBuffers(1, &VBO);
+  glGenVertexArrays(1, &m_CubeMesh.VAO);
+  glGenBuffers(1, &m_CubeMesh.VBO);
 
   // 1. Bind VAO en premier
-  glBindVertexArray(cubeVAO);
+  glBindVertexArray(m_CubeMesh.VAO);
 
   // 2. Bind le VBO (dans le contexte du VAO)
-  glBindBuffer(GL_ARRAY_BUFFER, VBO);
+  glBindBuffer(GL_ARRAY_BUFFER, m_CubeMesh.VBO);
   glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
   // Attribut position
@@ -119,22 +134,19 @@ Renderer::Renderer()
 
  glBindVertexArray(0);
  glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+  m_CubeMesh.triangleVerticies = sizeof(vertices) / (sizeof(Tbx::Vector3f) * 2);
+}
+
+void Renderer::InitSphereMesh()
+{
  
 }
 
-void Renderer::Draw(const Camera& camera)
+void Renderer::DrawMesh(const Mesh& mesh)
 {
-   // Active le shader
-   m_PrimaryShader.Use();
-
-   // Envoie les uniforms
-   m_PrimaryShader.SetVec4("color", 1.f, 1.f, 1.f, 1.f);
-   m_PrimaryShader.SetMat4("view", camera.GetViewMatrix());
-   m_PrimaryShader.SetMat4("projection", camera.GetProjectionMatrix());
-   m_PrimaryShader.SetMat4("model", Tbx::Matrix4x4f::Identity());
-
-   // Dessine le cube
-   glBindVertexArray(cubeVAO);          // Assure-toi que cubeVAO est accessible ici
-   glDrawArrays(GL_TRIANGLES, 0, 36);   // 36 sommets pour un cube complet
-   glBindVertexArray(0);                // Débind pour éviter des erreurs ailleurs
+  // Dessine le cube
+  glBindVertexArray(mesh.VAO);         
+  glDrawArrays(GL_TRIANGLES, 0, mesh.triangleVerticies);   
+  glBindVertexArray(0);           
 }
