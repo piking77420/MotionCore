@@ -22,6 +22,8 @@ file(GLOB_RECURSE HEADER_FILES *.h *.hpp)
 add_executable(${PROJECT_NAME} ${SOURCE_FILES} ${HEADER_FILES})
 
 target_link_libraries(${PROJECT_NAME} PRIVATE MotionCore)
+target_link_libraries(${PROJECT_NAME} PRIVATE MotionCoreSIMD)
+
 if (BUILD_DYNAMIC_IMAGE)
 
     add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD

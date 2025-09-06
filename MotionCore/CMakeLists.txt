@@ -13,13 +13,8 @@ endif()
 
 string(TOLOWER "${CMAKE_SYSTEM_PROCESSOR}" SYSTEM_PROCESSOR_LOWER)
 
-# If user doesn't define intruction set this to auto 
-# note: auto will enable all posible intruction set available  
-if(NOT DEFINED MOTION_CORE_SIMD_INSTRUCTION_SET)
-    set(MOTION_CORE_SIMD_INSTRUCTION_SET "AUTO" CACHE STRING
-        "Target SIMD instruction set (AUTO)")
-endif()
 
+## BEGIN SIMD
 ## Enumurate SIMD intruction set from architecture 
 if(SYSTEM_PROCESSOR_LOWER MATCHES "^(x86_64|amd64)$")
     set(SUPPORTED_SIMD "SSE2;AVX;AVX2")
@@ -34,12 +29,8 @@ else()
     message(FATAL_ERROR "Unsupported target architecture: ${CMAKE_SYSTEM_PROCESSOR}")
 endif()
 
-if (MOTION_CORE_SIMD_INSTRUCTION_SET STREQUAL "AUTO")
-     ## if user doesn't define intruction set enable all
-    set(MOTION_CORE_SIMD_INSTRUCTION_SET "${SUPPORTED_SIMD}")
 
-elseif(NOT MOTION_CORE_SIMD_INSTRUCTION_SET STREQUAL "AUTO"
-   AND NOT MOTION_CORE_SIMD_INSTRUCTION_SET STREQUAL "NONE")
+if(NOT MOTION_CORE_SIMD_INSTRUCTION_SET STREQUAL "NONE")
     ## Check if user defined simd is supported if not fatal exit   
     list(FIND SUPPORTED_SIMD "${MOTION_CORE_SIMD_INSTRUCTION_SET}" SIMD_INDEX)
     if(SIMD_INDEX EQUAL -1)
@@ -100,7 +91,8 @@ endif()
 
 message(STATUS "Selected SIMD instruction set: ${MOTION_CORE_SIMD_INSTRUCTION_SET}")
 
- 
+##END SIMD 
+
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
