@@ -16,6 +16,7 @@ find_package(OpenGL REQUIRED)
 target_link_libraries(${PROJECT_NAME} PRIVATE OpenGL::GL)
 
 target_link_libraries(${PROJECT_NAME} PRIVATE MotionCore)
+target_link_libraries(${PROJECT_NAME} PRIVATE MotionCoreSIMD)
 
 target_link_libraries(${PROJECT_NAME} PRIVATE 
     $<$<CONFIG:Debug>:${CMAKE_CURRENT_LIST_DIR}/src/externals/Debug/glfw3.lib>

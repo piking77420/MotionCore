@@ -1,12 +1,106 @@
 cmake_minimum_required(VERSION 3.26)
 
+
+
+
 project(MotionCore VERSION 0.1.0 LANGUAGES C CXX)
+add_library(MotionCoreSIMD INTERFACE)
 
 # Enable parallel compilation for MSVC
 if(MSVC)
     add_compile_options(/MP)
 endif()
 
+string(TOLOWER "${CMAKE_SYSTEM_PROCESSOR}" SYSTEM_PROCESSOR_LOWER)
+
+# If user doesn't define intruction set this to auto 
+# note: auto will enable all posible intruction set available  
+if(NOT DEFINED MOTION_CORE_SIMD_INSTRUCTION_SET)
+    set(MOTION_CORE_SIMD_INSTRUCTION_SET "AUTO" CACHE STRING
+        "Target SIMD instruction set (AUTO)")
+endif()
+
+## Enumurate SIMD intruction set from architecture 
+if(SYSTEM_PROCESSOR_LOWER MATCHES "^(x86_64|amd64)$")
+    set(SUPPORTED_SIMD "SSE2;AVX;AVX2")
+    message(STATUS "Target architecture: x86_64")
+elseif(SYSTEM_PROCESSOR_LOWER MATCHES "^i[3-6]86$")
+    set(SUPPORTED_SIMD "SSE2;AVX;AVX2")
+    message(STATUS "Target architecture: 32-bit x86")
+elseif(SYSTEM_PROCESSOR_LOWER MATCHES "^(arm|aarch64|arm64)$")
+    set(SUPPORTED_SIMD "NEON;SVE")
+    message(STATUS "Target architecture: ARM/ARM64")
+else()
+    message(FATAL_ERROR "Unsupported target architecture: ${CMAKE_SYSTEM_PROCESSOR}")
+endif()
+
+if (MOTION_CORE_SIMD_INSTRUCTION_SET STREQUAL "AUTO")
+     ## if user doesn't define intruction set enable all
+    set(MOTION_CORE_SIMD_INSTRUCTION_SET "${SUPPORTED_SIMD}")
+
+elseif(NOT MOTION_CORE_SIMD_INSTRUCTION_SET STREQUAL "AUTO"
+   AND NOT MOTION_CORE_SIMD_INSTRUCTION_SET STREQUAL "NONE")
+    ## Check if user defined simd is supported if not fatal exit   
+    list(FIND SUPPORTED_SIMD "${MOTION_CORE_SIMD_INSTRUCTION_SET}" SIMD_INDEX)
+    if(SIMD_INDEX EQUAL -1)
+        message(FATAL_ERROR
+            "SIMD option '${MOTION_CORE_SIMD_INSTRUCTION_SET}' is not supported on this architecture. Supported options: ${SUPPORTED_SIMD}")
+    endif()
+endif()
+
+if("SSE2" IN_LIST MOTION_CORE_SIMD_INSTRUCTION_SET)
+    target_compile_definitions(MotionCoreSIMD INTERFACE MOTION_CORE_SIMD_SSE2)
+    if(MSVC)
+        if(NOT CMAKE_SIZEOF_VOID_P EQUAL 8) # 32-bit MSVC needs /arch:SSE2
+            add_compile_options("/arch:SSE2")
+        endif()
+    else()
+        add_compile_options(-msse2)
+    endif()
+endif()
+
+if("AVX" IN_LIST MOTION_CORE_SIMD_INSTRUCTION_SET)
+    target_compile_definitions(MotionCoreSIMD INTERFACE MOTION_CORE_SIMD_AVX)
+
+    if(MSVC)
+        add_compile_options("/arch:AVX")
+    else()
+        add_compile_options(-mavx)
+    endif()
+endif()
+
+if("AVX2" IN_LIST MOTION_CORE_SIMD_INSTRUCTION_SET)
+    target_compile_definitions(MotionCoreSIMD INTERFACE MOTION_CORE_SIMD_AVX2)
+
+    if(MSVC)
+        add_compile_options("/arch:AVX2")
+    else()
+        add_compile_options(-mavx2)
+    endif()
+endif()
+
+if("NEON" IN_LIST MOTION_CORE_SIMD_INSTRUCTION_SET)
+    target_compile_definitions(MotionCoreSIMD INTERFACE MOTION_CORE_SIMD_NEON)
+
+    if(NOT MSVC) # GCC/Clang only
+        add_compile_options(-mfpu=neon)
+    endif()
+endif()
+
+if("SVE" IN_LIST MOTION_CORE_SIMD_INSTRUCTION_SET)
+    target_compile_definitions(MotionCoreSIMD INTERFACE MOTION_CORE_SIMD_SVE)
+    if(NOT MSVC)
+        add_compile_options(-march=armv8.2-a+sve)
+    endif()
+endif()
+
+if("NONE" IN_LIST MOTION_CORE_SIMD_INSTRUCTION_SET)
+    message(STATUS "SIMD disabled")
+endif()
+
+message(STATUS "Selected SIMD instruction set: ${MOTION_CORE_SIMD_INSTRUCTION_SET}")
+
+ 
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)

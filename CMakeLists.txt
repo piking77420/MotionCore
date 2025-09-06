@@ -4,14 +4,6 @@ set(BUILD_DYNAMIC_IMAGE OFF)
 set(BUILD_SAMPLE ON)
 set(BUILD_UNIT_TEST ON)
 
-if(MSVC)
-    if(CMAKE_GENERATOR_PLATFORM STREQUAL "x64")
-        message(STATUS "Building for x64 architecture.")
-    else()
-        message(FATAL_ERROR "This project requires x64 architecture.")
-    endif()
-endif()
-
 project(MotionCore VERSION 0.1.0 LANGUAGES C CXX)
 
 if(MSVC)
