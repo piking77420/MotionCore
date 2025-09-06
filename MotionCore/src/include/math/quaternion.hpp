@@ -2,7 +2,6 @@
 #include <string>
 
 #include "toolbox_typedef.hpp"
-#include "toolbox_typedef.hpp"
 #include "vector3.hpp"
 
 namespace Tbx
