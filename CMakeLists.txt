@@ -11,9 +11,6 @@ if(MSVC)
 endif()
 
 add_subdirectory(MotionCore)
-if (BUILD_SAMPLE)
-    add_subdirectory(MotionCoreSample)
-endif()
 
 if (BUILD_UNIT_TEST)
     add_subdirectory(UnitTest)
