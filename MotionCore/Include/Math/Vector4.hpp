@@ -54,13 +54,13 @@ namespace Tbx
 
         constexpr FORCEINLINE void operator/= (const Vector4& _other) noexcept;
 
-        constexpr Vector4 operator+(DataType value);
+        constexpr Vector4 operator+(DataType value) const;
 
-        constexpr Vector4 operator-(DataType value);
+        constexpr Vector4 operator-(DataType value) const;
 
-        constexpr Vector4 operator*(DataType value);
+        constexpr Vector4 operator*(DataType value) const;
 
-        constexpr Vector4 operator/(DataType value);
+        constexpr Vector4 operator/(DataType value) const;
 
         constexpr Vector4& operator+=(DataType value);
 
