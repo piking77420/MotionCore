@@ -37,14 +37,15 @@ namespace Tbx
 
         FORCEINLINE constexpr static DataType Distance(const Vector4& _a, const Vector4& _b);
 
-        constexpr Vector4 operator-();
-        constexpr Vector4 operator+(const Vector4& _other);
+        constexpr Vector4 operator-() const;
 
-        constexpr Vector4 operator-(const Vector4& _other);
+        constexpr Vector4 operator+(const Vector4& _other) const;
 
-        constexpr Vector4 operator*(const Vector4& _other);
+        constexpr Vector4 operator-(const Vector4& _other) const;
 
-        constexpr Vector4 operator/(const Vector4& _other);
+        constexpr Vector4 operator*(const Vector4& _other) const;
+
+        constexpr Vector4 operator/(const Vector4& _other) const;
 
         constexpr FORCEINLINE void operator+= (const Vector4& _other) noexcept;
 
