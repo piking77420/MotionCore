@@ -69,31 +69,31 @@ namespace Tbx
     }
 
     template <typename T>
-    constexpr Vector4<T> Vector4<T>::operator-()
+    constexpr Vector4<T> Vector4<T>::operator-() const
     {
         return Vector4<T>(-x, -y, -z, -w);
     }
 
     template <typename T>
-     constexpr Vector4<T> Vector4<T>::operator+(const Vector4<T>& _other)
+     constexpr Vector4<T> Vector4<T>::operator+(const Vector4<T>& _other) const
     {
         return Vector4<T>(x + _other.x, y + _other.y, z + _other.z, w + _other.w);
     }
 
     template <typename T>
-    constexpr Vector4<T> Vector4<T>::operator-(const Vector4<T>& _other)
+    constexpr Vector4<T> Vector4<T>::operator-(const Vector4<T>& _other) const
     {
         return Vector4<T>(x - _other.x, y - _other.y, z - _other.z, w - _other.w);
     }
 
     template <typename T>
-    constexpr Vector4<T> Vector4<T>::operator*(const Vector4<T>& _other)
+    constexpr Vector4<T> Vector4<T>::operator*(const Vector4<T>& _other) const
     {
         return Vector4<T>(x * _other.x, y * _other.y, z * _other.z, w * _other.w);
     }
 
     template <typename T>
-    constexpr Vector4<T> Vector4<T>::operator/(const Vector4<T>& _other)
+    constexpr Vector4<T> Vector4<T>::operator/(const Vector4<T>& _other) const
     {
         return Vector4(x / _other.x, y / _other.y, z / _other.z, w / _other.w);
     }
