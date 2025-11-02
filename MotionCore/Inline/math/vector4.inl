@@ -34,7 +34,7 @@ namespace Tbx
         const T mag = Magnitude();
 
         if (IsEqual<T>(mag, static_cast<T>(1)))
-            return this;
+            return *this;
 
         const T InvMagnitude = static_cast<T>(1) / mag;
 
@@ -135,25 +135,25 @@ namespace Tbx
     }
 
     template <typename T>
-    constexpr Vector4<T> Vector4<T>::operator+(DataType value)
+    constexpr Vector4<T> Vector4<T>::operator+(DataType value) const
     {
         return Vector4(x + value, y + value, z + value, w + value);
     }
 
     template <typename T>
-    constexpr Vector4<T> Vector4<T>::operator-(DataType value)
+    constexpr Vector4<T> Vector4<T>::operator-(DataType value) const
     {
         return Vector4<T>(x - value, y - value, z - value, w - value);
     }
 
     template <typename T>
-    constexpr Vector4<T> Vector4<T>::operator*(DataType value)
+    constexpr Vector4<T> Vector4<T>::operator*(DataType value) const
     {
         return Vector4<T>(x * value, y * value, z * value, w * value);
     }
 
     template <typename T>
-    constexpr Vector4<T> Vector4<T>::operator/(DataType value)
+    constexpr Vector4<T> Vector4<T>::operator/(DataType value) const
     {
         return Vector4<T>(x / value, y / value, z / value, w / value);
     }
