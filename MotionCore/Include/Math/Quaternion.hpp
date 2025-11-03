@@ -112,4 +112,4 @@ namespace Tbx
 	
 }
 
-#include "math/quaternion.inl"
+#include "Math/Quaternion.inl"

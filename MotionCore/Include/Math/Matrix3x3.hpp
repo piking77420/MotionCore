@@ -56,4 +56,4 @@ namespace Tbx
 }
     
 
-#include "math/matrix3x3.inl"
+#include "Math/Matrix3x3.inl"

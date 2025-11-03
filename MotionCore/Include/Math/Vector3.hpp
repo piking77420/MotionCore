@@ -95,4 +95,4 @@ namespace Tbx
   
 }
 
-#include "math/vector3.inl"
+#include "Math/Vector3.inl"

@@ -93,4 +93,4 @@ namespace Tbx
    
 }
 
-#include "math/vector2.inl"
+#include "Math/Vector2.inl"

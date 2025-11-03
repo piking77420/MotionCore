@@ -1,5 +1,4 @@
 #pragma once
-
 #include "Math/ToolBoxTypeDef.hpp"
 
 namespace MotionCore

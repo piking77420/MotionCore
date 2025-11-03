@@ -51,4 +51,4 @@ namespace Tbx
     };
 }
 
-#include "math/matrix2x2.inl"
+#include "Math/Matrix2x2.inl"

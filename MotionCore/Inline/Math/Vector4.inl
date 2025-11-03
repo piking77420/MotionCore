@@ -38,7 +38,7 @@ namespace Tbx
 
         const T InvMagnitude = static_cast<T>(1) / mag;
 
-        return { x * InvMagnitude, y * InvMagnitude, z * InvMagnitude, w * InvMagnitude };
+        return Vector4<T>(x * InvMagnitude, y * InvMagnitude, z * InvMagnitude, w * InvMagnitude);
     }
 
     template <typename T>

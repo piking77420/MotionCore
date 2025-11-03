@@ -82,4 +82,4 @@ namespace Tbx
 	Vector4<T> operator*(const Matrix4x4<T>& RESTRICT _m, const Vector4<T>& RESTRICT _vec);
 }
 
-#include "math/matrix_transformation.inl"
+#include "Math/MatrixTransformation.inl"
