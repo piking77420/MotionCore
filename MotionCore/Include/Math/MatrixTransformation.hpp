@@ -80,6 +80,44 @@ namespace Tbx
 
 	template<typename T>
 	Vector4<T> operator*(const Matrix4x4<T>& RESTRICT _m, const Vector4<T>& RESTRICT _vec);
+
+	template<typename T>
+	Matrix4x4<T> ToMatrix4x4(const Matrix3x3<T>& _M3)
+	{
+		Matrix4x4<T> m4;
+
+		m4[0] = _M3[0];
+		m4[1] = _M3[1];
+		m4[2] = _M3[2];
+		m4[3] = static_cast<T>(0);
+
+		m4[4] = _M3[3];
+		m4[5] = _M3[4];
+		m4[6] = _M3[5];
+		m4[7] = static_cast<T>(0);
+
+		m4[8] = _M3[6];
+		m4[9] = _M3[7];
+		m4[10] = _M3[8];
+		m4[11] = static_cast<T>(0);
+
+		m4[12] = static_cast<T>(0);
+		m4[13] = static_cast<T>(0);
+		m4[14] = static_cast<T>(0);
+		m4[15] = static_cast<T>(0);
+
+		return m4;
+	}
+
+	template<typename T>
+	Matrix3x3<T> ToMatrix3x3(const Matrix4x4<T>& _M4)
+	{
+		return Matrix3x3<T>(
+			Tbx::Vector3<T>(_M4[0], _M4[1], _M4[2]),
+			Tbx::Vector3<T>(_M4[4], _M4[5], _M4[6]),
+			Tbx::Vector3<T>(_M4[8], _M4[9], _M4[10]));
+	}
+
 }
 
 #include "Math/MatrixTransformation.inl"
