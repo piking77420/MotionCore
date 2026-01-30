@@ -46,7 +46,7 @@ namespace MotionCore
     };
 
 }
-
+/*
 #define OVERLOAD_MEMORY_OPERATOR(T)
         MOTION_CORE_API inline void* operator new(size_t size)\
         {\
@@ -56,4 +56,4 @@ namespace MotionCore
         {\
             MotionCore::MotionCoreAllocator::Deallocate(_ptr);\
         }\
-        
+     */   

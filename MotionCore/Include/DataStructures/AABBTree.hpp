@@ -38,7 +38,7 @@ namespace MotionCore
 
         void ForEachNode(NodeFuncIteration nodeFuncIteration);
 
-        OVERLOAD_MEMORY_OPERATOR(AABBTree);
+        //OVERLOAD_MEMORY_OPERATOR(AABBTree);
 
         AABBTree();
 
@@ -52,7 +52,7 @@ namespace MotionCore
             NodeIndex right;
             Aabb<numeric> bound;
            
-            OVERLOAD_MEMORY_OPERATOR(Node)
+            //OVERLOAD_MEMORY_OPERATOR(Node)
         };
 
         NodeIndex FoundAvailableNode();
