@@ -1,5 +1,6 @@
 #pragma once
 
+#include <algorithm>
 #include "Math/ToolboxTypedef.hpp"
 
 namespace Tbx
@@ -232,87 +233,90 @@ namespace Tbx
 	{
 		T cosOmega = Dot(q1, q2);
 
-		bool flip = false;
-
-		if (cosOmega < -Epsilon<T>())
-		{
-			flip = true;
-			cosOmega = -cosOmega;
-		}
-
-		T s1, s2;
-
-		if (cosOmega > (static_cast<T>(1.0f) - Epsilon<T>()))
-		{
-			// Too close, do straight linear interpolation.
-			s1 = 1.0f - t;
-			s2 = (flip) ? -t : t;
-		}
-		else
-		{
-			T omega = std::cos(cosOmega);
-			T invSinOmega = 1.f / std::sin(omega);
-
-			s1 = std::sin((1.0f - t) * omega) * invSinOmega;
-			s2 = (flip)
-				? -std::sin(t * omega) * invSinOmega
-				: std::sin(t * omega) * invSinOmega;
-		}
-
-		Quaternion ans;
-		ans.imaginary.x = s1 * q1.imaginary.x + s2 * q2.imaginary.x;
-		ans.imaginary.y = s1 * q1.imaginary.y + s2 * q2.imaginary.y;
-		ans.imaginary.z = s1 * q1.imaginary.z + s2 * q2.imaginary.z;
-		ans.real = s1 * q1.real + s2 * q2.real;
-
-		return ans.Normalize();
-	}
-
-	template <typename T>
-	template<typename U>
-	FORCEINLINE Quaternion<T> Quaternion<T>::Nlerp(const Quaternion& q1, const Quaternion& q2, U t)
-	{
-		T cosOmega = Dot(q1, q2);
-
-		bool flip = false;
-
-		// If the dot product is negative, flip the sign of q2 to take the shortest path
+		// Take shortest path
 		if (cosOmega < static_cast<T>(0))
 		{
-			flip = true;
+			q2 = -q2;
 			cosOmega = -cosOmega;
 		}
 
+		cosOmega = std::clamp(cosOmega,
+			static_cast<T>(-1),
+			static_cast<T>(1));
+
 		T s1, s2;
 
-		// If the quaternions are very close, use linear interpolation directly
-		if (cosOmega > (static_cast<T>(1.0f) - Epsilon<T>()))
+		if (cosOmega > static_cast<T>(0.9995))
 		{
-			s1 = static_cast<T>(1.0f) - t;
-			s2 = flip ? -t : t;
+			s1 = static_cast<T>(1) - static_cast<T>(t);
+			s2 = static_cast<T>(t);
 		}
 		else
 		{
-			// Otherwise, perform a standard linear interpolation between q1 and q2
-			T omega = std::acos(cosOmega);  // Angle between the quaternions
-			T invSinOmega = static_cast<T>(1.0f) / std::sin(omega);  // Inverse of sine of omega
+			T omega = std::acos(cosOmega);
+			T sinOmega = std::sin(omega);
 
-			s1 = std::sin((static_cast<T>(1.0f) - t) * omega) * invSinOmega;
-			s2 = flip ? -std::sin(t * omega) * invSinOmega : std::sin(t * omega) * invSinOmega;
+			if (std::abs(sinOmega) < Epsilon<T>())
+			{
+				s1 = static_cast<T>(1) - static_cast<T>(t);
+				s2 = static_cast<T>(t);
+			}
+			else
+			{
+				T invSinOmega = static_cast<T>(1) / sinOmega;
+				s1 = std::sin((static_cast<T>(1) - static_cast<T>(t)) * omega) * invSinOmega;
+				s2 = std::sin(static_cast<T>(t) * omega) * invSinOmega;
+			}
 		}
 
-		// Perform the interpolation and construct the resulting quaternion
 		Quaternion<T> result;
 		result.real = s1 * q1.real + s2 * q2.real;
 		result.imaginary.x = s1 * q1.imaginary.x + s2 * q2.imaginary.x;
 		result.imaginary.y = s1 * q1.imaginary.y + s2 * q2.imaginary.y;
 		result.imaginary.z = s1 * q1.imaginary.z + s2 * q2.imaginary.z;
 
-		// Normalize the result to ensure it's a unit quaternion
 		return result.Normalize();
 	}
 	
 
+	template <typename T>
+	template<typename U>
+	FORCEINLINE Quaternion<T> Quaternion<T>::Nlerp(const Quaternion& q1, const Quaternion& q2, U t)
+	{
+		Quaternion q2b = q2;
+
+		T tt = std::clamp(static_cast<T>(t),
+			static_cast<T>(0),
+			static_cast<T>(1));
+
+		if (Dot(q1, q2b) < static_cast<T>(0))
+			q2b = -q2b;
+
+		Quaternion<T> result;
+		result.real = q1.real * (static_cast<T>(1) - tt) + q2b.real * tt;
+
+		result.imaginary.x = q1.imaginary.x * (static_cast<T>(1) - tt) + q2b.imaginary.x * tt;
+
+		result.imaginary.y = q1.imaginary.y * (static_cast<T>(1) - tt) + q2b.imaginary.y * tt;
+
+		result.imaginary.z = q1.imaginary.z * (static_cast<T>(1) - tt) + q2b.imaginary.z * tt;
+
+		return result.Normalize();
+	}
+	
+	template <typename T>
+	FORCEINLINE Quaternion<T> Quaternion<T>::operator-() const
+	{
+		return Quaternion<T>(
+			-real,
+			Tbx::Vector3<T>(
+				-imaginary.x,
+				-imaginary.y,
+				-imaginary.z
+			)
+		);
+	}
+	
 	template <typename T>
 	FORCEINLINE Quaternion<T> Quaternion<T>::operator+(const Quaternion& _other)
 	{
@@ -347,7 +351,7 @@ namespace Tbx
 	FORCEINLINE Vector3<T> Quaternion<T>::operator*(const Vec3& _vec) const
 	{
 		Quaternion vecQuat(static_cast<T>(0), _vec.x, _vec.y, _vec.z);
-		Quaternion resQuat = Conjugate() * vecQuat * (*this);
+		Quaternion resQuat = (*this) *  vecQuat * Conjugate();
 		return resQuat.imaginary;
 	}
 

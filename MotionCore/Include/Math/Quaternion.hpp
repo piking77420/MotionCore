@@ -70,7 +70,9 @@ namespace Tbx
 		
 		template<typename U>
 		static FORCEINLINE Quaternion Nlerp(const Quaternion& q1, const Quaternion& q2, U t);
-		
+
+		FORCEINLINE Quaternion operator-() const;
+
 		FORCEINLINE Quaternion operator+(const Quaternion& _other);
 
 		FORCEINLINE Quaternion operator-(const Quaternion& _other);
