@@ -80,8 +80,8 @@ endif()
 
 
 
-find_package(OpenCL REQUIRED)
-target_link_libraries(${PROJECT_NAME} PRIVATE OpenCL::OpenCL)
+##find_package(OpenCL REQUIRED)
+##target_link_libraries(${PROJECT_NAME} PRIVATE OpenCL::OpenCL)
 
 target_include_directories(${PROJECT_NAME}
     PUBLIC

@@ -6,7 +6,7 @@
 #include <cstdio>
 #include <cstdlib>
 
-
+/*
 #define CL_TARGET_OPENCL_VERSION 300
 #include <CL/cl.h>
 #include <iostream>
@@ -30,9 +30,10 @@ __kernel void hello(__global char* out) {
     out[12] = '!';
     out[13] = '\0';
 }
-)CLC";
+)CLC";*/
 void MotionCore::MotionCoreEngine::InitExternalDevice()
 {
+    /*
     // 1. Get platform
     cl_platform_id platform;
     clGetPlatformIDs(1, &platform, nullptr);
@@ -75,7 +76,7 @@ void MotionCore::MotionCoreEngine::InitExternalDevice()
     clReleaseKernel(kernel);
     clReleaseProgram(program);
     clReleaseCommandQueue(queue);
-    clReleaseContext(context);
+    clReleaseContext(context);*/
 }
 
 
