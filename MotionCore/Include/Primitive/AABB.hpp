@@ -72,7 +72,7 @@ namespace MotionCore
 	}
 
 	template <typename T>
-	INLINE void Encapsulate(Aabb<T>* _aabb1, Aabb<T>* _aabb2)
+	INLINE void Encapsulate(Aabb<T>* _aabb1, const Aabb<T>* _aabb2)
 	{
 		// TO DO SIMD
 		if (_aabb2->min.x < _aabb1->min.x) _aabb1->min.x = _aabb2->min.x;
