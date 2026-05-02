@@ -139,7 +139,7 @@ namespace Tbx
     template<typename T>
     inline Matrix4x4<T> Matrix4x4<T>::operator*(const Matrix4x4& RESTRICT _other) const
     {
-        const T m00 = data[0] * _other[0] + data[4] * _other[1] + data[8] * _other[2] + data[8] * _other[3];
+        const T m00 = data[0] * _other[0] + data[4] * _other[1] + data[8] * _other[2] + data[12] * _other[3];
         const T m01 = data[1] * _other[0] + data[5] * _other[1] + data[9] * _other[2] + data[13] * _other[3];
         const T m02 = data[2] * _other[0] + data[6] * _other[1] + data[10] * _other[2] + data[14] * _other[3];
         const T m03 = data[3] * _other[0] + data[7] * _other[1] + data[11] * _other[2] + data[15] * _other[3];
