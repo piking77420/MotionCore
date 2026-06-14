@@ -318,6 +318,4 @@ namespace Tbx
         return !(*this == _other);
     }
 
-
-   
 }
