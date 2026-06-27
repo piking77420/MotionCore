@@ -2,6 +2,23 @@
 
 namespace Tbx
 {
+    template <typename T>
+    template <typename U>
+    Matrix3x3<T>::Matrix3x3(const Matrix3x3<U>& _other)
+    {
+        data[0] = static_cast<const T>(_other[0]);
+        data[1] = static_cast<const T>(_other[1]);
+        data[2] = static_cast<const T>(_other[2]);
+
+        data[3] = static_cast<const T>(_other[3]);
+        data[4] = static_cast<const T>(_other[4]);
+        data[5] = static_cast<const T>(_other[5]);
+
+        data[6] = static_cast<const T>(_other[6]);
+        data[7] = static_cast<const T>(_other[7]);
+        data[8] = static_cast<const T>(_other[8]);
+    }
+
     template<typename T>
     constexpr Matrix3x3<T>::Matrix3x3(T m00, T m10, T m20,
         T m01, T m11, T m21,

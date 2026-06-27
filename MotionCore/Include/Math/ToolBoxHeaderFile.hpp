@@ -81,7 +81,7 @@ namespace Tbx
 
     template<>
     CONSTEVAL double IsEqualValue<double>() {
-        return static_cast<double>(1e-7);
+        return static_cast<double>(1e-12);
     }
 
 

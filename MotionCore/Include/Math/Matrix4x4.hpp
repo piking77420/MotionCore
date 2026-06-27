@@ -16,7 +16,7 @@ namespace Tbx
         ~Matrix4x4() = default;
 
         template <typename U>
-        Matrix4x4(const Matrix4x4<U>& other);
+        explicit Matrix4x4(const Matrix4x4<U>& other);
         
         constexpr Matrix4x4(DataType _m00, DataType _m10, DataType _m20, DataType _m30,
             DataType _m01, DataType _m11, DataType _m21, DataType _m31,
