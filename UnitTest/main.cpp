@@ -1,7 +1,6 @@
 #include <gtest/gtest.h>
 
-#include "math/toolbox_typedef.hpp"
-#include "core/motion_core_engine.hpp"
+#include <Math/MatrixTransformation.hpp>
 
 using namespace Tbx;
 
