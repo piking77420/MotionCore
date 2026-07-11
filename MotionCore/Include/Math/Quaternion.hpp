@@ -22,6 +22,12 @@ namespace Tbx
 
 		explicit constexpr Quaternion(const DataType _real, const DataType _x, const DataType _y, const DataType _z);
 
+		Quaternion(Quaternion&& _q) = default;
+
+		Quaternion(const Quaternion& _q) = default;
+
+		Quaternion& operator=(const Quaternion& _q) = default;
+
 		~Quaternion() = default;
 
 		template<typename U>

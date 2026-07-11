@@ -232,11 +232,12 @@ namespace Tbx
 	FORCEINLINE Quaternion<T> Quaternion<T>::Slerp(const Quaternion& q1, const Quaternion& q2, U t)
 	{
 		T cosOmega = Dot(q1, q2);
+		Quaternion q2p = q2;
 
 		// Take shortest path
 		if (cosOmega < static_cast<T>(0))
 		{
-			q2 = -q2;
+			q2p = -q2p;
 			cosOmega = -cosOmega;
 		}
 
@@ -270,10 +271,10 @@ namespace Tbx
 		}
 
 		Quaternion<T> result;
-		result.real = s1 * q1.real + s2 * q2.real;
-		result.imaginary.x = s1 * q1.imaginary.x + s2 * q2.imaginary.x;
-		result.imaginary.y = s1 * q1.imaginary.y + s2 * q2.imaginary.y;
-		result.imaginary.z = s1 * q1.imaginary.z + s2 * q2.imaginary.z;
+		result.real = s1 * q1.real + s2 * q2p.real;
+		result.imaginary.x = s1 * q1.imaginary.x + s2 * q2p.imaginary.x;
+		result.imaginary.y = s1 * q1.imaginary.y + s2 * q2p.imaginary.y;
+		result.imaginary.z = s1 * q1.imaginary.z + s2 * q2p.imaginary.z;
 
 		return result.Normalize();
 	}
