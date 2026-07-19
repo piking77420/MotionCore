@@ -17,9 +17,9 @@ namespace MotionCore
         {
             #ifdef _MSC_VER
             return _aligned_malloc(_size, _alignement);
-            #elif
-            return std::aligned_alloc(_size, _alignement));
-            #endif _MSC_VER
+            #else
+            return std::aligned_alloc(_size, _alignement);
+            #endif
     
         }
 
@@ -27,8 +27,8 @@ namespace MotionCore
         {
             #ifdef _MSC_VER
             _aligned_free(_ptr);
-            #elif
-            std::free(_ptr)
+            #else
+            std::free(_ptr);
             #endif
         }
 

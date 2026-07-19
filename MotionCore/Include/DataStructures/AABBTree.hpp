@@ -8,7 +8,7 @@
 
 #include "MotionCoreHeader.h"
 #include "Core/MotionCoreAllocator.hpp"
-#include "Primitive/Aabb.hpp"
+#include <Primitive/AABB.hpp>
 
 namespace MotionCore
 {
@@ -72,43 +72,7 @@ namespace MotionCore
     template <size_t _NodeCount>
     void AABBTree<_NodeCount>::UpdateObjects(ObjectBounded* _objectBoundedArray, size_t _objectBoundedArraySize)
     {
-        assert(_objectBoundedArraySize < _NodeCount && "_objectBoundedArraySize is greater than nodeCount");
-
-        // heuristic insert array
-
-        // init random once
-        static std::mt19937 randomGenerator;
-                
-        // fill the array of index
-        std::iota(randomeIndiciesArray, randomeIndiciesArray.begin() + _objectBoundedArraySize, 0);
-        // shuffle the array of indicies
-        std::shuffle(randomeIndiciesArray, randomeIndiciesArray.begin() + _objectBoundedArraySize, randomGenerator);
-
-        // insert all the object
-        for (size_t i = 0; i < _objectBoundedArraySize; i++)
-        {
-            uint32_t randomIndex = randomeIndiciesArray[i];
-            ObjectBounded* boundedObject = &_objectBoundedArray[randomIndex];
-            const numeric surfaceArea = GetSurfaceArea(boundedObject->aabb);
-
-            if (boundedObject->nodeIndex == NullNodeIndex)
-            {
-                boundedObject->nodeIndex = InsertObject(boundedObject);
-            }
-            else
-            {
-                const Aabb<numeric>& objectNodeBound = m_Nodes.get()[boundedObject->nodeIndex]->bound;
-                
-                // if objectNodeBound contain boundedObject;
-                // is ok proceed next one
-                // if not remove and insert it 
-
-                if (Countain(boundedObject->aabb, objectNodeBound)) continue;
-
-                // TO DO REMOVE
-                boundedObject->nodeIndex = InsertObject(boundedObject);
-            }
-        }
+        
     }
 
     template<size_t _NodeCount>
@@ -153,21 +117,13 @@ namespace MotionCore
     template<size_t _NodeCount>
     inline NodeIndex AABBTree<_NodeCount>::InsertObject(ObjectBounded* _object, numeric _objectSurfaceArea)
     {
-        assert(_object != nullptr, "Ptr is null");
-
-        NodeIndex n = FoundAvailableNode();
-        Node* node = m_Nodes.get()[n];
-
-       
-
-        return n;
+        return NodeIndex{};
     }
 
     template<size_t _NodeCount>
     inline NodeIndex AABBTree<_NodeCount>::FindBestSibling(ObjectBounded* _object) const
     {
-
-
+        return NodeIndex{};
     }
 
 }

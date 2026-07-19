@@ -1,7 +1,7 @@
 #pragma once
 
 #include <algorithm>
-#include "Math/ToolboxTypedef.hpp"
+#include <Math/ToolBoxTypeDef.hpp>
 
 namespace Tbx
 {

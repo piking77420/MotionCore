@@ -1,6 +1,6 @@
 #pragma once
 
-#include <math/toolbox.hpp>
+#include <Math/ToolBoxTypeDef.hpp>
 
 // By convention all collision is been see from body1
 namespace MotionCore
