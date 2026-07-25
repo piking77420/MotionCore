@@ -5,12 +5,11 @@
 #include <stdint.h>
 #include <cassert>
 #include <float.h>
+#include <cstddef>
 
 // Platerfom Guard
 #if defined(__x86_64__) || defined(_M_X64)
-#pragma message("Compilation on x86 64-bit")
 #elif defined(__i386__) || defined(_M_IX86)
-#pragma message("Compilation on x86 32-bit")
 #error Not Supported Platform
 #elif defined(__aarch64__) || defined(_M_ARM64)
 #pragma message("Compilation on ARM 64-bit")
@@ -20,7 +19,6 @@
 #elif
 
 #endif
-
 
 
 #ifndef FORCEINLINE
