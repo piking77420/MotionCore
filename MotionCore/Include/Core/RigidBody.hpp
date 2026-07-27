@@ -41,13 +41,13 @@ namespace MotionCore
 	{
 		bool isTrigger;
 		ShapeType type;
-		union 
+		union
 		{
 			SphereShape sphereShape;
 			BoxShape boxShape;
 			CapsuleShape capsuleShape;
 			MeshShape meshShape;
-		}ShapeType;
+		}ShapeTypeValue;
 
 	};
 
